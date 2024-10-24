@@ -22,7 +22,9 @@ public class DateCheck {
             "%d %s, %d %s, and %d %s left until the World cant grow anymore!",
             "Time is ticking! Only %d %s, %d %s, and %d %s to go until the World will no longer be able to expand.",
             "Just %d %s, %d %s, and %d %s left for the World to stop expanding.",
-            "The clock is ticking: %d %s, %d %s, and %d %s remain until the World can no longer be expanded."
+            "The clock is ticking: %d %s, %d %s, and %d %s remain until the World can no longer be expanded.",
+            "Only %d %s, %d, %s, and %d %s until the World border is frozen.",
+            "Only %d %s, %d, %s, and %d %s until the World Expansion will halt."
     };
 
 
