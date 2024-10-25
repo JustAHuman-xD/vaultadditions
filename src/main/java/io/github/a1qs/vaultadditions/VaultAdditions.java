@@ -4,9 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.GlobeExpanderEntityRenderer;
 import io.github.a1qs.vaultadditions.config.CommonConfigs;
 import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
-import io.github.a1qs.vaultadditions.init.ModBlockEntities;
-import io.github.a1qs.vaultadditions.init.ModBlocks;
-import io.github.a1qs.vaultadditions.init.ModItems;
+import io.github.a1qs.vaultadditions.init.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,9 +47,11 @@ public class VaultAdditions {
 
 
     public void commonSetup(final FMLCommonSetupEvent event) {
+        ModNetwork.initialize();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        ModScreens.register();
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
     }
 }
