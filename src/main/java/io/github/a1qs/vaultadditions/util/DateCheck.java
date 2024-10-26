@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.util;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.config.CommonConfigs;
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
@@ -14,7 +14,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Random;
 
 public class DateCheck {
-    private static String date = CommonConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
+    private static String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final Random random = new Random();
     private static final String[] messages = {
