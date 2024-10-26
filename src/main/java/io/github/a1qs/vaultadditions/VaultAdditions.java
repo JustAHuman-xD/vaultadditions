@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions;
 import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.GlobeExpanderEntityRenderer;
 import io.github.a1qs.vaultadditions.config.CommonConfigs;
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -35,7 +36,7 @@ public class VaultAdditions {
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfigs.SPEC, "vaultadditions-common.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "vaultadditions-server.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.addListener(OnPlayerLogInEvent::onPlayerLogin);
