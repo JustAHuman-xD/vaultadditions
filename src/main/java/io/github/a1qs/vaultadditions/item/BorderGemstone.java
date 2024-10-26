@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.item;
 
-import io.github.a1qs.vaultadditions.config.CommonConfigs;
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.util.DateUtil;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -30,27 +31,42 @@ public class BorderGemstone extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(CommonConfigs.BORDER_GEMSTONE_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+        if(!DateUtil.pastDate()) {
+            pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+        } else {
+            pTooltipComponents.add(
+                    new TextComponent("Adds a ")
+                            .append(new TextComponent("Power point").withStyle(ChatFormatting.YELLOW))
+                            .append(" upon right clicking\nRequires Vault level ")
+                            .append(new TextComponent("100").withStyle(ChatFormatting.YELLOW))
+            );
+        }
     }
 
     @Nonnull
     public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack heldItemStack = player.getItemInHand(hand);
+        if(!DateUtil.pastDate()) return InteractionResultHolder.fail(heldItemStack);
+
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
-            if (!player.getAbilities().instabuild) {
-                PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
-                if(player.isCrouching()) {
-                    int itemStackCount = heldItemStack.getCount();
-                    heldItemStack.shrink(itemStackCount);
-                    statsData.addArchetypePoints((ServerPlayer) player, itemStackCount);
-                    return InteractionResultHolder.success(heldItemStack);
-                }
-                statsData.addArchetypePoints((ServerPlayer) player, 1);
-                heldItemStack.shrink(1);
+            PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
+            if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
+
+            if(player.isCrouching()) {
+                int itemStackCount = heldItemStack.getCount();
+                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
+
+                statsData.addArchetypePoints((ServerPlayer) player, itemStackCount);
+                player.awardStat(Stats.ITEM_USED.get(this));
+                return InteractionResultHolder.success(heldItemStack);
             }
+
+            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
+            statsData.addArchetypePoints((ServerPlayer) player, 1);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            return InteractionResultHolder.success(heldItemStack);
         }
-        player.awardStat(Stats.ITEM_USED.get(this));
 
         return InteractionResultHolder.sidedSuccess(heldItemStack, world.isClientSide());
     }
