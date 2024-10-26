@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.vault.powermenu;
 
 import io.github.a1qs.vaultadditions.init.ModNetwork;
-import io.github.a1qs.vaultadditions.network.SpecialExpertiseLevelMessage;
+import io.github.a1qs.vaultadditions.network.PowerLevelMessage;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.client.gui.screen.player.legacy.tab.split.dialog.SkillDialog;
@@ -12,10 +12,10 @@ import net.minecraft.client.Minecraft;
 
 import java.util.HashMap;
 
-public class SpecialExpertiseDialog extends SkillDialog<SpecialExpertiseTree, SpecialExpertiseElementContainerScreen> {
+public class PowerDialog extends SkillDialog<PowerTree, PowerElementContainerScreen> {
 
-    public SpecialExpertiseDialog(SpecialExpertiseTree talentTree, SpecialExpertiseElementContainerScreen expertisesElementContainerScreen) {
-        super(talentTree, expertisesElementContainerScreen);
+    public PowerDialog(PowerTree powerTree, PowerElementContainerScreen powerElementContainerScreen) {
+        super(powerTree, powerElementContainerScreen);
     }
 
     protected int getUnspentSkillPoints() {
@@ -27,7 +27,7 @@ public class SpecialExpertiseDialog extends SkillDialog<SpecialExpertiseTree, Sp
     }
 
     protected HashMap<String, SkillStyle> getStyles() {
-        return MiscUtil.SPECIAL_EXPERTISES_GUI.getStyles();
+        return MiscUtil.POWERS_GUI.getStyles();
     }
 
     protected SkillContext getSkillContext() {
@@ -35,7 +35,7 @@ public class SpecialExpertiseDialog extends SkillDialog<SpecialExpertiseTree, Sp
     }
 
     protected void sendUpgradeMessage() {
-        ModNetwork.CHANNEL.sendToServer(new SpecialExpertiseLevelMessage(this.skillGroup.getId(), true));
+        ModNetwork.CHANNEL.sendToServer(new PowerLevelMessage(this.skillGroup.getId(), true));
     }
 
 }

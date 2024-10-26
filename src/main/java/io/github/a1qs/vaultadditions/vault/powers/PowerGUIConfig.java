@@ -6,15 +6,15 @@ import iskallia.vault.config.entry.SkillStyle;
 
 import java.util.HashMap;
 
-public class SpecialExpertisesGUIConfig extends Config {
+public class PowerGUIConfig extends Config {
     @Expose
     private HashMap<String, SkillStyle> styles;
 
-    public SpecialExpertisesGUIConfig() {
+    public PowerGUIConfig() {
     }
 
     public String getName() {
-        return "vaultadditions_special_expertises_gui_styles";
+        return "vaultadditions_power_gui_styles";
     }
 
     public HashMap<String, SkillStyle> getStyles() {

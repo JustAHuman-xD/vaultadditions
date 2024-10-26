@@ -46,6 +46,11 @@ public class ConfigCommand {
                                         .executes(this::growPlayersOnGemstoneSubmit)
                                 )
                         )
+                        .then(Commands.literal("showPowerMenu")
+                                .then(Commands.argument("boolean", BoolArgumentType.bool())
+                                        .executes(this::showPowerMenu)
+                                )
+                        )
                         .then(Commands.literal("growPlayerByAmount")
                                 .then(Commands.argument("double", DoubleArgumentType.doubleArg())
                                         .executes(this::growPlayerByAmount)
@@ -95,6 +100,12 @@ public class ConfigCommand {
 
     private int growPlayersOnGemstoneSubmit(CommandContext<CommandSourceStack> context) {
         ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.set(BoolArgumentType.getBool(context, "boolean"));
+        ServerConfigs.SPEC.save();
+        return 0;
+    }
+
+    private int showPowerMenu(CommandContext<CommandSourceStack> context) {
+        ServerConfigs.SHOW_POWER_MENU.set(BoolArgumentType.getBool(context, "boolean"));
         ServerConfigs.SPEC.save();
         return 0;
     }

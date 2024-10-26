@@ -1,7 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
-import io.github.a1qs.vaultadditions.network.ServerboundOpenSpecialExpertisesMessage;
+import io.github.a1qs.vaultadditions.network.ServerboundOpenPowersMessage;
 import iskallia.vault.client.atlas.TextureAtlasRegion;
 import iskallia.vault.client.gui.framework.ScreenTextures;
 import iskallia.vault.client.gui.screen.player.element.SkillTabContainerElement;
@@ -19,19 +20,23 @@ public class MixinSkillTabContainerElement {
             ordinal = 0
     )
     private TextureAtlasRegion[] modifyIcons(TextureAtlasRegion[] icons) {
-        TextureAtlasRegion[] newIcons = new TextureAtlasRegion[icons.length + 1];
-        System.arraycopy(icons, 0, newIcons, 0, icons.length);
-        newIcons[icons.length] = ScreenTextures.TAB_ICON_ARCHETYPES;
-
-        return newIcons;
+        TextureAtlasRegion[] newIcons;
+        if(ServerConfigs.SHOW_POWER_MENU.get()) {
+            newIcons = new TextureAtlasRegion[icons.length + 1];
+            System.arraycopy(icons, 0, newIcons, 0, icons.length);
+            newIcons[icons.length] = ScreenTextures.TAB_ICON_ARCHETYPES;
+            return newIcons;
+        } else {
+            return icons;
+        }
     }
 
-    // dude what the fuck
+
     @Inject(method = "lambda$new$0(II)V", at = @At("TAIL"))
-    private static void b(int selectedIndex, int index, CallbackInfo ci) {
+    private static void handleAdditionalIndex(int selectedIndex, int index, CallbackInfo ci) {
         if (selectedIndex != index) {
             if(index == 5) {
-                ModNetwork.CHANNEL.sendToServer(ServerboundOpenSpecialExpertisesMessage.INSTANCE);
+                ModNetwork.CHANNEL.sendToServer(ServerboundOpenPowersMessage.INSTANCE);
             }
         }
     }

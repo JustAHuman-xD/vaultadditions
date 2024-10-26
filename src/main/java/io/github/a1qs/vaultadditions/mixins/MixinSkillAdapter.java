@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
-import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
+import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.vault.powers.*;
 import iskallia.vault.skill.base.Skill;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ public class MixinSkillAdapter {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onAdapterInit(CallbackInfo ci) {
         Skill.Adapter instance = ((Skill.Adapter) (Object)this);
-        instance.register("vaultadditions_expertises", SpecialExpertiseTree.class, SpecialExpertiseTree::new);
+        instance.register("vaultadditions_expertises", PowerTree.class, PowerTree::new);
 
         instance.register("power_skill_point_increase", SkillPointIncreasePower.class, SkillPointIncreasePower::new);
         instance.register("power_expertise_point_increase", ExpertisePointIncreasePower.class, ExpertisePointIncreasePower::new);

@@ -13,10 +13,10 @@ import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 
-public class SpecialExpertiseElementContainerScreen extends SkillsElementContainerScreen<SpecialExpertiseTree> {
+public class PowerElementContainerScreen extends SkillsElementContainerScreen<PowerTree> {
     public static final int TAB_INDEX = 5;
 
-    public SpecialExpertiseElementContainerScreen(NBTElementContainer<SpecialExpertiseTree> container, Inventory inventory, Component title) {
+    public PowerElementContainerScreen(NBTElementContainer<PowerTree> container, Inventory inventory, Component title) {
         super(container, inventory, title, ScreenRenderers.getImmediate());
     }
 
@@ -28,8 +28,8 @@ public class SpecialExpertiseElementContainerScreen extends SkillsElementContain
     }
 
     public TabContent getTabContent() {
-        SpecialExpertiseDialog borderDialog = new SpecialExpertiseDialog(this.getSkillTree(), this);
-        SpecialExpertisePanRegion talentPanningContent = new SpecialExpertisePanRegion(borderDialog, this);
+        PowerDialog borderDialog = new PowerDialog(this.getSkillTree(), this);
+        PowerPanRegion talentPanningContent = new PowerPanRegion(borderDialog, this);
         return new SplitTabContent(this, borderDialog, talentPanningContent);
     }
 

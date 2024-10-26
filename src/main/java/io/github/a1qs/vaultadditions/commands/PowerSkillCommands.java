@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.github.a1qs.vaultadditions.data.PlayerSpecialExpertiseData;
+import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -40,8 +40,8 @@ public class PowerSkillCommands {
 
     private int resetPowers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        PlayerSpecialExpertiseData data = PlayerSpecialExpertiseData.get(ServerLifecycleHooks.getCurrentServer());
-        data.resetSpecialExpertiseTree(player);
+        PlayerPowersData data = PlayerPowersData.get(ServerLifecycleHooks.getCurrentServer());
+        data.resetPowers(player);
         context.getSource().sendSuccess(new TextComponent("Reset " + player.getName().getString() + " Power Skills"), true);
 
         return 0;

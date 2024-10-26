@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.data;
 
-import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
+import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.skill.PlayerVaultStats;
@@ -24,44 +24,42 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class PlayerSpecialExpertiseData extends SavedData {
-    protected static final String DATA_NAME = "vaultadditions_PlayerSpecialExpertises";
-    private Map<UUID, SpecialExpertiseTree> playerMap = new HashMap<>();
+public class PlayerPowersData extends SavedData {
+    protected static final String DATA_NAME = "vaultadditions_PlayerPowers";
+    private Map<UUID, PowerTree> playerMap = new HashMap<>();
     private final Set<UUID> scheduledMerge = new HashSet<>();
-    private SpecialExpertiseTree previous;
+    private PowerTree previous;
 
-    public PlayerSpecialExpertiseData() {
+    public PlayerPowersData() {
     }
 
-    public SpecialExpertiseTree getSpecialExpertises(Player player) {
-        return this.getSpecialExpertises(player.getUUID());
+    public PowerTree getPowers(Player player) {
+        return this.getPowers(player.getUUID());
     }
 
-    public SpecialExpertiseTree getSpecialExpertises(UUID uuid) {
+    public PowerTree getPowers(UUID uuid) {
         return this.playerMap.computeIfAbsent(uuid, (uuid1) -> {
-            return MiscUtil.SPECIAL_EXPERTISES.getAll().copy();
+            return MiscUtil.POWERS.getAll().copy();
         });
     }
 
-    public void resetAllPlayerSpecialExpertiseTrees(ServerLevel level) {
+    public void resetAllPlayerPowerTrees(ServerLevel level) {
         this.playerMap.clear();
         this.setDirty();
-        Iterator var2 = level.players().iterator();
 
-        while(var2.hasNext()) {
-            ServerPlayer player = (ServerPlayer)var2.next();
-            this.getSpecialExpertises(player).sync(SkillContext.of(player));
+        for (ServerPlayer player : level.players()) {
+            this.getPowers(player).sync(SkillContext.of(player));
         }
 
     }
 
-    public void resetSpecialExpertiseTree(ServerPlayer player) {
-        this.getSpecialExpertises(player).iterate(LearnableSkill.class, (skill) -> {
+    public void resetPowers(ServerPlayer player) {
+        this.getPowers(player).iterate(LearnableSkill.class, (skill) -> {
             skill.onRemove(SkillContext.of(player));
         });
         this.playerMap.remove(player.getUUID());
         this.setDirty();
-        this.getSpecialExpertises(player).sync(SkillContext.of(player));
+        this.getPowers(player).sync(SkillContext.of(player));
     }
 
     public boolean isDirty() {
@@ -72,9 +70,9 @@ public class PlayerSpecialExpertiseData extends SavedData {
     public static void onTick(TickEvent.WorldTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             if (event.side.isServer()) {
-                PlayerSpecialExpertiseData data = get((ServerLevel)event.world);
-                if (data.previous != MiscUtil.SPECIAL_EXPERTISES.getAll()) {
-                    data.previous = MiscUtil.SPECIAL_EXPERTISES.getAll();
+                PlayerPowersData data = get((ServerLevel)event.world);
+                if (data.previous != MiscUtil.POWERS.getAll()) {
+                    data.previous = MiscUtil.POWERS.getAll();
                     data.scheduledMerge.addAll(data.playerMap.keySet());
                 }
             }
@@ -89,25 +87,25 @@ public class PlayerSpecialExpertiseData extends SavedData {
                 Player var2 = event.player;
                 if (var2 instanceof ServerPlayer) {
                     ServerPlayer player = (ServerPlayer)var2;
-                    PlayerSpecialExpertiseData data = get(player.getLevel());
+                    PlayerPowersData data = get(player.getLevel());
                     if (data.scheduledMerge.remove(player.getUUID())) {
                         SkillContext context = SkillContext.of(player);
-                        data.playerMap.put(player.getUUID(), (SpecialExpertiseTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.SPECIAL_EXPERTISES.getAll().copy(), context));
+                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.POWERS.getAll().copy(), context));
                         PlayerVaultStats stats = PlayerVaultStatsData.get((ServerLevel)player.level).getVaultStats(player);
                         stats.setSkillPoints(context.getLearnPoints());
                         stats.setRegretPoints(context.getRegretPoints());
                         AttributeSnapshotHelper.getInstance().refreshSnapshotDelayed(player);
                     }
 
-                    data.getSpecialExpertises(player).onTick(SkillContext.of(player));
+                    data.getPowers(player).onTick(SkillContext.of(player));
                 }
             }
 
         }
     }
 
-    private static PlayerSpecialExpertiseData create(CompoundTag tag) {
-        PlayerSpecialExpertiseData data = new PlayerSpecialExpertiseData();
+    private static PlayerPowersData create(CompoundTag tag) {
+        PlayerPowersData data = new PlayerPowersData();
         data.load(tag);
         return data;
     }
@@ -116,14 +114,14 @@ public class PlayerSpecialExpertiseData extends SavedData {
         this.playerMap.clear();
         this.scheduledMerge.clear();
         ListTag playerList = nbt.getList("Players", 8);
-        ListTag talentList = nbt.getList("SpecialExpertises", 10);
+        ListTag talentList = nbt.getList("Powers", 10);
         if (playerList.size() != talentList.size()) {
             throw new IllegalStateException("Map doesn't have the same amount of keys as values");
         } else {
             for(int i = 0; i < playerList.size(); ++i) {
                 UUID playerUUID = UUID.fromString(playerList.getString(i));
                 Adapters.SKILL.readNbt(talentList.getCompound(i)).ifPresent((tree) -> {
-                    this.playerMap.put(playerUUID, (SpecialExpertiseTree)tree);
+                    this.playerMap.put(playerUUID, (PowerTree)tree);
                     this.scheduledMerge.add(playerUUID);
                 });
             }
@@ -142,19 +140,19 @@ public class PlayerSpecialExpertiseData extends SavedData {
             });
         });
         nbt.put("Players", playerList);
-        nbt.put("SpecialExpertises", talentList);
+        nbt.put("Powers", talentList);
         return nbt;
     }
 
-    public static PlayerSpecialExpertiseData getServer() {
+    public static PlayerPowersData getServer() {
         return get(ServerLifecycleHooks.getCurrentServer());
     }
 
-    public static PlayerSpecialExpertiseData get(ServerLevel world) {
+    public static PlayerPowersData get(ServerLevel world) {
         return get(world.getServer());
     }
 
-    public static PlayerSpecialExpertiseData get(MinecraftServer srv) {
-        return (PlayerSpecialExpertiseData)srv.overworld().getDataStorage().computeIfAbsent(PlayerSpecialExpertiseData::create, PlayerSpecialExpertiseData::new, DATA_NAME);
+    public static PlayerPowersData get(MinecraftServer srv) {
+        return srv.overworld().getDataStorage().computeIfAbsent(PlayerPowersData::create, PlayerPowersData::new, DATA_NAME);
     }
 }

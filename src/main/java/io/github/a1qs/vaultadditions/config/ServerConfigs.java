@@ -15,6 +15,7 @@ public class ServerConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> GROW_PLAYER_ON_GEMSTONE_SUBMIT;
     public static final ForgeConfigSpec.ConfigValue<Double> GROW_PLAYER_AMOUNT;
     public static final ForgeConfigSpec.ConfigValue<Double> GROW_PLAYER_CAP;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW_POWER_MENU;
 
     static {
         BUILDER.push("VaultAdditions Common Configs");
@@ -42,6 +43,9 @@ public class ServerConfigs {
 
         GROW_PLAYER_CAP = BUILDER.comment("The max amount a player can grow in total")
                 .define("GROW_PLAYER_CAP", 0.5);
+
+        SHOW_POWER_MENU = BUILDER.comment("Whether the Power menu should be shown to the player")
+                .define("SHOW_POWER_MENU", true);
 
         BUILDER.pop();
         SPEC = BUILDER.build();

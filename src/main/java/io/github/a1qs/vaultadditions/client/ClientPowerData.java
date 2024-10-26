@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.client;
 
-import io.github.a1qs.vaultadditions.network.KnownSpecialExpertiseMessage;
-import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
+import io.github.a1qs.vaultadditions.network.KnownPowerMessage;
+import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import iskallia.vault.core.net.ArrayBitBuffer;
 import iskallia.vault.skill.base.TieredSkill;
 
@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ClientSpecialExpertiseData {
-    private static SpecialExpertiseTree SPECIAL_EXPERTISE = new SpecialExpertiseTree();
+public class ClientPowerData {
+    private static PowerTree POWER_TREE = new PowerTree();
 
-    public ClientSpecialExpertiseData() {
+    public ClientPowerData() {
     }
 
     @Nonnull
     public static List<TieredSkill> getLearnedTalentNodes() {
-        List<TieredSkill> talents = new ArrayList();
-        SPECIAL_EXPERTISE.iterate(TieredSkill.class, (talent) -> {
+        List<TieredSkill> talents = new ArrayList<>();
+        POWER_TREE.iterate(TieredSkill.class, (talent) -> {
             if (talent.isUnlocked()) {
                 talents.add(talent);
             }
@@ -31,7 +31,7 @@ public class ClientSpecialExpertiseData {
 
     @Nullable
     public static TieredSkill getLearnedTalentNode(String talentName) {
-        Iterator var1 = getLearnedTalentNodes().iterator();
+        Iterator<TieredSkill> var1 = getLearnedTalentNodes().iterator();
 
         TieredSkill node;
         do {
@@ -39,16 +39,16 @@ public class ClientSpecialExpertiseData {
                 return null;
             }
 
-            node = (TieredSkill)var1.next();
+            node = var1.next();
         } while(!node.getId().equals(talentName));
 
         return node;
     }
 
-    public static void updateTalents(KnownSpecialExpertiseMessage pkt) {
+    public static void updateTalents(KnownPowerMessage pkt) {
         ArrayBitBuffer buffer = ArrayBitBuffer.empty();
         pkt.getTree().writeBits(buffer);
         buffer.setPosition(0);
-        SPECIAL_EXPERTISE.readBits(buffer);
+        POWER_TREE.readBits(buffer);
     }
 }
