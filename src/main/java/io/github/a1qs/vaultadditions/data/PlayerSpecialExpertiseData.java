@@ -1,7 +1,7 @@
-package io.github.a1qs.vaultadditions.test;
+package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
-import io.github.a1qs.vaultadditions.vault.powers.PowerConfigs;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.LearnableSkill;
@@ -39,7 +39,7 @@ public class PlayerSpecialExpertiseData extends SavedData {
 
     public SpecialExpertiseTree getSpecialExpertises(UUID uuid) {
         return this.playerMap.computeIfAbsent(uuid, (uuid1) -> {
-            return PowerConfigs.SPECIAL_EXPERTISES.getAll().copy();
+            return MiscUtil.SPECIAL_EXPERTISES.getAll().copy();
         });
     }
 
@@ -73,8 +73,8 @@ public class PlayerSpecialExpertiseData extends SavedData {
         if (event.phase == TickEvent.Phase.START) {
             if (event.side.isServer()) {
                 PlayerSpecialExpertiseData data = get((ServerLevel)event.world);
-                if (data.previous != PowerConfigs.SPECIAL_EXPERTISES.getAll()) {
-                    data.previous = PowerConfigs.SPECIAL_EXPERTISES.getAll();
+                if (data.previous != MiscUtil.SPECIAL_EXPERTISES.getAll()) {
+                    data.previous = MiscUtil.SPECIAL_EXPERTISES.getAll();
                     data.scheduledMerge.addAll(data.playerMap.keySet());
                 }
             }
@@ -92,7 +92,7 @@ public class PlayerSpecialExpertiseData extends SavedData {
                     PlayerSpecialExpertiseData data = get(player.getLevel());
                     if (data.scheduledMerge.remove(player.getUUID())) {
                         SkillContext context = SkillContext.of(player);
-                        data.playerMap.put(player.getUUID(), (SpecialExpertiseTree) (data.playerMap.get(player.getUUID())).mergeFrom(PowerConfigs.SPECIAL_EXPERTISES.getAll().copy(), context));
+                        data.playerMap.put(player.getUUID(), (SpecialExpertiseTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.SPECIAL_EXPERTISES.getAll().copy(), context));
                         PlayerVaultStats stats = PlayerVaultStatsData.get((ServerLevel)player.level).getVaultStats(player);
                         stats.setSkillPoints(context.getLearnPoints());
                         stats.setRegretPoints(context.getRegretPoints());
