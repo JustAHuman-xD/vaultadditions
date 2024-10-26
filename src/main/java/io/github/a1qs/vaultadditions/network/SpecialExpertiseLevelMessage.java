@@ -1,8 +1,8 @@
 package io.github.a1qs.vaultadditions.network;
 
-import io.github.a1qs.vaultadditions.test.PlayerSpecialExpertiseData;
+import io.github.a1qs.vaultadditions.data.PlayerSpecialExpertiseData;
 import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
-import io.github.a1qs.vaultadditions.vault.powers.PowerConfigs;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.LearnableSkill;
@@ -54,7 +54,7 @@ public class SpecialExpertiseLevelMessage {
         SpecialExpertiseTree expertiseTree = expertisesData.getSpecialExpertises(player);
         if (!ModConfigs.SKILL_GATES.getGates().isLocked(message.expertiseName, expertiseTree)) {
             expertiseTree.getForId(message.expertiseName).ifPresent((skill) -> {
-                SkillContext context = PowerConfigs.ofSpecialExpertise(player);
+                SkillContext context = MiscUtil.ofSpecialExpertise(player);
                 if (skill instanceof LearnableSkill learnable) {
                     if (learnable.canLearn(context)) {
                         learnable.learn(context);

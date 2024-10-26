@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.network;
 
 import io.github.a1qs.vaultadditions.init.ModContainers;
-import io.github.a1qs.vaultadditions.test.PlayerSpecialExpertiseData;
+import io.github.a1qs.vaultadditions.data.PlayerSpecialExpertiseData;
 import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
 import iskallia.vault.container.NBTElementContainer;
 import iskallia.vault.core.net.ArrayBitBuffer;

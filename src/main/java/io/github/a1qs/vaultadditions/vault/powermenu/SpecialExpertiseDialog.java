@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.vault.powermenu;
 
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.SpecialExpertiseLevelMessage;
-import io.github.a1qs.vaultadditions.vault.powers.PowerConfigs;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.client.gui.screen.player.legacy.tab.split.dialog.SkillDialog;
 import iskallia.vault.config.entry.SkillStyle;
@@ -27,7 +27,7 @@ public class SpecialExpertiseDialog extends SkillDialog<SpecialExpertiseTree, Sp
     }
 
     protected HashMap<String, SkillStyle> getStyles() {
-        return PowerConfigs.SPECIAL_EXPERTISES_GUI.getStyles();
+        return MiscUtil.SPECIAL_EXPERTISES_GUI.getStyles();
     }
 
     protected SkillContext getSkillContext() {
