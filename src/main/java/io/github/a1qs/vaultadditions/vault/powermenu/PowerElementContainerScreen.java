@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.vault.powermenu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.client.gui.framework.ScreenRenderers;
 import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.client.gui.screen.player.SkillsElementContainerScreen;
@@ -34,7 +35,7 @@ public class PowerElementContainerScreen extends SkillsElementContainerScreen<Po
     }
 
     protected void renderPointOverlay(PoseStack matrixStack) {
-        this.renderPointOverlay(matrixStack, VaultBarOverlay.unspentArchetypePoints, TextColor.fromRgb(16724414), " unspent archetype point" + (VaultBarOverlay.unspentArchetypePoints == 1 ? "" : "s"));
+        this.renderPointOverlay(matrixStack, MiscUtil.unspentPowerPoints, TextColor.fromRgb(16724414), " unspent power point" + (MiscUtil.unspentPowerPoints == 1 ? "" : "s"));
     }
 
 }

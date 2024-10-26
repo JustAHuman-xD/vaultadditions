@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.commands.CommandSourceStack;
@@ -50,9 +51,9 @@ public class PowerSkillCommands {
     private int addPoints(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         int amount = IntegerArgumentType.getInteger(context, "amount");
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        PlayerVaultStatsData data = PlayerVaultStatsData.get(player.getLevel());
-        data.addArchetypePoints(player, amount);
-        context.getSource().sendSuccess(new TextComponent("Added " + amount + " of Archetype points to " + player.getName().getString()), true);
+        PlayerAdditionalVaultStatData data = PlayerAdditionalVaultStatData.get(player.getLevel());
+        data.addPowerPoints(player, amount);
+        context.getSource().sendSuccess(new TextComponent("Added " + amount + " of Power points to " + player.getName().getString()), true);
 
         return 0;
     }

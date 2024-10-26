@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.item;
 
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -38,14 +39,14 @@ public class PowerOrb extends Item {
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
             if (!player.getAbilities().instabuild) {
-                PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
+                PlayerAdditionalVaultStatData statsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
                 if(player.isCrouching()) {
                     int itemStackCount = heldItemStack.getCount();
                     heldItemStack.shrink(itemStackCount);
-                    statsData.addArchetypePoints((ServerPlayer) player, itemStackCount);
+                    statsData.addPowerPoints((ServerPlayer) player, itemStackCount);
                     return InteractionResultHolder.success(heldItemStack);
                 }
-                statsData.addArchetypePoints((ServerPlayer) player, 1);
+                statsData.addPowerPoints((ServerPlayer) player, 1);
                 heldItemStack.shrink(1);
             }
             player.awardStat(Stats.ITEM_USED.get(this));

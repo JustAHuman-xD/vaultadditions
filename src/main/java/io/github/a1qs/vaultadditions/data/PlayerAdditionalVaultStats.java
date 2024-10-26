@@ -1,9 +1,12 @@
 package io.github.a1qs.vaultadditions.data;
 
+import io.github.a1qs.vaultadditions.init.ModNetwork;
+import io.github.a1qs.vaultadditions.network.PowerPointMessage;
 import iskallia.vault.util.NetcodeUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.UUID;
@@ -74,7 +77,7 @@ public class PlayerAdditionalVaultStats implements INBTSerializable<CompoundTag>
 
     public void sync(MinecraftServer server) {
         NetcodeUtils.runIfPresent(server, this.uuid, (player) -> {
-            //ModNetwork.CHANNEL.sendTo(new VaultLevelMessage(this.vaultLevel, this.exp, this.getExpNeededToNextLevel(), this.unspentSkillPoints, this.unspentExpertisePoints, this.unspentKnowledgePoints, this.unspentArchetypePoints, this.unspentRegretPoints), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+            ModNetwork.CHANNEL.sendTo(new PowerPointMessage(this.unspentPowerPoints), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         });
     }
 
@@ -83,7 +86,7 @@ public class PlayerAdditionalVaultStats implements INBTSerializable<CompoundTag>
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("unspentPowerPoints", this.unspentPowerPoints);
         nbt.putInt("totalSpentPowerPoints", this.totalSpentPowerPoints);
-        return null;
+        return nbt;
     }
 
     @Override

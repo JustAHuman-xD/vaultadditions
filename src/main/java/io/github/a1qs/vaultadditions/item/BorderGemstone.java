@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.item;
 
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.util.DateUtil;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
@@ -53,17 +54,18 @@ public class BorderGemstone extends Item {
             PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
             if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
 
+            PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
             if(player.isCrouching()) {
                 int itemStackCount = heldItemStack.getCount();
                 if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
 
-                statsData.addArchetypePoints((ServerPlayer) player, itemStackCount);
+                additionalStatsData.addPowerPoints((ServerPlayer) player, itemStackCount);
                 player.awardStat(Stats.ITEM_USED.get(this));
                 return InteractionResultHolder.success(heldItemStack);
             }
 
             if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
-            statsData.addArchetypePoints((ServerPlayer) player, 1);
+            additionalStatsData.addPowerPoints((ServerPlayer) player, 1);
             player.awardStat(Stats.ITEM_USED.get(this));
             return InteractionResultHolder.success(heldItemStack);
         }

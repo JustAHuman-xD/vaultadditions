@@ -1,5 +1,7 @@
 package io.github.a1qs.vaultadditions.network;
 
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
@@ -49,7 +51,7 @@ public class PowerLevelMessage {
 
     private static void upgradePower(PowerLevelMessage message, ServerPlayer player) {
         ServerLevel level = player.getLevel();
-        PlayerVaultStatsData statsData = PlayerVaultStatsData.get(level);
+        PlayerAdditionalVaultStatData statsData = PlayerAdditionalVaultStatData.get(level);
         PlayerPowersData expertisesData = PlayerPowersData.get(level);
         PowerTree powerTree = expertisesData.getPowers(player);
         if (!ModConfigs.SKILL_GATES.getGates().isLocked(message.powerName, powerTree)) {
@@ -58,9 +60,9 @@ public class PowerLevelMessage {
                 if (skill instanceof LearnableSkill learnable) {
                     if (learnable.canLearn(context)) {
                         learnable.learn(context);
-                        PlayerVaultStats stats = statsData.getVaultStats(player);
-                        int learnPoints = stats.getUnspentArchetypePoints() - context.getLearnPoints();
-                        stats.spendArchetypePoints(player.getServer(), learnPoints);
+                        PlayerAdditionalVaultStats stats = statsData.getVaultStats(player);
+                        int learnPoints = stats.getUnspentPowerPoints() - context.getLearnPoints();
+                        stats.spendPowerPoints(player.getServer(), learnPoints);
                         powerTree.sync(context);
                     }
                 }

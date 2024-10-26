@@ -19,7 +19,7 @@ public class PowerDialog extends SkillDialog<PowerTree, PowerElementContainerScr
     }
 
     protected int getUnspentSkillPoints() {
-        return VaultBarOverlay.unspentArchetypePoints;
+        return MiscUtil.unspentPowerPoints;
     }
 
     protected void updateRegretButton() {
@@ -31,7 +31,7 @@ public class PowerDialog extends SkillDialog<PowerTree, PowerElementContainerScr
     }
 
     protected SkillContext getSkillContext() {
-        return new SkillContext(VaultBarOverlay.vaultLevel, VaultBarOverlay.unspentArchetypePoints, 0, SkillSource.of(Minecraft.getInstance().player));
+        return new SkillContext(VaultBarOverlay.vaultLevel, MiscUtil.unspentPowerPoints, 0, SkillSource.of(Minecraft.getInstance().player));
     }
 
     protected void sendUpgradeMessage() {
