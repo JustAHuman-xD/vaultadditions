@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.events;
 
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
-import io.github.a1qs.vaultadditions.util.DateCheck;
+import io.github.a1qs.vaultadditions.util.DateUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -24,8 +24,8 @@ public class OnPlayerLogInEvent {
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if(!DateCheck.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
-            event.getPlayer().sendMessage(DateCheck.untilDateMessage().withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+        if(!DateUtil.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+            event.getPlayer().sendMessage(DateUtil.untilDateMessage().withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
         }
     }
 }

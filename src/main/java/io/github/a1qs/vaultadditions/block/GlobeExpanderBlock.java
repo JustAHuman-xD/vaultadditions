@@ -7,7 +7,7 @@ import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.BorderGemstone;
-import io.github.a1qs.vaultadditions.util.DateCheck;
+import io.github.a1qs.vaultadditions.util.DateUtil;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
@@ -69,6 +69,11 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
+        if(DateUtil.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+            pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
+            return InteractionResult.PASS;
+        }
+
         if(!(pPlayer.getMainHandItem().getItem() instanceof BorderGemstone)) {
             double worldBorderSize = pPlayer.getLevel().getWorldBorder().getSize();
             pPlayer.displayClientMessage(new TextComponent("Current World Border size Diameter: " + worldBorderSize), true);
@@ -99,10 +104,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
 
-            if(DateCheck.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
-                pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
-                return InteractionResult.PASS;
-            }
 
             if(pPlayer.getMainHandItem().getItem() == ModItems.BORDER_GEMSTONE.get()) {
                 int borderShardIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
