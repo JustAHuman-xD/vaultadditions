@@ -1,8 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins;
 
-import io.github.a1qs.vaultadditions.test.PlayerSpecialExpertiseData;
+import io.github.a1qs.vaultadditions.data.PlayerSpecialExpertiseData;
 import io.github.a1qs.vaultadditions.vault.powermenu.SpecialExpertiseTree;
-import io.github.a1qs.vaultadditions.vault.powers.PowerConfigs;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.talent.GearAttributeSkill;
@@ -32,7 +32,7 @@ public class MixinAttributeSnapshotCalculator {
         expertise.iterate(GearAttributeSkill.class, (attributeSkill) -> {
             if (attributeSkill instanceof Skill skill) {
                 if (skill.isUnlocked()) {
-                    attributeSkill.getGearAttributes(PowerConfigs.ofSpecialExpertise(player)).forEach((attributeValue) -> {
+                    attributeSkill.getGearAttributes(MiscUtil.ofSpecialExpertise(player)).forEach((attributeValue) -> {
                         Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
                         VaultGearAttribute<?> attribute = attributeValue.getAttribute();
                         AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
