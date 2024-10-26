@@ -13,8 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
 
-public class DateCheck {
-    private static String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
+public class DateUtil {
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final Random random = new Random();
     private static final String[] messages = {
@@ -29,6 +29,7 @@ public class DateCheck {
 
 
     public static boolean pastDate() {
+        String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
         try {
             LocalDate configDate = LocalDate.parse(date, formatter);
             LocalDate current = LocalDate.now();
@@ -43,6 +44,7 @@ public class DateCheck {
     }
 
     public static MutableComponent untilDateMessage() {
+        String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
         try {
             LocalDateTime targetDateTime = LocalDateTime.parse(date, formatter);
             LocalDateTime currentDateTime = LocalDateTime.now();
