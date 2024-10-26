@@ -16,9 +16,9 @@ public class ConfigCommand {
         dispatcher.register(Commands.literal("vaultadditions")
                 .requires(sender -> sender.hasPermission(this.getRequiredPermissionLevel()))
                 .then(Commands.literal("config")
-                        .then(Commands.literal("setBorderShardIncrease")
+                        .then(Commands.literal("setPowerCrystalIncrease")
                                 .then(Commands.argument("increaseAmount", IntegerArgumentType.integer())
-                                        .executes(this::setShardIncrease)
+                                        .executes(this::setPowerCrystalIncrease)
                                 )
                         )
                         .then(Commands.literal("setNetherBorderMultiplier")
@@ -68,7 +68,7 @@ public class ConfigCommand {
 
 
 
-    private int setShardIncrease(CommandContext<CommandSourceStack> context) {
+    private int setPowerCrystalIncrease(CommandContext<CommandSourceStack> context) {
         ServerConfigs.POWER_CRYSTAL_INCREASE.set(IntegerArgumentType.getInteger(context, "increaseAmount"));
         ServerConfigs.SPEC.save();
         return 0;

@@ -29,9 +29,9 @@ public class PowerElementContainerScreen extends SkillsElementContainerScreen<Po
     }
 
     public TabContent getTabContent() {
-        PowerDialog borderDialog = new PowerDialog(this.getSkillTree(), this);
-        PowerPanRegion talentPanningContent = new PowerPanRegion(borderDialog, this);
-        return new SplitTabContent(this, borderDialog, talentPanningContent);
+        PowerDialog powerDialog = new PowerDialog(this.getSkillTree(), this);
+        PowerPanRegion talentPanningContent = new PowerPanRegion(powerDialog, this);
+        return new SplitTabContent(this, powerDialog, talentPanningContent);
     }
 
     protected void renderPointOverlay(PoseStack matrixStack) {

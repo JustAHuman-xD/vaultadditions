@@ -6,7 +6,7 @@ import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
-import io.github.a1qs.vaultadditions.item.BorderGemstone;
+import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.util.DateUtil;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.init.ModAttributes;
@@ -54,7 +54,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
     }
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @javax.annotation.Nullable BlockGetter pLevel, List<Component> pTooltip, @NotNull TooltipFlag pFlag) {
-        pTooltip.add(new TextComponent("Upon clicking with a Border Shard:").withStyle(ChatFormatting.YELLOW));
+        pTooltip.add(new TextComponent("Upon clicking with a Power Crystal:").withStyle(ChatFormatting.YELLOW));
         pTooltip.add(new TextComponent("Expands the World Border by " + ServerConfigs.POWER_CRYSTAL_INCREASE.get() + " Blocks").withStyle(ChatFormatting.YELLOW));
     }
 
@@ -74,7 +74,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
-        if(!(pPlayer.getMainHandItem().getItem() instanceof BorderGemstone)) {
+        if(!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
             double worldBorderSize = pPlayer.getLevel().getWorldBorder().getSize();
             pPlayer.displayClientMessage(new TextComponent("Current World Border size Diameter: " + worldBorderSize), true);
             return InteractionResult.SUCCESS;
@@ -105,14 +105,14 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             }
 
 
-            if(pPlayer.getMainHandItem().getItem() == ModItems.BORDER_GEMSTONE.get()) {
-                int borderShardIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
+            if(pPlayer.getMainHandItem().getItem() == ModItems.POWER_CRYSTAL.get()) {
+                int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
                 int handCount = pPlayer.getMainHandItem().getCount();
 
                 for (ServerLevel dimension : validDimensions) {
                     WorldBorder dimensionBorder = dimension.getWorldBorder();
 
-                    double blocksExpanded = calculateDimensionSpecificExpansion(dimension, borderShardIncrease, handCount);
+                    double blocksExpanded = calculateDimensionSpecificExpansion(dimension, powerCrystalIncrease, handCount);
                     double newSize = dimensionBorder.getSize() + blocksExpanded;
                     if(newSize >= 5.9999968E7) {
                         VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension(), newSize, 5.9999968E7);
@@ -151,7 +151,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 pLevel.sendBlockUpdated(pPos, expanderEntity.getBlockState(), expanderEntity.getBlockState(), 3);
 
 
-                expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), borderShardIncrease * handCount);
+                expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), powerCrystalIncrease * handCount);
             }
         }
 

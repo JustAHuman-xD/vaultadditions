@@ -1,5 +1,6 @@
 {
   "block.vaultadditions.globe_expander": "Globe Expander",
-  "item.vaultadditions.border_gemstone": "Border Gemstone",
+  "item.vaultadditions.power_crystal": "Power Crystal",
+  "item.vaultadditions.power_orb": "Power Orb",
   "container.vault.power": "Powers"
 }

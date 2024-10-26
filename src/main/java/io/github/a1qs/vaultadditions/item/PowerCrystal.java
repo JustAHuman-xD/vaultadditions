@@ -24,9 +24,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class BorderGemstone extends Item {
+public class PowerCrystal extends Item {
 
-    public BorderGemstone(Properties pProperties) {
+    public PowerCrystal(Properties pProperties) {
         super(pProperties);
     }
 

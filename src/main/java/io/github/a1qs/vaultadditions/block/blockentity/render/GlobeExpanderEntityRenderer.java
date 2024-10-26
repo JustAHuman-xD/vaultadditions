@@ -30,7 +30,7 @@ public class GlobeExpanderEntityRenderer implements BlockEntityRenderer<GlobeExp
             float lerpTicks = Mth.lerp(partialTicks, blockEntity.ticksSpinningOld, blockEntity.ticksSpinning);
             float percentConsumed = lerpTicks / (float) blockEntity.maxSpinTicks;
 
-            ItemStack itemStack = new ItemStack(ModItems.BORDER_GEMSTONE.get());
+            ItemStack itemStack = new ItemStack(ModItems.POWER_CRYSTAL.get());
 
             matrixStack.pushPose();
             this.renderItem(matrixStack, bufferSource, combinedLight, combinedOverlay, 1.5F, 0.65F, itemStack, blockEntity, partialTicks);
