@@ -94,6 +94,10 @@ public class PlayerPowersData extends SavedData {
                         PlayerVaultStats stats = PlayerVaultStatsData.get((ServerLevel)player.level).getVaultStats(player);
                         stats.setSkillPoints(context.getLearnPoints());
                         stats.setRegretPoints(context.getRegretPoints());
+                        SkillContext ctx = MiscUtil.ofPowers(player);
+                        PlayerAdditionalVaultStats stats2 = PlayerAdditionalVaultStatData.get((ServerLevel)player.level).getVaultStats(player);
+                        stats2.setPowerPoints(ctx.getLearnPoints());
+
                         AttributeSnapshotHelper.getInstance().refreshSnapshotDelayed(player);
                     }
 
