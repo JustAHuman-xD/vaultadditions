@@ -2,11 +2,14 @@ package io.github.a1qs.vaultadditions.block;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
-import io.github.a1qs.vaultadditions.config.CommonConfigs;
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.BorderGemstone;
 import io.github.a1qs.vaultadditions.util.DateCheck;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
+import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -17,6 +20,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -51,7 +55,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @javax.annotation.Nullable BlockGetter pLevel, List<Component> pTooltip, @NotNull TooltipFlag pFlag) {
         pTooltip.add(new TextComponent("Upon clicking with a Border Shard:").withStyle(ChatFormatting.YELLOW));
-        pTooltip.add(new TextComponent("Expands the World Border by " + CommonConfigs.BORDER_GEMSTONE_INCREASE.get() + " Blocks").withStyle(ChatFormatting.YELLOW));
+        pTooltip.add(new TextComponent("Expands the World Border by " + ServerConfigs.POWER_CRYSTAL_INCREASE.get() + " Blocks").withStyle(ChatFormatting.YELLOW));
     }
 
     @Override
@@ -95,13 +99,13 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
 
-            if(DateCheck.pastDate() && CommonConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+            if(DateCheck.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
                 pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
                 return InteractionResult.PASS;
             }
 
             if(pPlayer.getMainHandItem().getItem() == ModItems.BORDER_GEMSTONE.get()) {
-                int borderShardIncrease = CommonConfigs.BORDER_GEMSTONE_INCREASE.get();
+                int borderShardIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
                 int handCount = pPlayer.getMainHandItem().getCount();
 
                 for (ServerLevel dimension : validDimensions) {
@@ -110,7 +114,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                     double blocksExpanded = calculateDimensionSpecificExpansion(dimension, borderShardIncrease, handCount);
                     double newSize = dimensionBorder.getSize() + blocksExpanded;
                     if(newSize >= 5.9999968E7) {
-                        VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension().getRegistryName(), newSize, 5.9999968E7);
+                        VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension(), newSize, 5.9999968E7);
                         pPlayer.displayClientMessage(new TextComponent("Please report this to a server admin, see logs for more information.").withStyle(ChatFormatting.RED), true);
                         return InteractionResult.FAIL;
                     }
@@ -121,6 +125,25 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 if (!pPlayer.getAbilities().instabuild) {
                     pPlayer.getMainHandItem().setCount(0);
                 }
+
+                if(ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) {
+                    PowerCrystalData crystalData = PowerCrystalData.get(srv);
+                    crystalData.addCrystalContribution(pPlayer.getUUID(), handCount);
+
+                    var sizeScaleAttribute = pPlayer.getAttribute(ModAttributes.SIZE_SCALE);
+                    if (sizeScaleAttribute != null) {
+
+                        double increaseAmount = crystalData.getPlayerContributedCrystals(pPlayer.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
+                        increaseAmount = Math.min(increaseAmount, ServerConfigs.GROW_PLAYER_CAP.get());
+                        // Check if the player already has this modifier
+                        AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
+                        if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier); //remove to readd it
+
+                        AttributeModifier sizeScaleModifier = new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", increaseAmount, AttributeModifier.Operation.ADDITION);
+                        sizeScaleAttribute.addPermanentModifier(sizeScaleModifier);
+                    }
+                }
+
 
                 expanderEntity.resetSpinTime();
                 expanderEntity.setChanged();
@@ -156,13 +179,13 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
     private double calculateDimensionSpecificExpansion(ServerLevel dimension, int baseIncrease, int itemCount) {
         if (dimension.dimension() == Level.OVERWORLD) {
-            return itemCount * baseIncrease;  // Default increase in Overworld
+            return itemCount * baseIncrease;
         } else if (dimension.dimension() == Level.NETHER) {
-            return itemCount * baseIncrease * CommonConfigs.NETHER_BORDER_INCREASE.get();  // Half the increase in the Nether
+            return itemCount * baseIncrease * ServerConfigs.NETHER_BORDER_INCREASE.get();
         } else if (dimension.dimension() == Level.END) {
-            return itemCount * baseIncrease * CommonConfigs.END_BORDER_INCREASE.get();  // Double the increase in the End
+            return itemCount * baseIncrease * ServerConfigs.END_BORDER_INCREASE.get();
         }
-        return itemCount * baseIncrease;  // Default case for other dimensions
+        return itemCount * baseIncrease;
     }
 
 }
