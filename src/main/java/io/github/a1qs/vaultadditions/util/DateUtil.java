@@ -29,6 +29,8 @@ public class DateUtil {
 
 
     public static boolean pastDate() {
+        if(!ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) return true;
+
         String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
         try {
             LocalDate configDate = LocalDate.parse(date, formatter);
