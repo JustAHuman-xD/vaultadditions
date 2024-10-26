@@ -38,18 +38,37 @@ public class PowerOrb extends Item {
 
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {
-            if (!player.getAbilities().instabuild) {
-                PlayerAdditionalVaultStatData statsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
-                if(player.isCrouching()) {
-                    int itemStackCount = heldItemStack.getCount();
-                    heldItemStack.shrink(itemStackCount);
-                    statsData.addPowerPoints((ServerPlayer) player, itemStackCount);
-                    return InteractionResultHolder.success(heldItemStack);
-                }
-                statsData.addPowerPoints((ServerPlayer) player, 1);
-                heldItemStack.shrink(1);
+
+            PlayerAdditionalVaultStatData statsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
+            if(player.isCrouching()) {
+                int itemStackCount = heldItemStack.getCount();
+                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
+                statsData.addPowerPoints((ServerPlayer) player, itemStackCount);
+                return InteractionResultHolder.success(heldItemStack);
             }
+
+            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
             player.awardStat(Stats.ITEM_USED.get(this));
+        }
+
+        if (!world.isClientSide) {
+            PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
+            if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
+
+            PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
+            if(player.isCrouching()) {
+                int itemStackCount = heldItemStack.getCount();
+                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
+
+                additionalStatsData.addPowerPoints((ServerPlayer) player, itemStackCount);
+                player.awardStat(Stats.ITEM_USED.get(this));
+                return InteractionResultHolder.success(heldItemStack);
+            }
+
+            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
+            additionalStatsData.addPowerPoints((ServerPlayer) player, 1);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            return InteractionResultHolder.success(heldItemStack);
         }
 
         return InteractionResultHolder.sidedSuccess(heldItemStack, world.isClientSide());
