@@ -104,6 +104,10 @@ repositories {
     maven {
         url "https://www.cursemaven.com"
     }
+
+    flatDir {
+        dir 'lib'
+    }
 }
 
 dependencies {
@@ -120,6 +124,8 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-core-618298:4665730")
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
     implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
+
+    implementation files('lib/vault_hunters_sync_server_config-1.5.0.jar')
 
     runtimeOnly fg.deobf("curse.maven:ferritecore-429235:4074294")
 
