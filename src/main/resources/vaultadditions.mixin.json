@@ -4,16 +4,8 @@
   "package": "io.github.a1qs.vaultadditions.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinAttributeSnapshotCalculator",
-    "MixinAttributeSnapshotCalculator$AccessorAttributeSnapshot",
-    "MixinAttributeSnapshotCalculator$InvokeAttributeSnapshotAttributeValue",
-    "MixinModConfigs",
     "MixinSkillAdapter",
-    "MixinSkillTabContainerElement",
-    "MixinVirtualWorlds"
+    "MixinVaultAltarIngredientsConfig"
   ],
-  "refmap": "vaultadditions.mixin-refmap.json",
-  "client": [
-    "MixinVaultBarOverlay"
-  ]
+  "refmap": "vaultadditions.mixin-refmap.json"
 }
