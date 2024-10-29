@@ -18,6 +18,8 @@ public class MixinSkillAdapter {
 
         instance.register("power_skill_point_increase", SkillPointIncreasePower.class, SkillPointIncreasePower::new);
         instance.register("power_expertise_point_increase", ExpertisePointIncreasePower.class, ExpertisePointIncreasePower::new);
+        instance.register("power_fall_reduction", FallReductionPower.class, FallReductionPower::new);
+        instance.register("power_kinetic_reduction", KineticReductionPower.class, KineticReductionPower::new);
 
         instance.register("power_vanilla_attribute", VanillaAttributePower.class, VanillaAttributePower::new);
         instance.register("power_vanilla_attribute_2", VanillaAttributePowerAdditional.class, VanillaAttributePowerAdditional::new);
