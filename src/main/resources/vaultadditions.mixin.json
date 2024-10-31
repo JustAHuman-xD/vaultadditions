@@ -9,6 +9,7 @@
     "MixinAttributeSnapshotCalculator$InvokeAttributeSnapshotAttributeValue",
     "MixinModConfigs",
     "MixinSkillAdapter",
+    "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinVirtualWorlds"
   ],
