@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.data;
 
+import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.core.data.adapter.Adapters;

@@ -55,4 +55,16 @@ public class VaultAdditions {
         ModScreens.register();
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
     }
+
+    /* Randomly "awaken" the expander
+    * Choose a condition/event, which is weighted
+    * Choose time that the condition/event is active for
+    * e.g:
+    * 50% Expand Borders again
+    * 25% Submit x Gemstones in y duration  ->
+    *
+    *
+    */
+
+
 }

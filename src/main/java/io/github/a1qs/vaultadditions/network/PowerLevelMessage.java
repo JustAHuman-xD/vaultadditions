@@ -1,15 +1,13 @@
 package io.github.a1qs.vaultadditions.network;
 
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
-import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStats;
+import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.init.ModConfigs;
-import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.SkillContext;
-import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

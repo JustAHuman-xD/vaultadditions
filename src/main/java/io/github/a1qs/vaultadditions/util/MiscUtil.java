@@ -3,7 +3,7 @@ package io.github.a1qs.vaultadditions.util;
 
 
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
-import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStats;
+import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.vault.powers.PowerConfig;
 import io.github.a1qs.vaultadditions.vault.powers.PowerGUIConfig;
 import iskallia.vault.skill.PlayerVaultStats;

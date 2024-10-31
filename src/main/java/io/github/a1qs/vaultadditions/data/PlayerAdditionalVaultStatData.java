@@ -1,13 +1,11 @@
 package io.github.a1qs.vaultadditions.data;
 
+import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
-import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.GroupedSkill;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.base.SkillContext;
-import iskallia.vault.util.WeekKey;
-import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;

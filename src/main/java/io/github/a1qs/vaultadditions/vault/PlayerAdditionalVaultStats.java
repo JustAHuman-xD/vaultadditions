@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.data;
+package io.github.a1qs.vaultadditions.vault;
 
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.PowerPointMessage;

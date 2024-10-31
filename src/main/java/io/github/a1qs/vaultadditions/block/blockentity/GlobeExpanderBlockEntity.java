@@ -53,7 +53,6 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
 
                 BlockPos crystalPos = new BlockPos(pos.getX(), pos.getY() + 1.5, pos.getZ());
                 world.levelEvent(2003, crystalPos,0);
-
                 MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
                 srv.getPlayerList().broadcastMessage(
                         new TextComponent("[World Border] " + playerName + " expanded the World border by " + blocksExpanded + " Blocks!")
