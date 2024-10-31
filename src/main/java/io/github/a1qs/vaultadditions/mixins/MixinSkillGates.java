@@ -20,7 +20,6 @@ public class MixinSkillGates {
         MiscUtil.POWERS.getAll().skills.forEach((s) -> {
             allSkillIds.add(s.getId());
         });
-        System.out.println(allSkillIds);
 
         return allSkillIds;
     }
