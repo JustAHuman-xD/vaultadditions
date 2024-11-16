@@ -43,13 +43,8 @@ public class CrystalCommands {
                                 .then(Commands.argument("listPlayerAmount", IntegerArgumentType.integer(1))
                                         .executes(this::contributionLeaderboard)
                                 )
-
-
-
                         )
-
                 )
-
         );
     }
 
@@ -136,7 +131,7 @@ public class CrystalCommands {
 
 
 
-    public int getRequiredPermissionLevel() {
+    private int getRequiredPermissionLevel() {
         return 2;
     }
 }
