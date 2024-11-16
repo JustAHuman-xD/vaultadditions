@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class DateUtil {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final Random random = new Random();
     private static final String[] messages = {
             "%d %s, %d %s, and %d %s remain until the World can no longer grow.",
@@ -33,8 +33,8 @@ public class DateUtil {
 
         String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
         try {
-            LocalDate configDate = LocalDate.parse(date, formatter);
-            LocalDate current = LocalDate.now();
+            LocalDate configDate = LocalDate.parse(date, TIME_FORMAT);
+            LocalDate current = LocalDate.now(); //Gets the current time based off of SystemTime
 
             if (current.isEqual(configDate) || current.isAfter(configDate)) {
                 return true;
@@ -48,7 +48,7 @@ public class DateUtil {
     public static MutableComponent untilDateMessage() {
         String date = ServerConfigs.STOP_ACCEPTING_GEMSTONES_DATE.get();
         try {
-            LocalDateTime targetDateTime = LocalDateTime.parse(date, formatter);
+            LocalDateTime targetDateTime = LocalDateTime.parse(date, TIME_FORMAT);
             LocalDateTime currentDateTime = LocalDateTime.now();
 
             if (currentDateTime.isBefore(targetDateTime)) {
@@ -73,6 +73,4 @@ public class DateUtil {
         }
         return new TextComponent("What did you do. (please report this)").withStyle(ChatFormatting.DARK_RED);
     }
-
-
 }
