@@ -3,7 +3,9 @@ package io.github.a1qs.vaultadditions.block;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
+import io.github.a1qs.vaultadditions.events.Events;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
@@ -14,6 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -69,10 +72,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
-        if(DateUtil.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
-            pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
-            return InteractionResult.PASS;
-        }
 
         if(!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
             double worldBorderSize = pPlayer.getLevel().getWorldBorder().getSize();
@@ -87,6 +86,12 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        boolean isActiveBorderEvent = EventData.get(srv).getActiveEvent().equals(Events.EVENT_LOCATIONS.get("BORDER_EXPANSION_ENABLED"));
+
+        if((DateUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+            pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
+            return InteractionResult.PASS;
+        }
 
         List<ServerLevel> dimensions = Arrays.asList(
                 srv.getLevel(Level.OVERWORLD),
