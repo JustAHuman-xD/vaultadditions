@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.item;
 
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
-import io.github.a1qs.vaultadditions.util.DateUtil;
+import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -32,7 +32,7 @@ public class PowerCrystal extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if(!DateUtil.pastDate()) {
+        if(!TimeUtil.pastDate()) {
             pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
         } else {
             pTooltipComponents.add(
@@ -47,7 +47,7 @@ public class PowerCrystal extends Item {
     @Nonnull
     public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack heldItemStack = player.getItemInHand(hand);
-        if(!DateUtil.pastDate()) return InteractionResultHolder.fail(heldItemStack);
+        if(!TimeUtil.pastDate()) return InteractionResultHolder.fail(heldItemStack);
 
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         if (!world.isClientSide) {

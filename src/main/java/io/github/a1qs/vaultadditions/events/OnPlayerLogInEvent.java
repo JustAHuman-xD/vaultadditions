@@ -3,7 +3,7 @@ package io.github.a1qs.vaultadditions.events;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
-import io.github.a1qs.vaultadditions.util.DateUtil;
+import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.skill.base.SkillContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -23,8 +23,8 @@ public class OnPlayerLogInEvent {
         PlayerAdditionalVaultStatData.get(level).getVaultStats(player).sync(level.getServer());
 
 
-        if(!DateUtil.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
-            player.sendMessage(DateUtil.untilDateMessage().withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
+        if(!TimeUtil.pastDate() && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+            player.sendMessage(TimeUtil.untilDateMessage().withStyle(ChatFormatting.LIGHT_PURPLE), Util.NIL_UUID);
         }
     }
 }
