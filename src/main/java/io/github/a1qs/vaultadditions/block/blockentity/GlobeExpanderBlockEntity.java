@@ -1,11 +1,15 @@
 package io.github.a1qs.vaultadditions.block.blockentity;
 
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
@@ -60,6 +64,21 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
                         ChatType.CHAT,
                         Util.NIL_UUID
                 );
+                EventData data = EventData.get(ServerLifecycleHooks.getCurrentServer());
+                if(data.isEventActive() && data.getActiveEvent().isCrystalSubmission()) {
+                    if(!data.getActiveEvent().isModifierActive()) {
+                        data.getActiveEvent().addCrystalsSubmitted((int) blocksExpanded / ServerConfigs.POWER_CRYSTAL_INCREASE.get());
+                        if(data.getActiveEvent().isModifierActive()) {
+                            MutableComponent eventComponent2 = new TextComponent("[EVENT] ").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
+                                    .append(new TextComponent("The Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)))
+                                    .append(new TextComponent(data.getActiveEvent().getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
+                                    .append(new TextComponent(" is now active").setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)));
+
+
+                            srv.getPlayerList().broadcastMessage(eventComponent2, ChatType.SYSTEM, Util.NIL_UUID);
+                        }
+                    }
+                }
             }
         }
     }
@@ -68,19 +87,17 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
     public void resetSpinTime() {
         this.ticksSpinningOld = 0;
         this.ticksSpinning = 0;
-        this.isAnimating = true;  // Start the animation
-        this.setChanged();  // Notify the system that this block entity has been updated
+        this.isAnimating = true;
+        this.setChanged();
     }
 
     public void stopAnimation() {
-        this.isAnimating = false;  // Stop the animation
+        this.isAnimating = false;
         this.ticksSpinning = 0;
         this.ticksSpinningOld = 0;
 
-        // Mark the block entity as changed to save data to NBT
-        this.setChanged();
 
-        // Force a block update to sync NBT data with the client
+        this.setChanged();
         if (this.level != null && !this.level.isClientSide()) {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
         }

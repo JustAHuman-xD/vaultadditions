@@ -27,9 +27,6 @@ public class GlobeExpanderEntityRenderer implements BlockEntityRenderer<GlobeExp
 
         Level world = blockEntity.getLevel();
         if (world != null) {
-            float lerpTicks = Mth.lerp(partialTicks, blockEntity.ticksSpinningOld, blockEntity.ticksSpinning);
-            float percentConsumed = lerpTicks / (float) blockEntity.maxSpinTicks;
-
             ItemStack itemStack = new ItemStack(ModItems.POWER_CRYSTAL.get());
 
             matrixStack.pushPose();

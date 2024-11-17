@@ -5,18 +5,17 @@ import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
-import io.github.a1qs.vaultadditions.events.Events;
+import io.github.a1qs.vaultadditions.events.Event;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
-import io.github.a1qs.vaultadditions.util.DateUtil;
+import io.github.a1qs.vaultadditions.util.TimeUtil;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -86,9 +85,12 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-        boolean isActiveBorderEvent = EventData.get(srv).getActiveEvent().equals(Events.EVENT_LOCATIONS.get("BORDER_EXPANSION_ENABLED"));
+        EventData data = EventData.get(srv);
+        boolean isActiveBorderEvent = false;
+        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getId().equals(Event.EVENT_IDS.get("BORDER_EXPANSION_ENABLED"));
 
-        if((DateUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+
+        if((TimeUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
             pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
             return InteractionResult.PASS;
         }
@@ -150,11 +152,9 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                     }
                 }
 
-
                 expanderEntity.resetSpinTime();
                 expanderEntity.setChanged();
                 pLevel.sendBlockUpdated(pPos, expanderEntity.getBlockState(), expanderEntity.getBlockState(), 3);
-
 
                 expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), powerCrystalIncrease * handCount);
             }
