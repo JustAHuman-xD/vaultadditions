@@ -71,17 +71,15 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
+        if(pHand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.PASS;
+        }
 
         if(!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
             double worldBorderSize = pPlayer.getLevel().getWorldBorder().getSize();
             pPlayer.displayClientMessage(new TextComponent("Current World Border size Diameter: " + worldBorderSize), true);
             return InteractionResult.SUCCESS;
         }
-
-        if(pHand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
-        }
-
 
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);

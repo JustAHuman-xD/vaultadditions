@@ -49,10 +49,11 @@ public class PowerCrystal extends Item {
         ItemStack heldItemStack = player.getItemInHand(hand);
         if(!TimeUtil.pastDate()) return InteractionResultHolder.fail(heldItemStack);
 
-        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
+
         if (!world.isClientSide) {
             PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
             if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
 
             PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
             if(player.isCrouching()) {
@@ -69,8 +70,7 @@ public class PowerCrystal extends Item {
             player.awardStat(Stats.ITEM_USED.get(this));
             return InteractionResultHolder.success(heldItemStack);
         }
-
-        return InteractionResultHolder.sidedSuccess(heldItemStack, world.isClientSide());
+        return InteractionResultHolder.fail(heldItemStack);
     }
 
 
