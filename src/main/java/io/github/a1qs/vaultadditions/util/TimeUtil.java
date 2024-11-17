@@ -9,11 +9,12 @@ import net.minecraft.network.chat.TextComponent;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
 
-public class DateUtil {
+public class TimeUtil {
 
     public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final Random random = new Random();
@@ -72,5 +73,13 @@ public class DateUtil {
             VaultAdditions.LOGGER.error(e.toString());
         }
         return new TextComponent("What did you do. (please report this)").withStyle(ChatFormatting.DARK_RED);
+    }
+
+    public static long convertToEpochMillis(String dateStr) {
+        try {
+            return LocalDateTime.parse(dateStr, TIME_FORMAT).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        } catch (DateTimeParseException e) {
+            return -1;
+        }
     }
 }
