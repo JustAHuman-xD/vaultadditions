@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.events.Event;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import net.minecraft.ChatFormatting;
@@ -10,6 +11,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -28,7 +31,7 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class EventData extends SavedData {
-
+    private static final Random rand = new Random();
     private static final String DATA_NAME = "vaultadditions_EventData";
     private final Map<ResourceLocation, Event> eventMap = new HashMap<>();
     private final List<String> scheduledEvents = new ArrayList<>();
@@ -38,21 +41,37 @@ public class EventData extends SavedData {
 
     public void startEvent(Event event) {
         VaultAdditions.LOGGER.info("Started Event: {}", event.getId());
-        this.eventDuration = event.getEventDuration();
-        this.isActive = true;
-        this.activeEvent = event;
-        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(
-                new TextComponent(event.getEventMessage()).withStyle(ChatFormatting.YELLOW),
-                ChatType.SYSTEM,
-                Util.NIL_UUID
+        Event activeEventInstance = new Event(
+                event.getId(),
+                event.getEventMessage(),
+                event.getEventWeight(),
+                event.getEventDuration(),
+                event.isCrystalSubmission(),
+                event.getRequiredCrystals(),
+                event.getCrystalsSubmitted()
         );
+        activeEventInstance.setRequiredCrystals(rand.nextInt(ServerConfigs.CRYSTAL_SUBMIT_MIN.get(), ServerConfigs.CRYSTAL_SUBMIT_MAX.get()+1));
+        this.eventDuration = activeEventInstance.getEventDuration();
+        this.isActive = true;
+        this.activeEvent = activeEventInstance;
+        MutableComponent cmp = new TextComponent("[EVENT] ")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
+                .append(new TextComponent("Started Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
+                .append(new TextComponent(activeEventInstance.getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)));
+
+        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(cmp, ChatType.SYSTEM, Util.NIL_UUID);
         setDirty();
     }
 
 
     public void stopEvent() {
-        VaultAdditions.LOGGER.info("Event Ended: {}", this.getActiveEvent());
-        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(new TextComponent("Stopped Event"), ChatType.SYSTEM, Util.NIL_UUID);
+        VaultAdditions.LOGGER.info("Event Ended: {}", this.getActiveEvent().getId());
+        MutableComponent cmp = new TextComponent("[EVENT] ")
+                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
+                .append(new TextComponent("Stopped Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
+                .append(new TextComponent(this.getActiveEvent().getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)));
+
+        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(cmp, ChatType.SYSTEM, Util.NIL_UUID);
         this.activeEvent = null;
         this.isActive = false;
         setDirty();
@@ -97,13 +116,7 @@ public class EventData extends SavedData {
     private Event selectRandomEvent() {
         int totalWeight = eventMap.values().stream().mapToInt(Event::getEventWeight).sum();
         if (totalWeight == 0) {
-            return new Event(
-                    new ResourceLocation(VaultAdditions.MOD_ID, "fallback"),
-                    "Fallback Event, Report to author",
-                    1,
-                    300,
-                    false
-            );
+            return Event.FALLBACK;
         }
 
         int randomWeight = (int) (Math.random() * totalWeight);
@@ -114,13 +127,7 @@ public class EventData extends SavedData {
             }
         }
 
-        return new Event(
-                new ResourceLocation(VaultAdditions.MOD_ID, "fallback"),
-                "Fallback Event, Report to author",
-                1,
-                300,
-                false
-        );
+        return Event.FALLBACK;
     }
 
     public boolean removeEventByResourceLocation(ResourceLocation resourceLocation) {
@@ -196,18 +203,7 @@ public class EventData extends SavedData {
         ListTag eventList = nbt.getList("EventData", Tag.TAG_COMPOUND);
         for (int i = 0; i < eventList.size(); i++) {
             CompoundTag eventTag = eventList.getCompound(i);
-
-            ResourceLocation eventId = new ResourceLocation(eventTag.getString("EventId"));
-            String eventMessage = eventTag.getString("EventMessage");
-            int eventWeight = eventTag.getInt("EventWeight");
-            long eventDuration = eventTag.getLong("EventDuration");
-            boolean crystalSubmission = eventTag.getBoolean("CrystalSubmission");
-            int requiredCrystals = eventTag.getInt("RequiredCrystals");
-            int crystalsSubmitted = eventTag.getInt("SubmittedCrystals");
-
-
-            Event event = new Event(eventId, eventMessage, eventWeight, eventDuration, crystalSubmission, requiredCrystals,crystalsSubmitted);
-            data.eventMap.put(eventId, event);
+            data.eventMap.put(new ResourceLocation(eventTag.getString("EventId")), Event.deserialize(eventTag));
         }
 
         ListTag scheduledEventTag = nbt.getList("ScheduledEvents", Tag.TAG_STRING); // Use STRING here
@@ -233,14 +229,7 @@ public class EventData extends SavedData {
 
         ListTag eventList = new ListTag();
         for (Event event : eventMap.values()) {
-            CompoundTag eventTag = new CompoundTag();
-            eventTag.putString("EventId", event.getId().toString());
-            eventTag.putString("EventMessage", event.getEventMessage());
-            eventTag.putInt("EventWeight", event.getEventWeight());
-            eventTag.putLong("EventDuration", event.getEventDuration());
-            eventTag.putBoolean("CrystalSubmission", event.isCrystalSubmission());
-            eventTag.putInt("RequiredCrystals", event.getRequiredCrystals());
-            eventTag.putInt("SubmittedCrystals", event.getCrystalsSubmitted());
+            CompoundTag eventTag = Event.serialize(event);
             eventList.add(eventTag);
         }
         nbt.put("EventData", eventList);
