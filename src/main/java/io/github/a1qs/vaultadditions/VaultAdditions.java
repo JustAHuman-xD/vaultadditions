@@ -1,11 +1,13 @@
 package io.github.a1qs.vaultadditions;
 
 import com.mojang.logging.LogUtils;
+import io.github.a1qs.vaultadditions.block.blockentity.render.EventBlockRenderer;
 import io.github.a1qs.vaultadditions.block.blockentity.render.GlobeExpanderEntityRenderer;
 import io.github.a1qs.vaultadditions.config.CommonConfigs;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -53,18 +55,7 @@ public class VaultAdditions {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         ModScreens.register();
+        BlockEntityRenderers.register(ModBlockEntities.EVENT_BLOCK_ENTITY.get(), EventBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
     }
-
-    /* Randomly "awaken" the expander
-    * Choose a condition/event, which is weighted
-    * Choose time that the condition/event is active for
-    * e.g:
-    * 50% Expand Borders again
-    * 25% Submit x Gemstones in y duration  ->
-    *
-    *
-    */
-
-
 }
