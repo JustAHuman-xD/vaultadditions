@@ -1,6 +1,8 @@
 package io.github.a1qs.vaultadditions.events;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import iskallia.vault.VaultMod;
+import iskallia.vault.core.vault.Vault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
@@ -96,6 +98,7 @@ public class Event {
     }
 
     public static final Map<String, ResourceLocation> EVENT_IDS = new HashMap<>();
+    public static final Map<ResourceLocation, ResourceLocation> EVENT_MODIFIER_MAP = new HashMap<>();
     public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "expansion_enabled");
     public static final ResourceLocation PORTAL_MODIFIER_1 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_1");
     public static final ResourceLocation PORTAL_MODIFIER_2 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_2");
@@ -119,5 +122,11 @@ public class Event {
         EVENT_IDS.put("PORTAL_MODIFIER_3", PORTAL_MODIFIER_3);
         EVENT_IDS.put("PORTAL_MODIFIER_4", PORTAL_MODIFIER_4);
         EVENT_IDS.put("PORTAL_MODIFIER_5", PORTAL_MODIFIER_5);
+        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_1, new ResourceLocation(VaultMod.MOD_ID, "event_group_one"));
+        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_2, new ResourceLocation(VaultMod.MOD_ID, "event_group_two"));
+        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_3, new ResourceLocation(VaultMod.MOD_ID, "event_group_three"));
+        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_4, new ResourceLocation(VaultMod.MOD_ID, "event_group_four"));
+        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_5, new ResourceLocation(VaultMod.MOD_ID, "event_group_five"));
+
     }
 }

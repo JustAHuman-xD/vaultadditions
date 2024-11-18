@@ -50,7 +50,7 @@ public class EventData extends SavedData {
                 event.getRequiredCrystals(),
                 event.getCrystalsSubmitted()
         );
-        activeEventInstance.setRequiredCrystals(rand.nextInt(ServerConfigs.CRYSTAL_SUBMIT_MIN.get(), ServerConfigs.CRYSTAL_SUBMIT_MAX.get()+1));
+        if(event.isCrystalSubmission()) activeEventInstance.setRequiredCrystals(rand.nextInt(ServerConfigs.CRYSTAL_SUBMIT_MIN.get(), ServerConfigs.CRYSTAL_SUBMIT_MAX.get()+1));
         this.eventDuration = activeEventInstance.getEventDuration();
         this.isActive = true;
         this.activeEvent = activeEventInstance;
@@ -157,6 +157,10 @@ public class EventData extends SavedData {
 
     public boolean isEventActive() {
         return isActive;
+    }
+
+    public boolean conditionsCompleted() {
+        return isActive && (this.getActiveEvent().getCrystalsSubmitted() >= this.getActiveEvent().getRequiredCrystals());
     }
 
     public long getEventDuration() {

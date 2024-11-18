@@ -125,7 +125,9 @@ public class EventCommands {
                 StringArgumentType.getString(context, "eventMessage"),
                 IntegerArgumentType.getInteger(context, "weight"),
                 LongArgumentType.getLong(context, "durationInMin") * 20 * 60,
-                BoolArgumentType.getBool(context, "isCrystalSubmission")
+                BoolArgumentType.getBool(context, "isCrystalSubmission"),
+                0,
+                0
                 );
 
         data.addEvent(event);

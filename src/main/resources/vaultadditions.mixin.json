@@ -11,6 +11,7 @@
     "MixinSkillAdapter",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
+    "MixinVaultPortalBlock",
     "MixinVirtualWorlds"
   ],
   "refmap": "vaultadditions.mixin-refmap.json",
