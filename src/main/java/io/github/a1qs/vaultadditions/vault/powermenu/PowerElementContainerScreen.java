@@ -3,7 +3,6 @@ package io.github.a1qs.vaultadditions.vault.powermenu;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.client.gui.framework.ScreenRenderers;
-import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.client.gui.screen.player.SkillsElementContainerScreen;
 import iskallia.vault.client.gui.screen.player.legacy.SplitTabContent;
 import iskallia.vault.client.gui.screen.player.legacy.TabContent;

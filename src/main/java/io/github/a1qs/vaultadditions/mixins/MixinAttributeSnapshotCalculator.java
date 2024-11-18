@@ -1,8 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.talent.GearAttributeSkill;

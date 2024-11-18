@@ -1,10 +1,10 @@
 package io.github.a1qs.vaultadditions.network;
 
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
-import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
+import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.SkillContext;

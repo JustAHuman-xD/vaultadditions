@@ -3,7 +3,6 @@ package io.github.a1qs.vaultadditions.mixins;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.events.Event;
-import iskallia.vault.VaultMod;
 import iskallia.vault.block.VaultPortalBlock;
 import iskallia.vault.block.entity.VaultPortalTileEntity;
 import iskallia.vault.core.vault.modifier.VaultModifierStack;

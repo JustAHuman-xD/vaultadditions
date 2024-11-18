@@ -16,7 +16,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerAdditionalVaultStatData extends SavedData {
     //todo: this isnt necessary, counter argument: lazy

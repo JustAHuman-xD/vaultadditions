@@ -2,7 +2,6 @@ package io.github.a1qs.vaultadditions.events;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.VaultMod;
-import iskallia.vault.core.vault.Vault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
