@@ -67,23 +67,21 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        if(pLevel.isClientSide()) {
+        if (pLevel.isClientSide() || pHand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
 
-        if(pHand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
-        }
 
-        if(!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
-            double worldBorderSize = pPlayer.getLevel().getWorldBorder().getSize();
-            pPlayer.displayClientMessage(new TextComponent("Current World Border size Diameter: " + worldBorderSize), true);
+        // Handle non-crystal interactions
+        if (!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
+            handleWorldBorderInfo(pPlayer);
             return InteractionResult.SUCCESS;
         }
 
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
-        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         EventData data = EventData.get(srv);
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+
         boolean isActiveBorderEvent = false;
         if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getId().equals(Event.EVENT_IDS.get("BORDER_EXPANSION_ENABLED")) || data.getActiveEvent().isCrystalSubmission();
 
@@ -109,7 +107,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
 
-
             if(pPlayer.getMainHandItem().getItem() == ModItems.POWER_CRYSTAL.get()) {
                 int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
                 int handCount = pPlayer.getMainHandItem().getCount();
@@ -132,23 +129,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                     pPlayer.getMainHandItem().setCount(0);
                 }
 
-                if(ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) {
-                    PowerCrystalData crystalData = PowerCrystalData.get(srv);
-                    crystalData.addCrystalContribution(pPlayer.getUUID(), handCount);
-
-                    var sizeScaleAttribute = pPlayer.getAttribute(ModAttributes.SIZE_SCALE);
-                    if (sizeScaleAttribute != null) {
-
-                        double increaseAmount = crystalData.getPlayerContributedCrystals(pPlayer.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
-                        increaseAmount = Math.min(increaseAmount, ServerConfigs.GROW_PLAYER_CAP.get());
-                        // Check if the player already has this modifier
-                        AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-                        if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier); //remove to readd it
-
-                        AttributeModifier sizeScaleModifier = new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", increaseAmount, AttributeModifier.Operation.ADDITION);
-                        sizeScaleAttribute.addPermanentModifier(sizeScaleModifier);
-                    }
-                }
+                handlePlayerGrowth(pPlayer, handCount);
 
                 expanderEntity.resetSpinTime();
                 expanderEntity.setChanged();
@@ -192,4 +173,28 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         return itemCount * baseIncrease;
     }
 
+    private void handleWorldBorderInfo(Player player) {
+        double worldBorderSize = player.getLevel().getWorldBorder().getSize();
+        player.displayClientMessage(new TextComponent("Current World Border size diameter: " + worldBorderSize), true);
+    }
+
+    private void handlePlayerGrowth(Player player, int handCount) {
+        if (!ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) return;
+
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        PowerCrystalData crystalData = PowerCrystalData.get(server);
+
+        crystalData.addCrystalContribution(player.getUUID(), handCount);
+        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
+
+        if (sizeScaleAttribute != null) {
+            double growthAmount = crystalData.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
+            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
+
+            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
+            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
+
+            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
+        }
+    }
 }
