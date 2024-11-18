@@ -85,7 +85,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
         EventData data = EventData.get(srv);
         boolean isActiveBorderEvent = false;
-        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getId().equals(Event.EVENT_IDS.get("BORDER_EXPANSION_ENABLED"));
+        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getId().equals(Event.EVENT_IDS.get("BORDER_EXPANSION_ENABLED")) || data.getActiveEvent().isCrystalSubmission();
 
 
         if((TimeUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
