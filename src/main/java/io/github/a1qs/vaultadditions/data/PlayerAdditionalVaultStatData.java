@@ -51,7 +51,7 @@ public class PlayerAdditionalVaultStatData extends SavedData {
         return this;
     }
 
-    public PlayerAdditionalVaultStatData resetExpertises(ServerPlayer player) {
+    public PlayerAdditionalVaultStatData resetPowers(ServerPlayer player) {
         this.getVaultStats(player).resetPower(player.getLevel().getServer()).sync(player.getLevel().getServer());
         PlayerAdditionalVaultStatData statsData = this.get(player.getLevel());
         PlayerPowersData powerData = PlayerPowersData.get(player.getLevel());

@@ -14,8 +14,6 @@ import java.util.List;
 public class ClientPowerData {
     private static PowerTree POWER_TREE = new PowerTree();
 
-    public ClientPowerData() {
-    }
 
     @Nonnull
     public static List<TieredSkill> getLearnedTalentNodes() {
