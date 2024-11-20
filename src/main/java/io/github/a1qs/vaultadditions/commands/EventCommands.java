@@ -91,7 +91,9 @@ public class EventCommands {
                     .append(new TextComponent("    Event Duration: ").withStyle(ChatFormatting.LIGHT_PURPLE))
                     .append(new TextComponent(activeEvent.getEventDuration() + "\n").withStyle(ChatFormatting.YELLOW))
                     .append(new TextComponent("    Is Crystal Submission: ").withStyle(ChatFormatting.LIGHT_PURPLE))
-                    .append(new TextComponent(activeEvent.isCrystalSubmission() + "").withStyle(ChatFormatting.YELLOW)),
+                    .append(new TextComponent(activeEvent.isCrystalSubmission() + "\n").withStyle(ChatFormatting.YELLOW))
+                    .append(new TextComponent("    Required Crystal Submission: ").withStyle(ChatFormatting.LIGHT_PURPLE))
+                    .append(new TextComponent(activeEvent.getCrystalsSubmitted() + " / " + activeEvent.getRequiredCrystals())),
                     false);
             return 0;
         } else {
