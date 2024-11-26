@@ -8,6 +8,7 @@ import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.snapshot.AttributeSnapshotHelper;
+import iskallia.vault.world.data.PlayerExpertisesData;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -92,22 +93,45 @@ public class PlayerPowersData extends SavedData {
                     if (data.scheduledMerge.remove(player.getUUID())) {
                         SkillContext context = SkillContext.of(player);
                         data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.POWERS.getAll().copy(), context));
-                        PlayerVaultStats stats = PlayerVaultStatsData.get((ServerLevel)player.level).getVaultStats(player);
-                        stats.setSkillPoints(context.getLearnPoints());
-                        stats.setRegretPoints(context.getRegretPoints());
                         SkillContext ctx = MiscUtil.ofPowers(player);
                         PlayerAdditionalVaultStats stats2 = PlayerAdditionalVaultStatData.get((ServerLevel)player.level).getVaultStats(player);
                         stats2.setPowerPoints(ctx.getLearnPoints());
 
                         AttributeSnapshotHelper.getInstance().refreshSnapshotDelayed(player);
                     }
-
                     data.getPowers(player).onTick(SkillContext.of(player));
                 }
             }
-
         }
     }
+
+//    @SubscribeEvent
+//    public static void onTick(TickEvent.PlayerTickEvent event) {
+//        if (event.phase == TickEvent.Phase.START) {
+//            if (event.side.isServer()) {
+//                Player var2 = event.player;
+//                if (var2 instanceof ServerPlayer) {
+//                    ServerPlayer player = (ServerPlayer)var2;
+//                    PlayerPowersData data = get(player.getLevel());
+//                    if (data.scheduledMerge.remove(player.getUUID())) {
+//                        SkillContext context = MiscUtil.ofPowers(player);
+//                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.POWERS.getAll().copy(), context));
+////                        PlayerVaultStats stats = PlayerVaultStatsData.get((ServerLevel)player.level).getVaultStats(player);
+////                        stats.setSkillPoints(context.getLearnPoints());
+////                        stats.setRegretPoints(context.getRegretPoints());
+////                        SkillContext ctx = MiscUtil.ofPowers(player);
+//                        PlayerAdditionalVaultStats stats2 = PlayerAdditionalVaultStatData.get((ServerLevel)player.level).getVaultStats(player);
+//                        stats2.setPowerPoints(context.getLearnPoints());
+//
+//                        AttributeSnapshotHelper.getInstance().refreshSnapshotDelayed(player);
+//                    }
+//
+//                    data.getPowers(player).onTick(MiscUtil.ofPowers(player));
+//                }
+//            }
+//
+//        }
+//    }
 
     private static PlayerPowersData create(CompoundTag tag) {
         PlayerPowersData data = new PlayerPowersData();
