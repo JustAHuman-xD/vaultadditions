@@ -6,7 +6,6 @@ import io.github.a1qs.vaultadditions.container.LootStatueContainer;
 import io.github.a1qs.vaultadditions.container.RenameContainer;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
-import iskallia.vault.block.entity.LootStatueTileEntity;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.util.RenameType;
 import net.minecraft.core.BlockPos;
@@ -26,6 +25,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -179,6 +179,13 @@ public class LootStatueBlock extends BaseEntityBlock {
         }
 
         return itemstack;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos pos = context.getClickedPos();
+        Level world = context.getLevel();
+        return pos.getY() < world.getMaxBuildHeight() - 3 && world.getBlockState(pos.above(1)).canBeReplaced(context) && world.getBlockState(pos.above(2)).canBeReplaced(context) ? this.defaultBlockState().setValue(FACING, context.getHorizontalDirection()) : null;
     }
 
     @Override

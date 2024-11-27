@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions;
 import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.EventBlockRenderer;
 import io.github.a1qs.vaultadditions.block.blockentity.render.GlobeExpanderEntityRenderer;
+import io.github.a1qs.vaultadditions.block.blockentity.render.LootStatueBlockRenderer;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
@@ -55,5 +56,6 @@ public class VaultAdditions {
         ModScreens.register();
         BlockEntityRenderers.register(ModBlockEntities.EVENT_BLOCK_ENTITY.get(), EventBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), LootStatueBlockRenderer::new);
     }
 }
