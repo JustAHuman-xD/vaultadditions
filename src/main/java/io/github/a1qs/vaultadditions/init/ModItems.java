@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.init;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.item.PowerOrb;
 import net.minecraft.world.item.CreativeModeTab;
@@ -18,4 +19,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> POWER_ORB = ITEMS.register("power_orb",
             () -> new PowerOrb(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
+
+    public static final RegistryObject<Item> LOOT_STATUE_ITEM = ModItems.ITEMS.register("loot_statue_block",
+            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE.get()));
 }
