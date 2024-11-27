@@ -1,5 +1,7 @@
 package io.github.a1qs.vaultadditions.init;
 
+import io.github.a1qs.vaultadditions.client.menu.LootStatueMenu;
+import io.github.a1qs.vaultadditions.client.menu.RenameMenu;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerElementContainerScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -9,5 +11,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ModScreens {
     public static void register() {
         MenuScreens.register(ModContainers.POWERS_TAB_CONTAINER, PowerElementContainerScreen::new);
+        MenuScreens.register(ModContainers.LOOT_STATUE_CONTAINER, LootStatueMenu::new);
+        MenuScreens.register(ModContainers.RENAMING_CONTAINER, RenameMenu::new);
     }
 }
