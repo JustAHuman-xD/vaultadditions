@@ -53,7 +53,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class LootStatueBlock extends BaseEntityBlock {
-    private static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     private static final VoxelShape SHAPE;
 
     public LootStatueBlock(Properties properties) {
@@ -196,8 +196,6 @@ public class LootStatueBlock extends BaseEntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        System.out.println(type);
-        System.out.println(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get());
         return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), LootStatueBlockEntity::tick);
     }
 
