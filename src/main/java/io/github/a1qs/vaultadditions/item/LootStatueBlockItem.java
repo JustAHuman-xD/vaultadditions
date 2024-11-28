@@ -47,9 +47,21 @@ public class LootStatueBlockItem extends BlockItem {
             itemDescriptor = (new TextComponent(lootItem.getHoverName().getString())).withStyle(ChatFormatting.GREEN);
         }
 
+
+
         toolTip.add(TextComponent.EMPTY);
-        toolTip.add((new TextComponent("Item: ")).withStyle(ChatFormatting.WHITE));
-        toolTip.add((new TextComponent("- ")).append(itemDescriptor));
+        toolTip.add(new TextComponent("Item: ").withStyle(ChatFormatting.WHITE));
+        toolTip.add(new TextComponent("- ").append(itemDescriptor));
+
+        if(dataTag.contains("TotalItems") && dataTag.contains("ItemsRemaining")) {
+            toolTip.add(TextComponent.EMPTY);
+            toolTip.add(new TextComponent("Status: ").withStyle(ChatFormatting.WHITE));
+            if(dataTag.getInt("ItemsRemaining") <= 0) {
+                toolTip.add(new TextComponent("- ").append(new TextComponent("☠ EXPIRED").withStyle(ChatFormatting.RED)));
+            } else {
+                toolTip.add(new TextComponent("- ").append(new TextComponent("✔ ACTIVE").withStyle(ChatFormatting.GREEN)));
+            }
+        }
     }
 
     public static ItemStack getStatueBlockItem(String nickname) {
