@@ -2,7 +2,6 @@ package io.github.a1qs.vaultadditions.block.blockentity;
 
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import iskallia.vault.block.entity.SkinnableTileEntity;
-import iskallia.vault.init.ModConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,15 +19,15 @@ import javax.annotation.Nonnull;
 
 public class LootStatueBlockEntity extends SkinnableTileEntity {
     private int currentTick = 0;
-    private int decayStart;
-    private int decayTime;
+    private int totalItems;
+    private int itemsRemaining;
     private ItemStack lootItem;
 
     public LootStatueBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), pos, state);
         this.lootItem = ItemStack.EMPTY;
-        this.decayTime = 600; // This timer is used to track the current state of the Loot Statue, once 0, stop producing.
-        this.decayStart = 600;
+        this.itemsRemaining = 200; // This counter is used to track the current state of the Loot Statue, once 0, stop producing.
+        this.totalItems = itemsRemaining;
 
     }
 
@@ -36,12 +35,12 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
         return this.currentTick;
     }
 
-    public int getDecayStart() {
-        return decayStart;
+    public int getTotalItems() {
+        return totalItems;
     }
 
-    public int getDecayTime() {
-        return decayTime;
+    public int getItemsRemaining() {
+        return itemsRemaining;
     }
 
     public ItemStack getLootItem() {
@@ -49,7 +48,7 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     }
 
     public boolean isDead() {
-        return decayTime <= 0;
+        return itemsRemaining <= 0;
     }
 
     public void setLootItem(@Nonnull ItemStack stack) {
@@ -66,11 +65,12 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
                     if (!tile.lootItem.isEmpty()) {
                         ItemStack stack = tile.lootItem.copy();
                         if (tile.dispenseItem(stack, false)) {
+                            tile.itemsRemaining--;
                             tile.setChanged();
+
                         }
                     }
                 }
-                tile.decayTime--;
             }
         }
     }
@@ -108,8 +108,8 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
             nbt.putString("PlayerNickname", nickname);
         }
 
-        nbt.putInt("DecayStart", this.getDecayStart());
-        nbt.putInt("DecayTime", this.getDecayTime());
+        nbt.putInt("TotalItems", this.getTotalItems());
+        nbt.putInt("ItemsRemaining", this.getItemsRemaining());
         nbt.putInt("CurrentTick", this.getCurrentTick());
 
         nbt.put("LootItem", this.getLootItem().serializeNBT());
@@ -122,8 +122,8 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
             this.skin.updateSkin(nbt.getString("PlayerNickname"));
         }
 
-        this.decayStart = nbt.getInt("DecayStart");
-        this.decayTime = nbt.getInt("DecayTime");
+        this.totalItems = nbt.getInt("TotalItems");
+        this.itemsRemaining = nbt.getInt("ItemsRemaining");
         this.currentTick = nbt.getInt("CurrentTick");
         this.lootItem = ItemStack.of(nbt.getCompound("LootItem"));
     }
