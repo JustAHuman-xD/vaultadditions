@@ -2,10 +2,11 @@ package io.github.a1qs.vaultadditions.util;
 
 
 
+import io.github.a1qs.vaultadditions.config.vault.StatueLootConfig;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
-import io.github.a1qs.vaultadditions.vault.powers.PowerConfig;
-import io.github.a1qs.vaultadditions.vault.powers.PowerGUIConfig;
+import io.github.a1qs.vaultadditions.config.vault.PowerConfig;
+import io.github.a1qs.vaultadditions.config.vault.PowerGUIConfig;
 import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.skill.source.SkillSource;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class MiscUtil {
     public static PowerGUIConfig POWERS_GUI;
     public static PowerConfig POWERS;
+    public static StatueLootConfig STATUE_LOOT;
     public static UUID sizeScaleModifierUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     public static int unspentPowerPoints;
     public static final ObservableSupplier<Integer> POWER_POINT_SUPPLIER = ObservableSupplier.of(() -> unspentPowerPoints, Integer::equals);

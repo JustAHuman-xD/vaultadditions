@@ -7,7 +7,6 @@ import com.mojang.math.Vector3f;
 import io.github.a1qs.vaultadditions.block.LootStatueBlock;
 import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
 import iskallia.vault.VaultMod;
-import iskallia.vault.block.render.LootStatueRenderer;
 import iskallia.vault.entity.model.StatuePlayerModel;
 import iskallia.vault.util.SkinProfile;
 import net.minecraft.ChatFormatting;
@@ -29,10 +28,8 @@ import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Entity;
 
 public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBlockEntity> {
     private static StatuePlayerModel PLAYER_MODEL;
