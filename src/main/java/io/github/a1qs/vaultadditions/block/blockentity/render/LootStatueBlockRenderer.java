@@ -54,7 +54,7 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
             poseStack.pushPose();
             poseStack.translate(0.0, 0.1, 0.05);
             BakedModel bakedmodel = this.itemRenderer.getModel(renderItem, null, null, 0);
-            float scale = bakedmodel.isGui3d() ? 0.5F : 0.333333F;
+            float scale = bakedmodel.isGui3d() ? 0.5F : 0.3F;
             poseStack.scale(scale, scale, scale);
             this.itemRenderer.render(renderItem, ItemTransforms.TransformType.FIXED, false, poseStack, multiBufferSource, combinedLight, combinedOverlay, bakedmodel);
 
