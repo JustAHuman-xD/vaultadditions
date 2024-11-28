@@ -78,7 +78,7 @@ public class LootStatueBlock extends BaseEntityBlock {
                 if (!stack.hasTag() || !stack.getTag().contains("BlockEntityTag")) {
                     final CompoundTag data = new CompoundTag();
                     ListTag itemList = new ListTag();
-                    List<ItemStack> options = ModConfigs.STATUE_LOOT.getOptions();
+                    List<ItemStack> options = MiscUtil.STATUE_LOOT.getOptions();
 
                     for (ItemStack option : options) {
                         itemList.add(option.serializeNBT());

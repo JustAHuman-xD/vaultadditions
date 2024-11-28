@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powers;
+package io.github.a1qs.vaultadditions.config.vault;
 
 import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
