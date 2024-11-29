@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.block;
 
-import io.github.a1qs.vaultadditions.block.blockentity.EventBlockEntity;
 import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import iskallia.vault.init.ModConfigs;
 import net.minecraft.core.BlockPos;
@@ -16,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -54,7 +54,7 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        if (itemstack.isEmpty()) {
+        if (itemstack.isEmpty() || itemstack.getItem().equals(Items.POTION)) {
             return InteractionResult.PASS;
         } else {
             int i = pState.getValue(LEVEL);
@@ -89,6 +89,9 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
         ItemStack stack = context.getItemInHand();
         if (stack.hasTag() && stack.getTag().contains("BlockEntityTag", 10)) {
             int cauldronLevel = stack.getTagElement("BlockEntityTag").getInt("Level");
+            if(cauldronLevel != 1 && cauldronLevel != 2 && cauldronLevel != 3) {
+                cauldronLevel = 1;
+            }
             return toPlace.setValue(LEVEL, cauldronLevel);
         } else {
             return toPlace;
