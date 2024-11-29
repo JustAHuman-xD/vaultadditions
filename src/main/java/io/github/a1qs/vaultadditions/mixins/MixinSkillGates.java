@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
-import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import iskallia.vault.skill.SkillGates;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ public class MixinSkillGates {
             ordinal = 0
     )
     private List<String> addPowerSkills(List<String> allSkillIds) {
-        MiscUtil.POWERS.getAll().skills.forEach((s) -> {
+        CustomVaultConfigRegistry.POWERS.getAll().skills.forEach((s) -> {
             allSkillIds.add(s.getId());
         });
 

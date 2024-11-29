@@ -2,11 +2,11 @@ package io.github.a1qs.vaultadditions.block;
 
 
 import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.container.LootStatueContainer;
 import io.github.a1qs.vaultadditions.container.RenameContainer;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
-import iskallia.vault.init.ModConfigs;
 import iskallia.vault.util.RenameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -78,7 +78,7 @@ public class LootStatueBlock extends BaseEntityBlock {
                 if (!stack.hasTag() || !stack.getTag().contains("BlockEntityTag")) {
                     final CompoundTag data = new CompoundTag();
                     ListTag itemList = new ListTag();
-                    List<ItemStack> options = MiscUtil.STATUE_LOOT.getOptions();
+                    List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT.getOptions();
 
                     for (ItemStack option : options) {
                         itemList.add(option.serializeNBT());

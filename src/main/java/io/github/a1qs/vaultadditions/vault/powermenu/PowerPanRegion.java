@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.vault.powermenu;
 
-import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import iskallia.vault.client.gui.screen.player.legacy.tab.split.pan.SkillPanRegion;
 import iskallia.vault.client.gui.screen.player.legacy.widget.TalentGroupWidget;
 import iskallia.vault.config.entry.SkillStyle;
@@ -22,7 +22,7 @@ public class PowerPanRegion extends SkillPanRegion<PowerTree, PowerElementContai
     }
 
     protected HashMap<String, SkillStyle> getStyles() {
-        return MiscUtil.POWERS_GUI.getStyles();
+        return CustomVaultConfigRegistry.POWERS_GUI.getStyles();
     }
 
 

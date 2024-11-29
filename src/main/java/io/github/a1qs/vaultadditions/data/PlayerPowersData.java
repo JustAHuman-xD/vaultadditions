@@ -1,15 +1,13 @@
 package io.github.a1qs.vaultadditions.data;
 
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import iskallia.vault.core.data.adapter.Adapters;
-import iskallia.vault.skill.PlayerVaultStats;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.snapshot.AttributeSnapshotHelper;
-import iskallia.vault.world.data.PlayerExpertisesData;
-import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -41,7 +39,7 @@ public class PlayerPowersData extends SavedData {
 
     public PowerTree getPowers(UUID uuid) {
         return this.playerMap.computeIfAbsent(uuid, (uuid1) -> {
-            return MiscUtil.POWERS.getAll().copy();
+            return CustomVaultConfigRegistry.POWERS.getAll().copy();
         });
     }
 
@@ -73,8 +71,8 @@ public class PlayerPowersData extends SavedData {
         if (event.phase == TickEvent.Phase.START) {
             if (event.side.isServer()) {
                 PlayerPowersData data = get((ServerLevel)event.world);
-                if (data.previous != MiscUtil.POWERS.getAll()) {
-                    data.previous = MiscUtil.POWERS.getAll();
+                if (data.previous != CustomVaultConfigRegistry.POWERS.getAll()) {
+                    data.previous = CustomVaultConfigRegistry.POWERS.getAll();
                     data.scheduledMerge.addAll(data.playerMap.keySet());
                 }
             }
@@ -92,7 +90,7 @@ public class PlayerPowersData extends SavedData {
                     PlayerPowersData data = get(player.getLevel());
                     if (data.scheduledMerge.remove(player.getUUID())) {
                         SkillContext context = SkillContext.of(player);
-                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(MiscUtil.POWERS.getAll().copy(), context));
+                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(CustomVaultConfigRegistry.POWERS.getAll().copy(), context));
                         SkillContext ctx = MiscUtil.ofPowers(player);
                         PlayerAdditionalVaultStats stats2 = PlayerAdditionalVaultStatData.get((ServerLevel)player.level).getVaultStats(player);
                         stats2.setPowerPoints(ctx.getLearnPoints());

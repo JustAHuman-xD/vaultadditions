@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.block.blockentity;
 
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.block.entity.SkinnableTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +27,7 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     public LootStatueBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), pos, state);
         this.lootItem = ItemStack.EMPTY;
-        this.itemsRemaining = MiscUtil.STATUE_LOOT.getRandomItemCount(); // This counter is used to track the current state of the Loot Statue, once 0, stop producing.
+        this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT.getRandomItemCount(); // This counter is used to track the current state of the Loot Statue, once 0, stop producing.
         this.totalItems = itemsRemaining;
 
     }
@@ -77,7 +77,7 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     }
 
     private int getModifiedInterval() {
-        return MiscUtil.STATUE_LOOT.getInterval();
+        return CustomVaultConfigRegistry.STATUE_LOOT.getInterval();
     }
 
     private boolean dispenseItem(ItemStack stack, boolean simulate) {
