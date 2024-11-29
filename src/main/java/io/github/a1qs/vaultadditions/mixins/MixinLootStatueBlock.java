@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import java.util.List;
 
-@Mixin(value = LootStatueBlock.class, remap = false)
+@Mixin(value = LootStatueBlock.class)
 public class MixinLootStatueBlock {
 
     /**
