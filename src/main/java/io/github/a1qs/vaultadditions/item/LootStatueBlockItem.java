@@ -86,6 +86,10 @@ public class LootStatueBlockItem extends BlockItem {
         return null;
     }
 
+    public static void setStatueName(ItemStack stack, String name) {
+        stack.getOrCreateTagElement("BlockEntityTag").putString("PlayerNickname", name);
+    }
+
     public ItemStack getDefaultInstance() {
         return getStatueBlockItem("Steve");
     }

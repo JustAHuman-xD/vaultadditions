@@ -105,7 +105,6 @@ public class StatueCauldronBlockEntity extends BlockEntity {
                     }
 
                     if (be.getStatueCount() >= be.getRequiredAmount()) {
-                        System.out.println("Generated new Statue");
                         List<String> nameList = new ArrayList<>(be.getNames());
                         Collections.shuffle(nameList);
                         String name = nameList.isEmpty() ? "a1qs" : nameList.get(0);
