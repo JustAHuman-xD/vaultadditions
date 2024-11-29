@@ -75,7 +75,8 @@ public class LootStatueBlock extends BaseEntityBlock {
         if (pPlacer instanceof ServerPlayer player) {
             BlockEntity var9 = pLevel.getBlockEntity(pos);
             if (var9 instanceof LootStatueBlockEntity be) {
-                if (!stack.hasTag() || !stack.getTag().contains("BlockEntityTag")) {
+
+                if(!stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem")) {
                     final CompoundTag data = new CompoundTag();
                     ListTag itemList = new ListTag();
                     List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT.getOptions();
@@ -86,18 +87,16 @@ public class LootStatueBlock extends BaseEntityBlock {
 
                     data.put("Items", itemList);
                     data.put("Position", NbtUtils.writeBlockPos(pos));
-                    be.getSkin().updateSkin("a1qs");
+                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin("a1qs");
                     NetworkHooks.openGui(player, new MenuProvider() {
-                        public Component getDisplayName() {
+                        public @NotNull Component getDisplayName() {
                             return new TextComponent("Loot Statue Options");
                         }
 
-                        public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
+                        public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
                             return new LootStatueContainer(windowId, data);
                         }
-                    }, (buffer) -> {
-                        buffer.writeNbt(data);
-                    });
+                    }, (buffer) -> buffer.writeNbt(data));
                 }
             }
         }
