@@ -10,12 +10,12 @@ import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
-public class ConfigCommand {
+public class ConfigCommands {
     public int getRequiredPermissionLevel() {
         return 2;
     }
 
-    public ConfigCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public ConfigCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("vaultadditions")
                 .requires(sender -> sender.hasPermission(this.getRequiredPermissionLevel()))
                 .then(Commands.literal("config")
