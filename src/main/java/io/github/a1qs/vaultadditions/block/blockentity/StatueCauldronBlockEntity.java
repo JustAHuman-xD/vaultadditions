@@ -53,11 +53,13 @@ public class StatueCauldronBlockEntity extends BlockEntity {
         for (net.minecraft.nbt.Tag tag : nameList) {
             this.names.add(((CompoundTag) tag).getString("name" + i++));
         }
+        sendUpdates();
 
     }
 
     public void setOwner(UUID owner) {
         this.owner = owner;
+        sendUpdates();
     }
 
     public UUID getOwner() {
@@ -66,6 +68,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     public void setStatueCount(int statueCount) {
         this.statueCount = statueCount;
+        sendUpdates();
     }
 
     public int getStatueCount() {
@@ -74,6 +77,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     public void setRequiredAmount(int requiredAmount) {
         this.requiredAmount = requiredAmount;
+        sendUpdates();
     }
 
     public int getRequiredAmount() {
@@ -82,6 +86,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     public void addName(String name) {
         this.names.add(name);
+        sendUpdates();
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
