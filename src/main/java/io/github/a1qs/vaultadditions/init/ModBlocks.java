@@ -4,6 +4,7 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.EventBlock;
 import io.github.a1qs.vaultadditions.block.GlobeExpanderBlock;
 import io.github.a1qs.vaultadditions.block.LootStatueBlock;
+import io.github.a1qs.vaultadditions.block.StatueCauldronBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -35,6 +36,12 @@ public class ModBlocks {
                     .strength(20, 3.6E8F).noOcclusion()),
             CreativeModeTab.TAB_MISC,
             false);
+
+    public static final RegistryObject<Block> STATUE_CAULDRON = registerBlock("statue_cauldron",
+            () -> new StatueCauldronBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(20, 3.6E8F).noOcclusion()),
+            CreativeModeTab.TAB_MISC,
+            true);
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab, boolean createBlockItem) {

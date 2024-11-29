@@ -4,6 +4,7 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.EventBlockEntity;
 import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
 import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
+import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,6 +22,9 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<LootStatueBlockEntity>> LOOT_STATUE_BLOCK_ENTITY = BLOCK_ENTITIES.register("loot_statue_block_entity",
             () -> BlockEntityType.Builder.of(LootStatueBlockEntity::new, ModBlocks.LOOT_STATUE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<StatueCauldronBlockEntity>> STATUE_CAULDRON_BLOCK_ENTITY = BLOCK_ENTITIES.register("statue_cauldron_block_entity",
+            () -> BlockEntityType.Builder.of(StatueCauldronBlockEntity::new, ModBlocks.STATUE_CAULDRON.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {
