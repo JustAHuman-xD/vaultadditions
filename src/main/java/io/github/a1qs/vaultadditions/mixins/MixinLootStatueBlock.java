@@ -1,0 +1,77 @@
+package io.github.a1qs.vaultadditions.mixins;
+
+import iskallia.vault.block.LootStatueBlock;
+import iskallia.vault.block.LootStatueUpperBlock;
+import iskallia.vault.block.entity.LootStatueTileEntity;
+import iskallia.vault.container.LootStatueContainer;
+import iskallia.vault.init.ModBlocks;
+import iskallia.vault.init.ModConfigs;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
+import java.util.List;
+
+@Mixin(value = LootStatueBlock.class, remap = false)
+public class MixinLootStatueBlock {
+
+    /**
+     * @author a1qs
+     * @reason loot statue fix for not selecting items after being placed with a pre-set name
+     */
+    @Overwrite
+    public void setPlacedBy(Level pLevel, BlockPos pos, BlockState pState, LivingEntity pPlacer, ItemStack stack) {
+        BlockPos blockpos = pos.above();
+        pLevel.setBlock(blockpos, ModBlocks.LOOT_STATUE_UPPER.defaultBlockState().setValue(LootStatueUpperBlock.HALF, Half.BOTTOM), 3);
+        pLevel.setBlock(blockpos.above(), ModBlocks.LOOT_STATUE_UPPER.defaultBlockState().setValue(LootStatueUpperBlock.HALF, Half.TOP), 3);
+        if (pPlacer instanceof ServerPlayer player) {
+            BlockEntity var9 = pLevel.getBlockEntity(pos);
+            if (var9 instanceof LootStatueTileEntity) {
+                if(stack.getTag() != null) {
+                    if(!stack.getTag().getCompound("BlockEntityTag").contains("LootItem")) {
+                        final CompoundTag data = new CompoundTag();
+                        ListTag itemList = new ListTag();
+                        List<ItemStack> options = ModConfigs.STATUE_LOOT.getOptions();
+
+                        for (ItemStack option : options) {
+                            itemList.add(option.serializeNBT());
+                        }
+
+                        data.put("Items", itemList);
+                        data.put("Position", NbtUtils.writeBlockPos(pos));
+                        NetworkHooks.openGui(player, new MenuProvider() {
+                            public @NotNull Component getDisplayName() {
+                                return new TextComponent("Loot Statue Options");
+                            }
+
+                            public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+                                return new LootStatueContainer(windowId, data);
+                            }
+                        }, (buffer) -> buffer.writeNbt(data));
+                    }
+                }
+
+
+            }
+
+        }
+    }
+}
