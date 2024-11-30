@@ -1,19 +1,17 @@
 package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.EventEntry;
+import io.github.a1qs.vaultadditions.util.EntryHelper;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -33,45 +31,35 @@ import java.util.*;
 public class EventData extends SavedData {
     private static final Random rand = new Random();
     private static final String DATA_NAME = "vaultadditions_EventData";
-    private final Map<ResourceLocation, Event> eventMap = new HashMap<>();
     private final List<String> scheduledEvents = new ArrayList<>();
-    private Event activeEvent;
     private long eventDuration;
     private boolean isActive;
+    private Event activeEvent;
 
-    public void startEvent(Event event) {
+    public void startEvent(EventEntry event) {
         VaultAdditions.LOGGER.info("Started Event: {}", event.getId());
-        Event activeEventInstance = new Event(
-                event.getId(),
-                event.getEventMessage(),
-                event.getEventWeight(),
-                event.getEventDuration(),
-                event.isCrystalSubmission(),
-                event.getRequiredCrystals(),
-                event.getCrystalsSubmitted()
-        );
-        if(event.isCrystalSubmission()) activeEventInstance.setRequiredCrystals(rand.nextInt(ServerConfigs.CRYSTAL_SUBMIT_MIN.get(), ServerConfigs.CRYSTAL_SUBMIT_MAX.get()+1));
-        this.eventDuration = activeEventInstance.getEventDuration();
+
+        Event activeEventInstance = new Event(EntryHelper.findIndexOf(CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList(), event), 0, 0);
+        if(event.isCrystalSubmission()) {
+            activeEventInstance.setRequiredCrystals(rand.nextInt(
+                    event.getMinCrystalsSubmitted(),
+                    event.getMaxCrystalsSubmitted()+1
+                    )
+            );
+        }
+        this.eventDuration = event.getEventDuration();
         this.isActive = true;
         this.activeEvent = activeEventInstance;
-        MutableComponent cmp = new TextComponent("[EVENT] ")
-                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
-                .append(new TextComponent("Started Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
-                .append(new TextComponent(activeEventInstance.getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)));
 
-        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(cmp, ChatType.SYSTEM, Util.NIL_UUID);
+        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(this.activeEvent.getEventStartMessage(), ChatType.SYSTEM, Util.NIL_UUID);
         setDirty();
     }
 
 
     public void stopEvent() {
-        VaultAdditions.LOGGER.info("Event Ended: {}", this.getActiveEvent().getId());
-        MutableComponent cmp = new TextComponent("[EVENT] ")
-                .withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
-                .append(new TextComponent("Stopped Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
-                .append(new TextComponent(this.getActiveEvent().getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)));
+        VaultAdditions.LOGGER.info("Event Ended: {}", this.activeEvent.getEventId());
 
-        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(cmp, ChatType.SYSTEM, Util.NIL_UUID);
+        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(this.activeEvent.getEventEndMessage(), ChatType.SYSTEM, Util.NIL_UUID);
         this.activeEvent = null;
         this.isActive = false;
         setDirty();
@@ -104,46 +92,14 @@ public class EventData extends SavedData {
             }
 
             if (eventData.isTimePassed(timestamp)) {
-                eventData.startEvent(eventData.selectRandomEvent());
+                EventEntry e = CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().getRandom(new Random());
+                eventData.startEvent(e);
                 eventsToRemove.add(scheduledEvent);
             }
         }
 
         eventData.scheduledEvents.removeAll(eventsToRemove);
         eventData.setDirty();
-    }
-
-    private Event selectRandomEvent() {
-        int totalWeight = eventMap.values().stream().mapToInt(Event::getEventWeight).sum();
-        if (totalWeight == 0) {
-            return Event.FALLBACK;
-        }
-
-        int randomWeight = (int) (Math.random() * totalWeight);
-        for (Event event : eventMap.values()) {
-            randomWeight -= event.getEventWeight();
-            if (randomWeight < 0) {
-                return event;
-            }
-        }
-
-        return Event.FALLBACK;
-    }
-
-    public boolean removeEventByResourceLocation(ResourceLocation resourceLocation) {
-        for (ResourceLocation entry : eventMap.keySet()) {
-            if (entry.equals(resourceLocation)) {
-                eventMap.remove(resourceLocation);
-                setDirty();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void addEvent(Event event) {
-        eventMap.put(event.getId(), event);
-        setDirty();
     }
 
     public void addEventDate(String date) {
@@ -195,22 +151,12 @@ public class EventData extends SavedData {
                 .orElse("No upcoming events!");
     }
 
-    public List<ResourceLocation> getAllEventIds() {
-        return new ArrayList<>(eventMap.keySet());
-    }
 
     // Load-Save methods
     public static EventData load(CompoundTag nbt) {
         EventData data = new EventData();
 
-
-        ListTag eventList = nbt.getList("EventData", Tag.TAG_COMPOUND);
-        for (int i = 0; i < eventList.size(); i++) {
-            CompoundTag eventTag = eventList.getCompound(i);
-            data.eventMap.put(new ResourceLocation(eventTag.getString("EventId")), Event.deserialize(eventTag));
-        }
-
-        ListTag scheduledEventTag = nbt.getList("ScheduledEvents", Tag.TAG_STRING); // Use STRING here
+        ListTag scheduledEventTag = nbt.getList("ScheduledEvents", Tag.TAG_STRING);
         for (int i = 0; i < scheduledEventTag.size(); i++) {
             String time = scheduledEventTag.getString(i);
 
@@ -221,22 +167,14 @@ public class EventData extends SavedData {
 
         data.isActive = nbt.getBoolean("IsActive");
         data.eventDuration = nbt.getLong("EventDuration");
-        if (nbt.contains("ActiveEvent")) {
-            data.activeEvent = Event.deserialize((CompoundTag) nbt.get("ActiveEvent"));
-        }
+        if(data.isActive) data.activeEvent = Event.deserialize((CompoundTag) nbt.get("ActiveEvent"));
+
 
         return data;
     }
 
     @Override
     public CompoundTag save(CompoundTag nbt) {
-
-        ListTag eventList = new ListTag();
-        for (Event event : eventMap.values()) {
-            CompoundTag eventTag = Event.serialize(event);
-            eventList.add(eventTag);
-        }
-        nbt.put("EventData", eventList);
 
         ListTag scheduledEventTag = new ListTag();
         for (String time : scheduledEvents) {
@@ -246,10 +184,7 @@ public class EventData extends SavedData {
 
         nbt.putBoolean("IsActive", isActive);
         nbt.putLong("EventDuration", eventDuration);
-
-        if(isActive) {
-            nbt.put("ActiveEvent", Event.serialize(activeEvent));
-        }
+        if(isActive) nbt.put("ActiveEvent", Event.serialize(this.activeEvent));
 
         return nbt;
     }
