@@ -9,6 +9,7 @@ import iskallia.vault.util.nbt.NBTHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -53,9 +54,8 @@ public class EventBlockEntity extends BlockEntity {
             long days = remainingTime / (20 * 60 * 60 * 24);
 
             this.lines.add("[\"\",{\"text\":\"Event active until: \",\"bold\":true,\"color\":\"yellow\"},{\"text\":\"" + days + "d " + hours + "h " + minutes + "m " + seconds + "s\"}]");
-            this.lines.add("{\"text\":\""+ activeEvent.getEventMessage() +"\",\"color\":\"light_purple\"}");
-            if(activeEvent.isCrystalSubmission()) this.lines.add("[\"\",{\"text\":\"Submitted Crystals: \",\"bold\":true},{\"text\":\"" + activeEvent.getCrystalsSubmitted() + "\",\"color\":\"yellow\"},{\"text\":\" /\",\"color\":\"white\"},{\"text\":\" " + activeEvent.getRequiredCrystals() + "\",\"color\":\"yellow\"}]");
-
+            this.lines.add(Component.Serializer.toJson(activeEvent.getEventDisplayMessage()));
+            if(activeEvent.isCrystalSubmissionEvent()) this.lines.add("[\"\",{\"text\":\"Submitted Crystals: \",\"bold\":true},{\"text\":\"" + activeEvent.getCrystalsSubmitted() + "\",\"color\":\"yellow\"},{\"text\":\" /\",\"color\":\"white\"},{\"text\":\" " + activeEvent.getRequiredCrystals() + "\",\"color\":\"yellow\"}]");
 
         } else {
             if(!data.getNextScheduledEvent().equals("No upcoming events!")) {
