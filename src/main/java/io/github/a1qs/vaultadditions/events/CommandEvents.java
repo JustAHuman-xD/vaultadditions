@@ -17,7 +17,6 @@ public class CommandEvents {
         new CrystalCommands(event.getDispatcher());
         new EventCommands(event.getDispatcher());
         new SpecialCommands(event.getDispatcher());
-        new DevCommands(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }
