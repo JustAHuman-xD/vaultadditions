@@ -69,13 +69,7 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
                     if(!data.getActiveEvent().isModifierActive()) {
                         data.getActiveEvent().addCrystalsSubmitted((int) blocksExpanded / ServerConfigs.POWER_CRYSTAL_INCREASE.get());
                         if(data.getActiveEvent().isModifierActive()) {
-                            MutableComponent eventComponent2 = new TextComponent("[EVENT] ").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
-                                    .append(new TextComponent("The Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
-                                    .append(data.getActiveEvent().getEventStartMessage())
-                                    .append(new TextComponent(" is now active").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)));
-
-
-                            srv.getPlayerList().broadcastMessage(eventComponent2, ChatType.SYSTEM, Util.NIL_UUID);
+                            srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
                         }
                     }
                 }

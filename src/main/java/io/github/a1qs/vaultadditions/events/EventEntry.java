@@ -29,6 +29,9 @@ public class EventEntry {
     public final JsonElement eventDisplayMessage;
 
     @Expose
+    public final JsonElement eventEnabledMessage;
+
+    @Expose
     public final long eventDuration;
 
     @Expose
@@ -43,24 +46,26 @@ public class EventEntry {
     @Expose
     public int maxCrystalsSubmitted;
 
-    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, long eventDuration, boolean crystalSubmission) {
+    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission) {
         this.eventId = eventId;
         this.eventStartMessage = eventStartMessage;
         this.eventEndMessage = eventEndMessage;
         this.eventLoginMessage = eventLoginMessage;
         this.eventDisplayMessage = eventDisplayMessage;
+        this.eventEnabledMessage = eventEnabledMessage;
         this.eventDuration = eventDuration;
         this.crystalSubmission = crystalSubmission;
         if(crystalSubmission) minCrystalsSubmitted = 50;
         if(crystalSubmission) maxCrystalsSubmitted = 250;
     }
 
-    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, long eventDuration, boolean crystalSubmission, List<ResourceLocation> resourceLocationList) {
+    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission, List<ResourceLocation> resourceLocationList) {
         this.eventId = eventId;
         this.eventStartMessage = eventStartMessage;
         this.eventEndMessage = eventEndMessage;
         this.eventLoginMessage = eventLoginMessage;
         this.eventDisplayMessage = eventDisplayMessage;
+        this.eventEnabledMessage = eventEnabledMessage;
         this.eventDuration = eventDuration;
         this.crystalSubmission = crystalSubmission;
         if(crystalSubmission) minCrystalsSubmitted = 50;
@@ -159,6 +164,10 @@ public class EventEntry {
 
     public JsonElement getEventDisplayMessage() {
         return eventDisplayMessage;
+    }
+
+    public JsonElement getEventEnabledMessage() {
+        return eventEnabledMessage;
     }
 
     public long getEventDuration() {

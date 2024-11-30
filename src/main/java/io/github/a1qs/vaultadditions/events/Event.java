@@ -105,6 +105,14 @@ public class Event {
                         ).value.getEventDisplayMessage());
     }
 
+    public Component getEventEnabledMessage() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+                .value.getParsedMessage(
+                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                                this.getConfigIndex()
+                        ).value.getEventEnabledMessage());
+    }
+
     public boolean isCrystalSubmissionEvent() {
         return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.isCrystalSubmission();
     }

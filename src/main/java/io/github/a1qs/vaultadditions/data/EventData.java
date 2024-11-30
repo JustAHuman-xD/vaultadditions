@@ -74,7 +74,6 @@ public class EventData extends SavedData {
         if(eventData.isActive) {
             eventData.eventDuration--;
             if (eventData.eventDuration <= 0) {
-
                 eventData.stopEvent();
             }
             eventData.setDirty();
