@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.block.blockentity.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
@@ -74,6 +75,9 @@ public class StatueCauldronRenderer implements BlockEntityRenderer<StatueCauldro
             poseStack.mulPose(minecraft.getEntityRenderDispatcher().cameraOrientation());
             poseStack.scale(-0.025F, -0.025F, 0.025F); // Scale for text rendering
 
+            // Slightly offset in Z-direction to prevent Z-fighting
+            poseStack.translate(0, 0, -0.01);
+
             Font font = minecraft.font;
             float percentage = (float)blockEntity.getStatueCount() / (float)blockEntity.getRequiredAmount() *100;
 
@@ -94,17 +98,29 @@ public class StatueCauldronRenderer implements BlockEntityRenderer<StatueCauldro
             float backgroundHeight = 10; // Adjust height based on text size
 
             // Render background box
+            RenderSystem.enableBlend(); // Enable transparency
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableDepthTest(); // Ensure it renders above everything
             GuiComponent.fill(
                     poseStack,
                     (int) -backgroundWidth / 2,
                     (int) -backgroundHeight / 2,
                     (int) backgroundWidth / 2,
                     (int) backgroundHeight / 2,
-                    1711276032
+                    1711276032 // Semi-transparent black
             );
 
-            font.draw(poseStack, staticText, -totalTextWidth / 2, -4, 0xFFFFFF); // White color
+            // Render the "Filled:" text in white
+            font.draw(poseStack, staticText, -totalTextWidth / 2, -4, 0xFFFFFF);
+
+            // Render the percentage text with gradient color
             font.draw(poseStack, percentageText, -totalTextWidth / 2 + staticTextWidth, -4, color);
+
+            // Restore render settings
+            RenderSystem.enableDepthTest(); // Re-enable depth test for other elements
+            RenderSystem.disableBlend(); // Disable transparency blending
+
+            // Pop pose stack
             poseStack.popPose();
         }
     }
