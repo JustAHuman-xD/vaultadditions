@@ -65,13 +65,13 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
                         Util.NIL_UUID
                 );
                 EventData data = EventData.get(ServerLifecycleHooks.getCurrentServer());
-                if(data.isEventActive() && data.getActiveEvent().isCrystalSubmission()) {
+                if(data.isEventActive() && data.getActiveEvent().isCrystalSubmissionEvent()) {
                     if(!data.getActiveEvent().isModifierActive()) {
                         data.getActiveEvent().addCrystalsSubmitted((int) blocksExpanded / ServerConfigs.POWER_CRYSTAL_INCREASE.get());
                         if(data.getActiveEvent().isModifierActive()) {
                             MutableComponent eventComponent2 = new TextComponent("[EVENT] ").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD)
                                     .append(new TextComponent("The Event: ").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)))
-                                    .append(new TextComponent(data.getActiveEvent().getEventMessage()).setStyle(Style.EMPTY.withColor(ChatFormatting.LIGHT_PURPLE).withBold(false)))
+                                    .append(data.getActiveEvent().getEventStartMessage())
                                     .append(new TextComponent(" is now active").setStyle(Style.EMPTY.withColor(ChatFormatting.YELLOW).withBold(false)));
 
 

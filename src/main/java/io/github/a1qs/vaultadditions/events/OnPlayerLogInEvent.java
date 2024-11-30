@@ -30,16 +30,7 @@ public class OnPlayerLogInEvent {
         }
 
         if(EventData.getServer().isEventActive()) {
-            long remainingTime = EventData.getServer().getEventDuration();
-
-            long seconds = (remainingTime / 20) % 60;
-            long minutes = (remainingTime / (20 * 60)) % 60;
-            long hours = (remainingTime / (20 * 60 * 60)) % 24;
-            long days = remainingTime / (20 * 60 * 60 * 24);
-
-            player.sendMessage(new TextComponent("The Event \"").withStyle(ChatFormatting.YELLOW)
-                    .append(new TextComponent(EventData.getServer().getActiveEvent().getEventMessage()).withStyle(ChatFormatting.LIGHT_PURPLE))
-                    .append(new TextComponent("\" is active for another " + days + "d " + hours + "h " + minutes + "m " + seconds + "s!").withStyle(ChatFormatting.YELLOW)), Util.NIL_UUID);
+            player.sendMessage(EventData.getServer().getActiveEvent().getEventLoginMessage(), Util.NIL_UUID);
         }
     }
 }
