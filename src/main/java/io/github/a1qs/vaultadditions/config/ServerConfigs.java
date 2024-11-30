@@ -17,8 +17,6 @@ public class ServerConfigs {
     public static final ForgeConfigSpec.ConfigValue<Double> GROW_PLAYER_CAP;
     public static final ForgeConfigSpec.ConfigValue<Boolean> SHOW_POWER_MENU;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> CRYSTAL_SUBMIT_MIN;
-    public static final ForgeConfigSpec.ConfigValue<Integer> CRYSTAL_SUBMIT_MAX;
 
     static {
         BUILDER.comment("ServerConfigs for VaultAdditions");
@@ -53,16 +51,6 @@ public class ServerConfigs {
                 .define("SHOW_POWER_MENU", true);
 
         BUILDER.pop(); // General Settings End
-
-        BUILDER.push("Event Settings"); // Event Settings Start
-
-        CRYSTAL_SUBMIT_MIN = BUILDER.comment("The minimum value a Crystal submission event will require")
-            .define("CRYSTAL_SUBMIT_MIN", 50);
-
-        CRYSTAL_SUBMIT_MAX = BUILDER.comment("The maximum value a Crystal submission event will require")
-                .define("CRYSTAL_SUBMIT_MAX", 250);
-
-        BUILDER.pop();
 
         SPEC = BUILDER.build();
     }

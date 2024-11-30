@@ -64,17 +64,6 @@ public class ConfigCommands {
                                         .executes(this::growPlayerCap)
                                 )
                         )
-                        .then(Commands.literal("crystalSubmitMin")
-                                .then(Commands.argument("amount", IntegerArgumentType.integer())
-                                        .executes(this::crystalSubmitMin)
-                                )
-                        )
-                        .then(Commands.literal("crystalSubmitMax")
-                                .then(Commands.argument("amount", IntegerArgumentType.integer())
-                                        .executes(this::crystalSubmitMax)
-                                )
-                        )
-
                 )
         );
     }
@@ -134,17 +123,4 @@ public class ConfigCommands {
         ServerConfigs.SPEC.save();
         return 0;
     }
-
-    private int crystalSubmitMin(CommandContext<CommandSourceStack> context) {
-        ServerConfigs.CRYSTAL_SUBMIT_MIN.set(IntegerArgumentType.getInteger(context, "amount"));
-        ServerConfigs.SPEC.save();
-        return 0;
-    }
-
-    private int crystalSubmitMax(CommandContext<CommandSourceStack> context) {
-        ServerConfigs.CRYSTAL_SUBMIT_MAX.set(IntegerArgumentType.getInteger(context, "amount"));
-        ServerConfigs.SPEC.save();
-        return 0;
-    }
-
 }
