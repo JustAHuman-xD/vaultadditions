@@ -34,7 +34,7 @@ public class Event {
     public static Event deserialize(CompoundTag tag) {
         return new Event(
                 tag.getInt("ConfigIndex"),
-                tag.getInt("RequiredIndex"),
+                tag.getInt("RequiredCrystals"),
                 tag.getInt("SubmittedCrystals")
         );
     }
