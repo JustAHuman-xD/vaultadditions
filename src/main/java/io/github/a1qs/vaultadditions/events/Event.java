@@ -1,51 +1,42 @@
 package io.github.a1qs.vaultadditions.events;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import iskallia.vault.VaultMod;
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class Event {
-    private final ResourceLocation eventId;
-    private final String eventMessage;
-    private final int eventWeight;
-    private final long eventDuration;
-    private final boolean crystalSubmission;
+    public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "event_re_enable_border_expansion");
+    public static final ResourceLocation ADD_PORTAL_MODIFIERS = new ResourceLocation(VaultAdditions.MOD_ID, "event_add_portal_modifiers");
+
+    private final int configIndex;
     private int requiredCrystals;
     private int crystalsSubmitted;
 
 
-    public Event(ResourceLocation eventId, String eventMessage, int eventWeight, long eventDuration, boolean crystalSubmission, int requiredCrystals, int crystalsSubmitted) {
-        this.eventId = eventId;
-        this.eventMessage = eventMessage;
-        this.eventWeight = eventWeight;
-        this.eventDuration = eventDuration;
-        this.crystalSubmission = crystalSubmission;
+    public Event(int configIndex, int requiredCrystals, int crystalsSubmitted) {
+        this.configIndex = configIndex;
         this.requiredCrystals = requiredCrystals;
         this.crystalsSubmitted = crystalsSubmitted;
     }
 
-    public ResourceLocation getId() {
-        return eventId;
+    public static CompoundTag serialize(Event event) {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("ConfigIndex", event.getConfigIndex());
+        tag.putInt("RequiredCrystals", event.getRequiredCrystals());
+        tag.putInt("SubmittedCrystals", event.getCrystalsSubmitted());
+        return tag;
     }
 
-    public String getEventMessage() {
-        return eventMessage;
-    }
-
-    public int getEventWeight() {
-        return eventWeight;
-    }
-
-    public long getEventDuration() {
-        return eventDuration;
-    }
-
-    public boolean isCrystalSubmission() {
-        return crystalSubmission;
+    public static Event deserialize(CompoundTag tag) {
+        return new Event(
+                tag.getInt("ConfigIndex"),
+                tag.getInt("RequiredIndex"),
+                tag.getInt("SubmittedCrystals")
+        );
     }
 
     public int getRequiredCrystals() {
@@ -72,60 +63,60 @@ public class Event {
         return this.crystalsSubmitted >= requiredCrystals;
     }
 
-    public static CompoundTag serialize(Event event) {
-        CompoundTag tag = new CompoundTag();
-        tag.putString("EventId", event.getId().toString());
-        tag.putString("EventMessage", event.getEventMessage());
-        tag.putInt("EventWeight", event.getEventWeight());
-        tag.putLong("EventDuration", event.getEventDuration());
-        tag.putBoolean("IsCrystalSubmission", event.isCrystalSubmission());
-        tag.putInt("RequiredCrystals", event.getRequiredCrystals());
-        tag.putInt("SubmittedCrystals", event.getCrystalsSubmitted());
-        return tag;
+    public int getConfigIndex() {
+        return configIndex;
     }
 
-    public static Event deserialize(CompoundTag tag) {
-        return new Event(
-                new ResourceLocation(tag.getString("EventId")),
-                tag.getString("EventMessage"),
-                tag.getInt("EventWeight"),
-                tag.getLong("EventDuration"),
-                tag.getBoolean("IsCrystalSubmission"),
-                tag.getInt("RequiredCrystals"),
-                tag.getInt("SubmittedCrystals")
-        );
+    // Event data getters
+
+    public ResourceLocation getEventId() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getId();
     }
 
-    public static final Map<String, ResourceLocation> EVENT_IDS = new HashMap<>();
-    public static final Map<ResourceLocation, ResourceLocation> EVENT_MODIFIER_MAP = new HashMap<>();
-    public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "expansion_enabled");
-    public static final ResourceLocation PORTAL_MODIFIER_1 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_1");
-    public static final ResourceLocation PORTAL_MODIFIER_2 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_2");
-    public static final ResourceLocation PORTAL_MODIFIER_3 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_3");
-    public static final ResourceLocation PORTAL_MODIFIER_4 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_4");
-    public static final ResourceLocation PORTAL_MODIFIER_5 = new ResourceLocation(VaultAdditions.MOD_ID, "event_modifier_5");
-    public static final Event FALLBACK = new Event(
-            new ResourceLocation(VaultAdditions.MOD_ID, "fallback"),
-            "Fallback Event, Report to author",
-            1,
-            300,
-            false,
-            0,
-            0
-    );
-
-    static {
-        EVENT_IDS.put("BORDER_EXPANSION_ENABLED", BORDER_EXPANSION_ENABLED);
-        EVENT_IDS.put("PORTAL_MODIFIER_1", PORTAL_MODIFIER_1);
-        EVENT_IDS.put("PORTAL_MODIFIER_2", PORTAL_MODIFIER_2);
-        EVENT_IDS.put("PORTAL_MODIFIER_3", PORTAL_MODIFIER_3);
-        EVENT_IDS.put("PORTAL_MODIFIER_4", PORTAL_MODIFIER_4);
-        EVENT_IDS.put("PORTAL_MODIFIER_5", PORTAL_MODIFIER_5);
-        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_1, new ResourceLocation(VaultMod.MOD_ID, "event_group_one"));
-        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_2, new ResourceLocation(VaultMod.MOD_ID, "event_group_two"));
-        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_3, new ResourceLocation(VaultMod.MOD_ID, "event_group_three"));
-        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_4, new ResourceLocation(VaultMod.MOD_ID, "event_group_four"));
-        EVENT_MODIFIER_MAP.put(PORTAL_MODIFIER_5, new ResourceLocation(VaultMod.MOD_ID, "event_group_five"));
-
+    public Component getEventStartMessage() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+                .value.getParsedMessage(
+                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                                this.getConfigIndex()
+                        ).value.getEventStartMessage());
     }
+
+    public Component getEventEndMessage() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+                .value.getParsedMessage(
+                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                                this.getConfigIndex()
+                        ).value.getEventEndMessage());
+    }
+
+    public Component getEventLoginMessage() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+                .value.getParsedMessage(
+                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                                this.getConfigIndex()
+                        ).value.getEventLoginMessage());
+    }
+
+    public Component getEventDisplayMessage() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+                .value.getParsedMessage(
+                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                                this.getConfigIndex()
+                        ).value.getEventDisplayMessage());
+    }
+
+    public boolean isCrystalSubmissionEvent() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.isCrystalSubmission();
+    }
+
+    public List<ResourceLocation> getAdditionalModifiers() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getAdditionalModifiers();
+    }
+
+    public long getEventDuration() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventDuration();
+    }
+
+
+
 }
