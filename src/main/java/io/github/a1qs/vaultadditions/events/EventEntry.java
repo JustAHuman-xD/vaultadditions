@@ -38,7 +38,7 @@ public class EventEntry {
     public final boolean crystalSubmission;
 
     @Expose
-    public List<ResourceLocation> additionalModifiers;
+    public Map<ResourceLocation, Integer> additionalModifiers;
 
     @Expose
     public int minCrystalsSubmitted;
@@ -59,7 +59,7 @@ public class EventEntry {
         if(crystalSubmission) maxCrystalsSubmitted = 250;
     }
 
-    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission, List<ResourceLocation> resourceLocationList) {
+    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission, Map<ResourceLocation, Integer> resourceLocationMap) {
         this.eventId = eventId;
         this.eventStartMessage = eventStartMessage;
         this.eventEndMessage = eventEndMessage;
@@ -70,7 +70,7 @@ public class EventEntry {
         this.crystalSubmission = crystalSubmission;
         if(crystalSubmission) minCrystalsSubmitted = 50;
         if(crystalSubmission) maxCrystalsSubmitted = 250;
-        this.additionalModifiers = resourceLocationList;
+        this.additionalModifiers = resourceLocationMap;
     }
 
     /**
@@ -178,7 +178,7 @@ public class EventEntry {
         return crystalSubmission;
     }
 
-    public List<ResourceLocation> getAdditionalModifiers() {
+    public Map<ResourceLocation, Integer> getAdditionalModifiers() {
         return additionalModifiers;
     }
 

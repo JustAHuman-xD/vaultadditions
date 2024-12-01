@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.events;
 
+import com.ibm.icu.impl.ICUNotifier;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
+import java.util.Map;
 
 public class Event {
     public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "event_re_enable_border_expansion");
@@ -117,7 +119,7 @@ public class Event {
         return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.isCrystalSubmission();
     }
 
-    public List<ResourceLocation> getAdditionalModifiers() {
+    public Map<ResourceLocation, Integer> getAdditionalModifiers() {
         return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getAdditionalModifiers();
     }
 

@@ -11,6 +11,7 @@ import iskallia.vault.util.data.WeightedList;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class EventConfig extends Config {
@@ -56,7 +57,7 @@ public class EventConfig extends Config {
                         createComplexEventEnabledMessage(),
                         200L,
                         true,
-                        List.of(new ResourceLocation("the_vault:energizing"), new ResourceLocation("the_vault:energizing"), new ResourceLocation("the_vault:energizing"), new ResourceLocation("the_vault:energizing"))),
+                        Map.of(new ResourceLocation("the_vault:energizing"), 3, new ResourceLocation("the_vault:item_quantity"), 3)),
                 3);
 
         eventList.add(new EventEntry(
@@ -68,7 +69,7 @@ public class EventConfig extends Config {
                         createComplexEventEnabledMessage(),
                         200L,
                         true,
-                        List.of(new ResourceLocation("the_vault:energizing"), new ResourceLocation("the_vault:item_quantity"))),
+                        Map.of(new ResourceLocation("the_vault:energizing"), 3, new ResourceLocation("the_vault:item_rarity"), 3)),
                 3);
     }
 

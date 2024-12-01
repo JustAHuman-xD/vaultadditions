@@ -22,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Map;
+
 
 @Mixin(value = VaultPortalBlock.class, remap = false)
 public class MixinVaultPortalBlock {
@@ -35,10 +37,10 @@ public class MixinVaultPortalBlock {
                 if(portal != null && portal.getData().isPresent()) {
                     CrystalData crystalData = portal.getData().get();
 
-                    for(ResourceLocation rl : data.getActiveEvent().getAdditionalModifiers()) {
-                        VaultModifier<?> modifier = VaultModifierRegistry.get(rl);
+                    for(Map.Entry<ResourceLocation, Integer> rl : data.getActiveEvent().getAdditionalModifiers().entrySet()) {
+                        VaultModifier<?> modifier = VaultModifierRegistry.get(rl.getKey());
                         if(modifier != null) {
-                            crystalData.getModifiers().add(VaultModifierStack.of(modifier));
+                            crystalData.getModifiers().add(VaultModifierStack.of(modifier, rl.getValue()));
                         } else {
                             VaultAdditions.LOGGER.error("Non-existant modifier {} found, could not apply Event Modifier", rl);
                         }
