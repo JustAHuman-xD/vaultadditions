@@ -1,8 +1,8 @@
 package io.github.a1qs.vaultadditions.block.blockentity.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import io.github.a1qs.vaultadditions.block.LootStatueBlock;
 import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
@@ -12,6 +12,7 @@ import iskallia.vault.util.SkinProfile;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -19,12 +20,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringUtil;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -71,7 +74,7 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
                             text = (new TextComponent("☠ ")).withStyle(ChatFormatting.RED).append(text);
                         }
 
-                        this.renderLabel(poseStack, multiBufferSource, combinedLight, text, -1);
+                        this.renderLabel(blockEntity, poseStack, text);
                     }
                 }
             }
@@ -108,19 +111,58 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
         }
     }
 
-    private void renderLabel(PoseStack poseStack, MultiBufferSource buffer, int lightLevel, Component text, int color) {
-        Font fontRenderer = mc.font;
-        float scale = 0.02F;
-        int opacity = 1711276032;
-        poseStack.pushPose();
-        Matrix4f matrix4f = poseStack.last().pose();
-        float offset = (float)(-fontRenderer.width(text) / 2);
-        poseStack.translate(0.0, 1.0, -0.15);
-        poseStack.scale(scale, scale, scale);
+    private void renderLabel(LootStatueBlockEntity blockEntity, PoseStack poseStack, Component text) {
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
+        if (player == null) return;
 
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-        fontRenderer.drawInBatch(text, offset, 0.0F, color, false, matrix4f, buffer, true, opacity, lightLevel);
-        fontRenderer.drawInBatch(text, offset, 0.0F, -1, false, matrix4f, buffer, false, 0, lightLevel);
-        poseStack.popPose();
+        HitResult hitResult = minecraft.hitResult;
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos hitPos = ((BlockHitResult) hitResult).getBlockPos();
+            if (!hitPos.equals(blockEntity.getBlockPos())) return;
+
+            // Render text and background above the block
+            poseStack.pushPose();
+            poseStack.translate(0.0, 0.8, -0.15); // Adjust position above the block
+            poseStack.mulPose(minecraft.getEntityRenderDispatcher().cameraOrientation());
+            poseStack.scale(-0.025F, -0.025F, 0.025F); // Scale for text rendering
+
+            // Slightly offset in Z-direction to prevent Z-fighting
+            poseStack.translate(0, 0, -0.01);
+
+            Font font = minecraft.font;
+
+
+
+            float textWidth = font.width(text);
+
+            float backgroundPadding = 4; // Padding around the text
+            float backgroundWidth = textWidth + backgroundPadding * 2;
+            float backgroundHeight = 10; // Adjust height based on text size
+
+            // Render background box
+            RenderSystem.enableBlend(); // Enable transparency
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.disableDepthTest(); // Ensure it renders above everything
+            GuiComponent.fill(
+                    poseStack,
+                    (int) -backgroundWidth / 2,
+                    (int) -backgroundHeight / 2,
+                    (int) backgroundWidth / 2,
+                    (int) backgroundHeight / 2,
+                    1711276032 // Semi-transparent black
+            );
+
+            // Render the "Filled:" text in white
+            font.draw(poseStack, text, -textWidth / 2, -4, 0xFFFFFF);
+            // Restore render settings
+            RenderSystem.enableDepthTest(); // Re-enable depth test for other elements
+            RenderSystem.disableBlend(); // Disable transparency blending
+
+            // Pop pose stack
+            poseStack.popPose();
+        }
     }
+
+
 }
