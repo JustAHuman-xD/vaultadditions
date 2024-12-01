@@ -125,6 +125,8 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:ferritecore-429235:4074294")
     runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4147231")
     runtimeOnly fg.deobf("curse.maven:kotlin-for-forge-351264:4513187")
+    runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:3853078")
+    runtimeOnly fg.deobf("curse.maven:citadel-331936:3783096")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
