@@ -1,18 +1,18 @@
 package io.github.a1qs.vaultadditions.events;
 
-import com.ibm.icu.impl.ICUNotifier;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.Map;
 
 public class Event {
     public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "event_re_enable_border_expansion");
     public static final ResourceLocation ADD_PORTAL_MODIFIERS = new ResourceLocation(VaultAdditions.MOD_ID, "event_add_portal_modifiers");
+    public static final ResourceLocation ADD_VAULT_COMPLETION_ITEM = new ResourceLocation(VaultAdditions.MOD_ID, "event_vault_completion_item");
 
     private final int configIndex;
     private int requiredCrystals;
@@ -53,10 +53,6 @@ public class Event {
         this.requiredCrystals = requiredCrystals;
     }
 
-    public void setCrystalsSubmitted(int crystalsSubmitted) {
-        this.crystalsSubmitted = crystalsSubmitted;
-    }
-
     public void addCrystalsSubmitted(int crystalsSubmitted) {
         this.crystalsSubmitted = Math.min(this.crystalsSubmitted + crystalsSubmitted, getRequiredCrystals());
     }
@@ -72,7 +68,7 @@ public class Event {
     // Event data getters
 
     public ResourceLocation getEventId() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getId();
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventId();
     }
 
     public Component getEventStartMessage() {
@@ -125,6 +121,14 @@ public class Event {
 
     public long getEventDuration() {
         return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventDuration();
+    }
+
+    public ItemStack getItemStack() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getItemToAdd();
+    }
+
+    public float getChance() {
+        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getChance();
     }
 
 

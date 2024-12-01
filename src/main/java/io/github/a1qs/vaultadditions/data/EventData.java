@@ -12,7 +12,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -37,7 +36,7 @@ public class EventData extends SavedData {
     private Event activeEvent;
 
     public void startEvent(EventEntry event) {
-        VaultAdditions.LOGGER.info("Started Event: {}", event.getId());
+        VaultAdditions.LOGGER.info("Started Event: {}", event.getEventId());
 
         Event activeEventInstance = new Event(EntryHelper.findIndexOf(CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList(), event), 0, 0);
         if(event.isCrystalSubmission()) {

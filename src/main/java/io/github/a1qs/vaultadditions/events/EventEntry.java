@@ -7,9 +7,9 @@ import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.data.EventData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class EventEntry {
@@ -37,14 +37,20 @@ public class EventEntry {
     @Expose
     public final boolean crystalSubmission;
 
-    @Expose
+    @Expose // isCrystalSubmission
+    public Integer minCrystalsSubmitted;
+
+    @Expose // isCrystalSubmission
+    public Integer maxCrystalsSubmitted;
+
+    @Expose // "event_add_portal_modifiers"
     public Map<ResourceLocation, Integer> additionalModifiers;
 
-    @Expose
-    public int minCrystalsSubmitted;
+    @Expose // "event_vault_completion_item"
+    public ItemStack itemToAdd;
 
-    @Expose
-    public int maxCrystalsSubmitted;
+    @Expose // "event_vault_completion_item"
+    public Float chance;
 
     public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission) {
         this.eventId = eventId;
@@ -70,7 +76,23 @@ public class EventEntry {
         this.crystalSubmission = crystalSubmission;
         if(crystalSubmission) minCrystalsSubmitted = 50;
         if(crystalSubmission) maxCrystalsSubmitted = 250;
+
         this.additionalModifiers = resourceLocationMap;
+    }
+
+    public EventEntry(ResourceLocation eventId, JsonElement eventStartMessage, JsonElement eventEndMessage, JsonElement eventLoginMessage, JsonElement eventDisplayMessage, JsonElement eventEnabledMessage, long eventDuration, boolean crystalSubmission, ItemStack itemToAdd, float chance) {
+        this.eventId = eventId;
+        this.eventStartMessage = eventStartMessage;
+        this.eventEndMessage = eventEndMessage;
+        this.eventLoginMessage = eventLoginMessage;
+        this.eventDisplayMessage = eventDisplayMessage;
+        this.eventEnabledMessage = eventEnabledMessage;
+        this.eventDuration = eventDuration;
+        this.crystalSubmission = crystalSubmission;
+        if(crystalSubmission) minCrystalsSubmitted = 50;
+        if(crystalSubmission) maxCrystalsSubmitted = 250;
+        this.itemToAdd = itemToAdd;
+        this.chance = chance;
     }
 
     /**
@@ -93,6 +115,8 @@ public class EventEntry {
         placeholders.put("crystalSubmission", String.valueOf(this.crystalSubmission));
         placeholders.put("minCrystalsSubmitted", String.valueOf(this.minCrystalsSubmitted));
         placeholders.put("maxCrystalsSubmitted", String.valueOf(this.maxCrystalsSubmitted));
+        placeholders.put("item", this.itemToAdd.getItem().getRegistryName().toString());
+        placeholders.put("itemCount", String.valueOf(this.itemToAdd.getCount()));
 
         // active event based data
         placeholders.put("eventDurationTicks", String.valueOf(eventActive ? d.getEventDuration() : null));
@@ -146,7 +170,7 @@ public class EventEntry {
      *  Getter/Setters
      */
 
-    public ResourceLocation getId() {
+    public ResourceLocation getEventId() {
         return eventId;
     }
 
@@ -188,5 +212,13 @@ public class EventEntry {
 
     public int getMaxCrystalsSubmitted() {
         return maxCrystalsSubmitted;
+    }
+
+    public ItemStack getItemToAdd() {
+        return itemToAdd;
+    }
+
+    public Float getChance() {
+        return chance;
     }
 }

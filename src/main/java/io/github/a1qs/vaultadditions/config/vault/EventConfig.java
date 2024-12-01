@@ -7,8 +7,10 @@ import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.events.Event;
 import io.github.a1qs.vaultadditions.events.EventEntry;
 import iskallia.vault.config.Config;
+import iskallia.vault.init.ModItems;
 import iskallia.vault.util.data.WeightedList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Map;
@@ -35,41 +37,32 @@ public class EventConfig extends Config {
                 createComplexLoginMessage(),
                 createComplexDisplayMessage(),
                 createComplexEventEnabledMessage(),
-                200L,
+                2000L,
                 false), 2);
 
         eventList.add(new EventEntry(
-                Event.BORDER_EXPANSION_ENABLED,
-                createComplexStartMessage(),
-                createComplexEndMessage(),
-                createComplexLoginMessage(),
-                createComplexDisplayMessage(),
-                createComplexEventEnabledMessage(),
-                200L,
-                true), 2);
-
-        eventList.add(new EventEntry(
                         Event.ADD_PORTAL_MODIFIERS,
                         createComplexStartMessage(),
                         createComplexEndMessage(),
                         createComplexLoginMessage(),
                         createComplexDisplayMessage(),
                         createComplexEventEnabledMessage(),
-                        200L,
+                        2000L,
                         true,
-                        Map.of(new ResourceLocation("the_vault:energizing"), 3, new ResourceLocation("the_vault:item_quantity"), 3)),
+                        Map.of(new ResourceLocation("the_vault:energizing"), 3, new ResourceLocation("the_vault:item_rarity"), 3)),
                 3);
 
         eventList.add(new EventEntry(
-                        Event.ADD_PORTAL_MODIFIERS,
+                        Event.ADD_VAULT_COMPLETION_ITEM,
                         createComplexStartMessage(),
                         createComplexEndMessage(),
                         createComplexLoginMessage(),
                         createComplexDisplayMessage(),
                         createComplexEventEnabledMessage(),
-                        200L,
+                        2000L,
                         true,
-                        Map.of(new ResourceLocation("the_vault:energizing"), 3, new ResourceLocation("the_vault:item_rarity"), 3)),
+                        new ItemStack(ModItems.ABYSSAL_ICHOR, 5),
+                        0.5F),
                 3);
     }
 
