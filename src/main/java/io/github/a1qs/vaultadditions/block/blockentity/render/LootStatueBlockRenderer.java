@@ -121,9 +121,18 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
             BlockPos hitPos = ((BlockHitResult) hitResult).getBlockPos();
             if (!hitPos.equals(blockEntity.getBlockPos())) return;
 
+            Direction direction = blockEntity.getBlockState().getValue(LootStatueBlock.FACING);
+            float rotationY = switch (direction) {
+                case NORTH -> 0.0F;
+                case EAST -> 270.0F;
+                case SOUTH -> 180.0F;
+                case WEST -> 90.0F;
+                default -> 0.0F; // Fallback for unexpected cases
+            };
             // Render text and background above the block
             poseStack.pushPose();
             poseStack.translate(0.0, 0.8, -0.15); // Adjust position above the block
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(-rotationY));
             poseStack.mulPose(minecraft.getEntityRenderDispatcher().cameraOrientation());
             poseStack.scale(-0.025F, -0.025F, 0.025F); // Scale for text rendering
 
