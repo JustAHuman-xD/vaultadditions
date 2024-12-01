@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.init.ModBlocks;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import net.minecraft.ChatFormatting;
@@ -40,6 +41,7 @@ public class SpecialCommands {
             // Drop the item if it couldn't be fully added
             player.drop(statue, false);
         }
+        VaultAdditions.LOGGER.info("{} has been granted a Loot Statue of type {} with statue_name {}", player.getName().getString(), ModBlocks.LOOT_STATUE.getId(), playerName);
         context.getSource().sendSuccess(new TextComponent("You've been granted a Loot Statue").withStyle(ChatFormatting.GREEN), true);
         return 0;
     }
