@@ -12,9 +12,6 @@ import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.shapes.BooleanOp;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.UUID;
 
@@ -31,12 +28,4 @@ public class MiscUtil {
         return new SkillContext(stats.getVaultLevel(), additionalStats.getUnspentPowerPoints(), 0, SkillSource.of(player));
     }
 
-    // Used to merge an array of Voxels together in an efficient manner
-    public static VoxelShape mergeVoxelShapes(VoxelShape[] shape) {
-        VoxelShape combinedShape = Shapes.empty();
-        for(VoxelShape s : shape) {
-            combinedShape = Shapes.join(combinedShape, s, BooleanOp.OR);
-        }
-        return combinedShape;
-    }
 }
