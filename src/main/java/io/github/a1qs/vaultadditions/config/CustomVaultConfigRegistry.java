@@ -10,6 +10,7 @@ public class CustomVaultConfigRegistry {
     public static MegaGiftStatueLootConfig STATUE_LOOT_MEGA_GIFT;
     public static ArenaGiftStatueLootConfig STATUE_LOOT_ARENA;
     public static EventConfig EVENT_CONFIG;
+    public static NameProviderConfig NAME_PROVIDER_CONFIG;
 
     public static void registerCustomConfigs() {
         POWERS_GUI = new PowerGUIConfig().readConfig();
@@ -18,7 +19,7 @@ public class CustomVaultConfigRegistry {
         STATUE_LOOT_GIFT = new GiftStatueLootConfig().readConfig();
         STATUE_LOOT_MEGA_GIFT = new MegaGiftStatueLootConfig().readConfig();
         STATUE_LOOT_ARENA = new ArenaGiftStatueLootConfig().readConfig();
-
+        NAME_PROVIDER_CONFIG = new NameProviderConfig().readConfig();
         EVENT_CONFIG = new EventConfig().readConfig();
     }
 }
