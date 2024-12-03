@@ -1,20 +1,24 @@
 package io.github.a1qs.vaultadditions.config;
 
-import io.github.a1qs.vaultadditions.config.vault.EventConfig;
-import io.github.a1qs.vaultadditions.config.vault.PowerConfig;
-import io.github.a1qs.vaultadditions.config.vault.PowerGUIConfig;
-import io.github.a1qs.vaultadditions.config.vault.StatueLootConfig;
+import io.github.a1qs.vaultadditions.config.vault.*;
 
 public class CustomVaultConfigRegistry {
     public static PowerGUIConfig POWERS_GUI;
     public static PowerConfig POWERS;
-    public static StatueLootConfig STATUE_LOOT;
+    public static VaultStatueLootConfig STATUE_LOOT_VAULT;
+    public static GiftStatueLootConfig STATUE_LOOT_GIFT;
+    public static MegaGiftStatueLootConfig STATUE_LOOT_MEGA_GIFT;
+    public static ArenaGiftStatueLootConfig STATUE_LOOT_ARENA;
     public static EventConfig EVENT_CONFIG;
 
     public static void registerCustomConfigs() {
         POWERS_GUI = new PowerGUIConfig().readConfig();
         POWERS = new PowerConfig().readConfig();
-        STATUE_LOOT = new StatueLootConfig().readConfig();
+        STATUE_LOOT_VAULT = new VaultStatueLootConfig().readConfig();
+        STATUE_LOOT_GIFT = new GiftStatueLootConfig().readConfig();
+        STATUE_LOOT_MEGA_GIFT = new MegaGiftStatueLootConfig().readConfig();
+        STATUE_LOOT_ARENA = new ArenaGiftStatueLootConfig().readConfig();
+
         EVENT_CONFIG = new EventConfig().readConfig();
     }
 }
