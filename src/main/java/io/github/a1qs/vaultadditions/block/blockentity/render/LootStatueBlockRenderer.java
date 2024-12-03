@@ -47,6 +47,7 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
 
     @Override
     public void render(LootStatueBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay) {
+
         BlockState blockState = blockEntity.getBlockState();
         Direction direction = blockState.getValue(LootStatueBlock.FACING);
         poseStack.translate(0.5, 0.5, 0.5);
@@ -55,9 +56,32 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
         ItemStack renderItem = blockEntity.getLootItem();
         if (!renderItem.isEmpty()) {
             poseStack.pushPose();
-            poseStack.translate(0.0, 0.1, 0.05);
+            double[] doubleArray = new double[3];
+            switch(blockEntity.getBlockState().getBlock().getRegistryName().toString()) {
+                case "vaultadditions:loot_statue_vault" -> {
+                    doubleArray[0] = 0.0;
+                    doubleArray[1] = 0.1;
+                    doubleArray[2] = 0.05;
+                }
+                case "vaultadditions:loot_statue_gift" -> {
+                    doubleArray[0] = 0.0;
+                    doubleArray[1] = 0.15;
+                    doubleArray[2] = 0.2;
+                }
+                case "vaultadditions:loot_statue_gift_mega" -> {
+                    doubleArray[0] = 0.0;
+                    doubleArray[1] = 0.3;
+                    doubleArray[2] = 0.1;
+                }
+                case "vaultadditions:loot_statue_arena" -> {
+                    doubleArray[0] = 0.0;
+                    doubleArray[1] = 0.0;
+                    doubleArray[2] = 0.05;
+                }
+            }
+            poseStack.translate(doubleArray[0], doubleArray[1], doubleArray[2]); // ;
             BakedModel bakedmodel = this.itemRenderer.getModel(renderItem, null, null, 0);
-            float scale = bakedmodel.isGui3d() ? 0.5F : 0.3F;
+            float scale = bakedmodel.isGui3d() ? 0.5F : 0.28F;
             poseStack.scale(scale, scale, scale);
             this.itemRenderer.render(renderItem, ItemTransforms.TransformType.FIXED, false, poseStack, multiBufferSource, combinedLight, combinedOverlay, bakedmodel);
 
@@ -94,6 +118,13 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
         PLAYER_MODEL.rightSleeve.xRot = -120.0F;
         PLAYER_MODEL.head.zRot = 0.0F;
         PLAYER_MODEL.hat.zRot = 0.0F;
+        PLAYER_MODEL.leftLeg.zRot = 0.0F;
+        PLAYER_MODEL.leftLeg.xRot = 0.0F;
+        PLAYER_MODEL.leftLeg.yRot = 0.0F;
+        PLAYER_MODEL.rightLeg.zRot = 0.0F;
+        PLAYER_MODEL.rightLeg.xRot = 0.0F;
+        PLAYER_MODEL.rightLeg.yRot = 0.0F;
+
         PLAYER_MODEL.setSlim(skin.isSlim());
 
         VertexConsumer vertexBuilder = buffer.getBuffer(renderType);
@@ -103,7 +134,42 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
         matrixStack.translate(0.0, 0.0, statueOffset);
         matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
         matrixStack.scale(scale, scale, scale);
-        matrixStack.translate(0.0, -0.75, 0.0); // -1.5
+
+        double[] doubleArray = new double[3];
+        switch(blockEntity.getBlockState().getBlock().getRegistryName().toString()) {
+            case "vaultadditions:loot_statue_vault"-> {
+                doubleArray[0] = 0.0;
+                doubleArray[1] = -0.75;
+                doubleArray[2] = 0.0;
+            }
+            case "vaultadditions:loot_statue_gift" -> {
+                doubleArray[0] = 0.0;
+                doubleArray[1] = -0.8;
+                doubleArray[2] = -0.3;
+            }
+            case "vaultadditions:loot_statue_gift_mega" -> {
+                doubleArray[0] = 0.0;
+                doubleArray[1] = -1.0;
+                doubleArray[2] = 0.0;
+                PLAYER_MODEL.leftLeg.xRot = 55.0F;
+                PLAYER_MODEL.rightLeg.xRot = 55.0F;
+                PLAYER_MODEL.leftLeg.yRot = 24.8F;
+                PLAYER_MODEL.rightLeg.yRot = -24.8F;
+                PLAYER_MODEL.rightArm.xRot = -120.4F;
+                PLAYER_MODEL.rightSleeve.xRot = -120.4F;
+                PLAYER_MODEL.leftArm.xRot = -120.4F;
+                PLAYER_MODEL.leftSleeve.xRot = -120.4F;
+
+            }
+            case "vaultadditions:loot_statue_arena" -> {
+                doubleArray[0] = 0.0;
+                doubleArray[1] = -0.5;
+                doubleArray[2] = 0.0;
+            }
+        }
+
+
+        matrixStack.translate(doubleArray[0], doubleArray[1], doubleArray[2]);
         PLAYER_MODEL.renderToBuffer(matrixStack, vertexBuilder, combinedLight, combinedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrixStack.popPose();
         if (buffer instanceof MultiBufferSource.BufferSource) {
@@ -129,9 +195,12 @@ public class LootStatueBlockRenderer implements BlockEntityRenderer<LootStatueBl
                 case WEST -> 90.0F;
                 default -> 0.0F; // Fallback for unexpected cases
             };
+
             // Render text and background above the block
+            float offset = 0.0F;
+            if(blockEntity.getBlockState().getBlock().getRegistryName().toString().equals("vaultadditions:loot_statue_gift_mega")) offset = 0.1F;
             poseStack.pushPose();
-            poseStack.translate(0.0, 0.8, -0.15); // Adjust position above the block
+            poseStack.translate(0.0, 0.85 + offset, -0.15); // Adjust position above the block
             poseStack.mulPose(Vector3f.YP.rotationDegrees(-rotationY));
             poseStack.mulPose(minecraft.getEntityRenderDispatcher().cameraOrientation());
             poseStack.scale(-0.025F, -0.025F, 0.025F); // Scale for text rendering
