@@ -176,7 +176,7 @@ public class LootStatueBlock extends BaseEntityBlock {
 
                     data.put("Items", itemList);
                     data.put("Position", NbtUtils.writeBlockPos(pos));
-                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin(UsernameProvider.getRandomKnownUsername());
+                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin(UsernameProvider.getRandomUsername());
                     NetworkHooks.openGui(player, new MenuProvider() {
                         public @NotNull Component getDisplayName() {
                             return new TextComponent("Loot Statue Options");
