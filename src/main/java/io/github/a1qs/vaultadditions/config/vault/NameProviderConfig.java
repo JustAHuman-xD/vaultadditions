@@ -5,6 +5,7 @@ import iskallia.vault.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class NameProviderConfig extends Config {
     @Expose
@@ -37,5 +38,9 @@ public class NameProviderConfig extends Config {
 
     public boolean isUsed() {
         return IS_USED;
+    }
+
+    public String getRandomName() {
+        return getNameList().get(new Random().nextInt(getNameList().size()));
     }
 }
