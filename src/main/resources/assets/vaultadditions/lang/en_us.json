@@ -1,6 +1,9 @@
 {
   "block.vaultadditions.globe_expander": "Globe Expander",
-  "block.vaultadditions.loot_statue_block": "Loot Statue",
+  "block.vaultadditions.loot_statue_vault": "Vault Loot Statue",
+  "block.vaultadditions.loot_statue_gift": "Gift Loot Statue",
+  "block.vaultadditions.loot_statue_mega_gift": "Mega Gift Loot Statue",
+  "block.vaultadditions.loot_statue_arena": "Arena Loot Statue",
   "block.vaultadditions.statue_cauldron": "Statue Cauldron",
   "item.vaultadditions.power_crystal": "Power Crystal",
   "item.vaultadditions.power_orb": "Power Orb",
