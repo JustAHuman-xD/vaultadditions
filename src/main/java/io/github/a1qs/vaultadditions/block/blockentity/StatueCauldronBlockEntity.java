@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions.block.blockentity;
 import io.github.a1qs.vaultadditions.block.StatueCauldronBlock;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
+import io.github.a1qs.vaultadditions.util.UsernameProvider;
 import iskallia.vault.init.ModBlocks;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.init.ModSounds;
@@ -107,10 +108,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
                     if (be.getStatueCount() >= be.getRequiredAmount()) {
                         List<String> nameList = new ArrayList<>(be.getNames());
                         Collections.shuffle(nameList);
-                        String name = nameList.isEmpty() ? "a1qs" : nameList.get(0);
-                        if (name == null || name.isEmpty()) {
-                            name = "iGoodie";
-                        }
+                        String name = nameList.isEmpty() ? UsernameProvider.getRandomUsername() : nameList.get(0);
 
                         ItemStack statue = new ItemStack(ModBlocks.LOOT_STATUE);
                         statue.getOrCreateTagElement("BlockEntityTag").putString("PlayerNickname", name);
