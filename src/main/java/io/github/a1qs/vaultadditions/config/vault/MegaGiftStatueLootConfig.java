@@ -18,9 +18,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
-public class StatueLootConfig extends Config {
+public class MegaGiftStatueLootConfig extends Config {
     @Expose
     private WeightedList<SingleItemEntry> LOOT = new WeightedList<>();
     @Expose
@@ -31,35 +34,23 @@ public class StatueLootConfig extends Config {
     private int MAX_ITEM_GENERATED;
 
 
-    public StatueLootConfig() {
-    }
 
     public String getName() {
-        return "vaultadditions_statues";
+        return "vaultadditions_statue_mega_gift";
     }
 
     protected void reset() {
         this.LOOT = new WeightedList<>();
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.NETHER_BRICK.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.ICE.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.STONE.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.GRANITE.getDefaultInstance()), 2));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.DIORITE.getDefaultInstance()), 2));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.ANDESITE.getDefaultInstance()), 2));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.COBBLESTONE.getDefaultInstance()), 3));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.COBBLED_DEEPSLATE.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.COBWEB.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.NETHERRACK.getDefaultInstance()), 10));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.OAK_LOG.getDefaultInstance()), 1));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.BIRCH_LOG.getDefaultInstance()), 1));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.DARK_OAK_LOG.getDefaultInstance()), 1));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.ACACIA_LOG.getDefaultInstance()), 1));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.SPRUCE_LOG.getDefaultInstance()), 1));
+        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.JUNGLE_LOG.getDefaultInstance()), 1));
 
-        ItemStack stack = new ItemStack(ModItems.UNKNOWN_ITEM);
-        stack.setHoverName(new TextComponent("Fancy Example NBT item").withStyle(ChatFormatting.RED));
-        stack.enchant(Enchantments.DEPTH_STRIDER, 10);
-
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(stack), 10));
-
-        this.INTERVAL = 500;
-        this.MIN_ITEM_GENERATED = 100;
-        this.MAX_ITEM_GENERATED = 200;
+        this.INTERVAL = 750;
+        this.MIN_ITEM_GENERATED = 300;
+        this.MAX_ITEM_GENERATED = 500;
     }
 
     public ItemStack randomLoot() {
