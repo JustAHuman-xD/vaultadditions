@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -31,7 +32,25 @@ public class ModBlocks {
                     .strength(-1, 3.6E8F).noOcclusion().noCollission().noDrops()), CreativeModeTab.TAB_MISC,
             true);
 
-    public static final RegistryObject<Block> LOOT_STATUE = registerBlock("loot_statue_block",
+    public static final RegistryObject<Block> LOOT_STATUE_VAULT = registerBlock("loot_statue_vault",
+            () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(20, 3.6E8F).noOcclusion()),
+            CreativeModeTab.TAB_MISC,
+            false);
+
+    public static final RegistryObject<Block> LOOT_STATUE_GIFT = registerBlock("loot_statue_gift",
+            () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(20, 3.6E8F).noOcclusion()),
+            CreativeModeTab.TAB_MISC,
+            false);
+
+    public static final RegistryObject<Block> LOOT_STATUE_GIFT_MEGA = registerBlock("loot_statue_gift_mega",
+            () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(20, 3.6E8F).noOcclusion()),
+            CreativeModeTab.TAB_MISC,
+            false);
+
+    public static final RegistryObject<Block> LOOT_STATUE_ARENA = registerBlock("loot_statue_arena",
             () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
                     .strength(20, 3.6E8F).noOcclusion()),
             CreativeModeTab.TAB_MISC,

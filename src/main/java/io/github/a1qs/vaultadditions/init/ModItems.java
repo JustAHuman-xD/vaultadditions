@@ -20,6 +20,15 @@ public class ModItems {
     public static final RegistryObject<Item> POWER_ORB = ITEMS.register("power_orb",
             () -> new PowerOrb(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
 
-    public static final RegistryObject<Item> LOOT_STATUE_ITEM = ModItems.ITEMS.register("loot_statue_block",
-            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE.get()));
+    public static final RegistryObject<Item> LOOT_STATUE_VAULT = ModItems.ITEMS.register("loot_statue_vault",
+            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_VAULT.get()));
+
+    public static final RegistryObject<Item> LOOT_STATUE_GIFT = ModItems.ITEMS.register("loot_statue_gift",
+            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_GIFT.get()));
+
+    public static final RegistryObject<Item> LOOT_STATUE_GIFT_MEGA = ModItems.ITEMS.register("loot_statue_gift_mega",
+            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_GIFT_MEGA.get()));
+
+    public static final RegistryObject<Item> LOOT_STATUE_ARENA = ModItems.ITEMS.register("loot_statue_arena",
+            () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_ARENA.get()));
 }

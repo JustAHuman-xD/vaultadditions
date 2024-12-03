@@ -21,11 +21,15 @@ public class ModBlockEntities {
             () -> BlockEntityType.Builder.of(EventBlockEntity::new, ModBlocks.EVENT_BLOCK.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<LootStatueBlockEntity>> LOOT_STATUE_BLOCK_ENTITY = BLOCK_ENTITIES.register("loot_statue_block_entity",
-            () -> BlockEntityType.Builder.of(LootStatueBlockEntity::new, ModBlocks.LOOT_STATUE.get()).build(null));
+            () -> BlockEntityType.Builder.of(LootStatueBlockEntity::new,
+                    ModBlocks.LOOT_STATUE_VAULT.get(),
+                    ModBlocks.LOOT_STATUE_ARENA.get(),
+                    ModBlocks.LOOT_STATUE_GIFT.get(),
+                    ModBlocks.LOOT_STATUE_GIFT_MEGA.get()
+                    ).build(null));
 
     public static final RegistryObject<BlockEntityType<StatueCauldronBlockEntity>> STATUE_CAULDRON_BLOCK_ENTITY = BLOCK_ENTITIES.register("statue_cauldron_block_entity",
             () -> BlockEntityType.Builder.of(StatueCauldronBlockEntity::new, ModBlocks.STATUE_CAULDRON.get()).build(null));
-
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
