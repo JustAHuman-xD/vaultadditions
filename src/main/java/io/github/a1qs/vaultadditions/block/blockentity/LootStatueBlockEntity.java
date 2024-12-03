@@ -27,9 +27,14 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     public LootStatueBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), pos, state);
         this.lootItem = ItemStack.EMPTY;
-        this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT.getRandomItemCount(); // This counter is used to track the current state of the Loot Statue, once 0, stop producing.
-        this.totalItems = itemsRemaining;
+        switch(state.getBlock().getRegistryName().toString()) {
+            case "vaultadditions:loot_statue_gift" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getRandomItemCount();
+            case "vaultadditions:loot_statue_gift_mega" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getRandomItemCount();
+            case "vaultadditions:loot_statue_arena" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getRandomItemCount();
+            default -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getRandomItemCount();
+        }
 
+        this.totalItems = itemsRemaining;
     }
 
     public int getCurrentTick() {
@@ -61,7 +66,7 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, LootStatueBlockEntity tile) {
         if (!level.isClientSide) {
             if(!tile.isDead()) {
-                if (tile.currentTick++ >= tile.getModifiedInterval()) {
+                if (tile.currentTick++ >= tile.getModifiedInterval(state)) {
                     tile.currentTick = 0;
                     if (!tile.lootItem.isEmpty()) {
                         ItemStack stack = tile.lootItem.copy();
@@ -76,8 +81,21 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
         }
     }
 
-    private int getModifiedInterval() {
-        return CustomVaultConfigRegistry.STATUE_LOOT.getInterval();
+    private int getModifiedInterval(BlockState state) {
+        switch(state.getBlock().getRegistryName().toString()) {
+            case "vaultadditions:loot_statue_gift" -> {
+                return CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getInterval();
+            }
+            case "vaultadditions:loot_statue_gift_mega" -> {
+                return CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getInterval();
+            }
+            case "vaultadditions:loot_statue_arena" -> {
+                return CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getInterval();
+            }
+            default -> {
+                return CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getInterval();
+            }
+        }
     }
 
     private boolean dispenseItem(ItemStack stack, boolean simulate) {

@@ -2,10 +2,6 @@ package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
-import io.github.a1qs.vaultadditions.config.vault.EventConfig;
-import io.github.a1qs.vaultadditions.config.vault.StatueLootConfig;
-import io.github.a1qs.vaultadditions.config.vault.PowerConfig;
-import io.github.a1qs.vaultadditions.config.vault.PowerGUIConfig;
 import iskallia.vault.init.ModConfigs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

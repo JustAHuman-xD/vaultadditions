@@ -6,7 +6,8 @@ import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.container.LootStatueContainer;
 import io.github.a1qs.vaultadditions.container.RenameContainer;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.util.UsernameProvider;
+import io.github.a1qs.vaultadditions.util.VoxelUtil;
 import iskallia.vault.util.RenameType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,19 +55,101 @@ import java.util.List;
 
 public class LootStatueBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    private static final VoxelShape SHAPE;
+    private static final VoxelShape VAULT_SHAPE;
+    private static final VoxelShape VAULT_SHAPE_90;
+    private static final VoxelShape VAULT_SHAPE_180;
+    private static final VoxelShape VAULT_SHAPE_270;
+    private static final VoxelShape GIFT_SHAPE;
+    private static final VoxelShape GIFT_SHAPE_90;
+    private static final VoxelShape GIFT_SHAPE_180;
+    private static final VoxelShape GIFT_SHAPE_270;
+    private static final VoxelShape MEGA_GIFT_SHAPE;
+    private static final VoxelShape MEGA_GIFT_SHAPE_90;
+    private static final VoxelShape MEGA_GIFT_SHAPE_180;
+    private static final VoxelShape MEGA_GIFT_SHAPE_270;
+    private static final VoxelShape ARENA_SHAPE;
+    private static final VoxelShape ARENA_SHAPE_90;
+    private static final VoxelShape ARENA_SHAPE_180;
+    private static final VoxelShape ARENA_SHAPE_270;
 
     public LootStatueBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.SOUTH));
-
     }
 
 
     @Override
     @ParametersAreNonnullByDefault
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        Direction direction = state.getValue(FACING);
+        switch (direction) {
+            case SOUTH -> {
+                switch(state.getBlock().getRegistryName().toString()) {
+                    case "vaultadditions:loot_statue_vault" -> {
+                        return VAULT_SHAPE;
+                    }
+                    case "vaultadditions:loot_statue_gift" -> {
+                        return GIFT_SHAPE;
+                    }
+                    case "vaultadditions:loot_statue_gift_mega" -> {
+                        return MEGA_GIFT_SHAPE;
+                    }
+                    case "vaultadditions:loot_statue_arena" -> {
+                        return ARENA_SHAPE;
+                    }
+                }
+            }
+            case EAST -> {
+                switch(state.getBlock().getRegistryName().toString()) {
+                    case "vaultadditions:loot_statue_vault" -> {
+                        return VAULT_SHAPE_270;
+                    }
+                    case "vaultadditions:loot_statue_gift" -> {
+                        return GIFT_SHAPE_270;
+                    }
+                    case "vaultadditions:loot_statue_gift_mega" -> {
+                        return MEGA_GIFT_SHAPE_270;
+                    }
+                    case "vaultadditions:loot_statue_arena" -> {
+                        return ARENA_SHAPE_270;
+                    }
+                }
+            }
+            case NORTH -> {
+                switch(state.getBlock().getRegistryName().toString()) {
+                    case "vaultadditions:loot_statue_vault" -> {
+                        return VAULT_SHAPE_180;
+                    }
+                    case "vaultadditions:loot_statue_gift" -> {
+                        return GIFT_SHAPE_180;
+                    }
+                    case "vaultadditions:loot_statue_gift_mega" -> {
+                        return MEGA_GIFT_SHAPE_180;
+                    }
+                    case "vaultadditions:loot_statue_arena" -> {
+                        return ARENA_SHAPE_180;
+                    }
+                }
+
+            }
+            default -> {
+                switch(state.getBlock().getRegistryName().toString()) {
+                    case "vaultadditions:loot_statue_vault" -> {
+                        return VAULT_SHAPE_90;
+                    }
+                    case "vaultadditions:loot_statue_gift" -> {
+                        return GIFT_SHAPE_90;
+                    }
+                    case "vaultadditions:loot_statue_gift_mega" -> {
+                        return MEGA_GIFT_SHAPE_90;
+                    }
+                    case "vaultadditions:loot_statue_arena" -> {
+                        return ARENA_SHAPE_180;
+                    }
+                }
+            }
+        }
+        return Shapes.block(); // Fallback
     }
 
     @Override
@@ -79,7 +162,13 @@ public class LootStatueBlock extends BaseEntityBlock {
                 if(!stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem")) {
                     final CompoundTag data = new CompoundTag();
                     ListTag itemList = new ListTag();
-                    List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT.getOptions();
+                    List<ItemStack> options;
+                    switch(pState.getBlock().getRegistryName().toString()) {
+                        case "vaultadditions:loot_statue_gift" -> options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_gift_mega" -> options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_arena" -> options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
+                        default -> options = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getOptions();
+                    }
 
                     for (ItemStack option : options) {
                         itemList.add(option.serializeNBT());
@@ -87,7 +176,7 @@ public class LootStatueBlock extends BaseEntityBlock {
 
                     data.put("Items", itemList);
                     data.put("Position", NbtUtils.writeBlockPos(pos));
-                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin("a1qs");
+                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin(UsernameProvider.getRandomKnownUsername());
                     NetworkHooks.openGui(player, new MenuProvider() {
                         public @NotNull Component getDisplayName() {
                             return new TextComponent("Loot Statue Options");
@@ -212,11 +301,71 @@ public class LootStatueBlock extends BaseEntityBlock {
     }
 
     static {
-        VoxelShape[] shape = {
+        VoxelShape[] vaultShape = {
+                Shapes.box(0.390625, 0.234375, 0.8125, 0.453125, 0.546875, 0.875),
+                Shapes.box(0.640625, 0.234375, 0.8125, 0.703125, 0.546875, 0.875),
+                Shapes.box(0.453125, 0.546875, 0.8125, 0.640625, 0.609375, 0.875),
+                Shapes.box(0.453125, 0.171875, 0.8125, 0.640625, 0.234375, 0.875),
+                Shapes.box(0.453125, 0.234375, 0.84375, 0.640625, 0.546875, 0.84375),
+                Shapes.box(0.375, 0.1875, 0.59375, 0.625, 0.875, 0.71875),
+                Shapes.box(0.375, 0.875, 0.53125, 0.625, 1.125, 0.78125),
+                Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.1875, 0.9375),
+        };
+        
+        VoxelShape[] giftShape = {
                 Shapes.box(0.0625, 0, 0.0625, 0.9375, 0.0625, 0.9375),
-                Shapes.box(0.0625, 0.0625, 0.0625, 0.9375, 0.1875, 0.9375)
+                Shapes.box(0.25, 0.0625, 0.25, 0.75, 0.1875, 0.75),
+                Shapes.box(0.109375, 0.0625, 0.109375, 0.328125, 0.28125, 0.328125),
+                Shapes.box(0.3125, 0.0625, 0.09375, 0.484375, 0.203125, 0.265625),
+                Shapes.box(0.71875, 0.0625, 0.078125, 0.921875, 0.234375, 0.28125),
+                Shapes.box(0.703125, 0.0625, 0.375, 0.9375, 0.328125, 0.609375),
+                Shapes.box(0.0625, 0.0625, 0.359375, 0.265625, 0.203125, 0.5625),
+                Shapes.box(0.109375, 0.0625, 0.59375, 0.34375, 0.34375, 0.828125),
+                Shapes.box(0.578125, 0.0625, 0.109375, 0.71875, 0.1875, 0.25),
+                Shapes.box(0.6875, 0.0625, 0.59375, 0.921875, 0.25, 0.828125),
+                Shapes.box(0.390625, 0.0625, 0.671875, 0.65625, 0.296875, 0.9375),
+                Shapes.box(0.21875, 0.046875, 0.765625, 0.390625, 0.203125, 0.921875),
+                Shapes.box(0.640625, 0.0625, 0.8125, 0.78125, 0.171875, 0.9375),
+                Shapes.box(0.375, 0.1875, 0.4375, 0.625, 0.546875, 0.5625),
+                Shapes.box(0.375, 0.90625, 0.375, 0.625, 1.15625, 0.625),
+                Shapes.box(0.375, 0.546875, 0.4375, 0.625, 0.90625, 0.5625),
+        };
+        
+        VoxelShape[] megaGiftShape = {
+                Shapes.box(0.1875, 0, 0.1875, 0.8125, 0.4375, 0.8125),
+                Shapes.box(0.15625, 0.4375, 0.15625, 0.84375, 0.5625, 0.84375),
+                Shapes.box(0.375, 1, 0.515625, 0.625, 1.25, 0.765625),
+                Shapes.box(0.375, 0.640625, 0.578125, 0.625, 1, 0.703125),
         };
 
-        SHAPE = MiscUtil.mergeVoxelShapes(shape);
+        VoxelShape[] arenaShape = {
+                Shapes.box(0.296875, 0, 0.15625, 0.703125, 0.015625, 0.859375),
+                Shapes.box(0.125, 0, 0.21875, 0.296875, 0.015625, 0.78125),
+                Shapes.box(0.703125, 0, 0.21875, 0.875, 0.015625, 0.78125),
+                Shapes.box(0.375, 0.018750000000000003, 0.59375, 0.625, 0.37812500000000004, 0.71875),
+                Shapes.box(0.375, 0.7375, 0.53125, 0.625, 0.9875, 0.78125),
+                Shapes.box(0.375, 0.37812500000000004, 0.59375, 0.625, 0.7375, 0.71875),
+                Shapes.box(0.03125, 0, 0.03125, 0.96875, 0.1875, 0.96875),
+        };
+
+        VAULT_SHAPE = VoxelUtil.mergeVoxelShapes(vaultShape);
+        VAULT_SHAPE_90 = VoxelUtil.rotateShape(VAULT_SHAPE, 90);
+        VAULT_SHAPE_180 = VoxelUtil.rotateShape(VAULT_SHAPE, 180);
+        VAULT_SHAPE_270 = VoxelUtil.rotateShape(VAULT_SHAPE, 270);
+
+        GIFT_SHAPE = VoxelUtil.mergeVoxelShapes(giftShape);
+        GIFT_SHAPE_90 = VoxelUtil.rotateShape(GIFT_SHAPE, 90);
+        GIFT_SHAPE_180 = VoxelUtil.rotateShape(GIFT_SHAPE, 180);
+        GIFT_SHAPE_270 = VoxelUtil.rotateShape(GIFT_SHAPE, 270);
+
+        MEGA_GIFT_SHAPE = VoxelUtil.mergeVoxelShapes(megaGiftShape);
+        MEGA_GIFT_SHAPE_90 = VoxelUtil.rotateShape(MEGA_GIFT_SHAPE, 90);
+        MEGA_GIFT_SHAPE_180 = VoxelUtil.rotateShape(MEGA_GIFT_SHAPE, 180);
+        MEGA_GIFT_SHAPE_270 = VoxelUtil.rotateShape(MEGA_GIFT_SHAPE, 270);
+
+        ARENA_SHAPE = VoxelUtil.mergeVoxelShapes(arenaShape);
+        ARENA_SHAPE_90 = VoxelUtil.rotateShape(ARENA_SHAPE, 90);
+        ARENA_SHAPE_180 = VoxelUtil.rotateShape(ARENA_SHAPE, 180);
+        ARENA_SHAPE_270 = VoxelUtil.rotateShape(ARENA_SHAPE, 270);
     }
 }

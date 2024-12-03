@@ -64,11 +64,12 @@ public class LootStatueBlockItem extends BlockItem {
         }
     }
 
+    /* Generally unused */
     public static ItemStack getStatueBlockItem(String nickname) {
-        ItemStack itemStack = new ItemStack(ModBlocks.LOOT_STATUE.get());
+        ItemStack itemStack = new ItemStack(ModBlocks.LOOT_STATUE_VAULT.get());
         CompoundTag nbt = new CompoundTag();
         nbt.putString("PlayerNickname", nickname);
-        ItemStack loot = CustomVaultConfigRegistry.STATUE_LOOT.randomLoot();
+        ItemStack loot = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.randomLoot();
         nbt.put("LootItem", loot.serializeNBT());
         CompoundTag stackNBT = new CompoundTag();
         stackNBT.put("BlockEntityTag", nbt);
