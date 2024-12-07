@@ -5,6 +5,7 @@ import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.ServerboundOpenPowersMessage;
 import iskallia.vault.client.atlas.TextureAtlasRegion;
 import iskallia.vault.client.gui.framework.ScreenTextures;
+import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.client.gui.screen.player.element.SkillTabContainerElement;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +22,7 @@ public class MixinSkillTabContainerElement {
     )
     private TextureAtlasRegion[] modifyIcons(TextureAtlasRegion[] icons) {
         TextureAtlasRegion[] newIcons;
-        if(ServerConfigs.SHOW_POWER_MENU.get()) {
+        if(ServerConfigs.SHOW_POWER_MENU.get() || VaultBarOverlay.vaultLevel == 100) {
             newIcons = new TextureAtlasRegion[icons.length + 1];
             System.arraycopy(icons, 0, newIcons, 0, icons.length);
             newIcons[icons.length] = ScreenTextures.TAB_ICON_ARCHETYPES;
@@ -34,12 +35,10 @@ public class MixinSkillTabContainerElement {
 
     @Inject(method = "lambda$new$0(II)V", at = @At("TAIL"))
     private static void handleAdditionalIndex(int selectedIndex, int index, CallbackInfo ci) {
-        if (selectedIndex != index) {
+        if (selectedIndex != index || VaultBarOverlay.vaultLevel == 100) {
             if(index == 5) {
                 ModNetwork.CHANNEL.sendToServer(ServerboundOpenPowersMessage.INSTANCE);
             }
         }
     }
-
-
 }
