@@ -10,6 +10,7 @@
     "MixinAwardCrateObjective",
     "MixinLootStatueBlock",
     "MixinModConfigs",
+    "MixinMultiJumpTrinket",
     "MixinSkillAdapter",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
