@@ -4,6 +4,8 @@ import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +31,11 @@ public class PowerOrb extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(new TextComponent("Adds a ").append("Power point").withStyle(ChatFormatting.YELLOW).append(" upon right clicking"));
+        pTooltipComponents.add(
+                new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                        .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                        .append(new TextComponent(" upon use.").withStyle(ChatFormatting.YELLOW))
+        );
     }
 
     @Nonnull
@@ -52,8 +58,6 @@ public class PowerOrb extends Item {
         }
 
         if (!world.isClientSide) {
-            PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
-            if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
 
             PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
             if(player.isCrouching()) {
