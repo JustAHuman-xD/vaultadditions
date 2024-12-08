@@ -49,7 +49,6 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 

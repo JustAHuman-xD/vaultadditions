@@ -8,7 +8,6 @@ import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.skill.base.SkillContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;

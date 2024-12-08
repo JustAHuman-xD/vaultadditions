@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.block;
 
-import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;import io.github.a1qs.vaultadditions.init.ModBlockEntities;
+import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;
+import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import iskallia.vault.init.ModConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

@@ -2,7 +2,6 @@ package io.github.a1qs.vaultadditions.client.menu;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import io.github.a1qs.vaultadditions.container.RenameContainer;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.RenameStatueMessage;

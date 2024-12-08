@@ -7,7 +7,6 @@ import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.StatueSelectItemMessage;
 import iskallia.vault.VaultMod;
 import iskallia.vault.client.gui.component.StatueOptionSlot;
-import iskallia.vault.network.message.OmegaStatueUIMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -24,7 +23,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class LootStatueMenu extends AbstractContainerScreen<LootStatueContainer> {
