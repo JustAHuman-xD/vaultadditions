@@ -2,8 +2,8 @@ package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
-import io.github.a1qs.vaultadditions.events.Event;
-import io.github.a1qs.vaultadditions.events.EventEntry;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
+import io.github.a1qs.vaultadditions.config.vault.entry.EventEntry;
 import io.github.a1qs.vaultadditions.util.EntryHelper;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import net.minecraft.Util;
@@ -33,12 +33,12 @@ public class EventData extends SavedData {
     private final List<String> scheduledEvents = new ArrayList<>();
     private long eventDuration;
     private boolean isActive;
-    private Event activeEvent;
+    private VaultAdditionsEvent activeEvent;
 
     public void startEvent(EventEntry event) {
         VaultAdditions.LOGGER.info("Started Event: {}", event.getEventId());
 
-        Event activeEventInstance = new Event(EntryHelper.findIndexOf(CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList(), event), 0, 0);
+        VaultAdditionsEvent activeEventInstance = new VaultAdditionsEvent(EntryHelper.findIndexOf(CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList(), event), 0, 0);
         if(event.isCrystalSubmission()) {
             activeEventInstance.setRequiredCrystals(rand.nextInt(
                     event.getMinCrystalsSubmitted(),
@@ -121,7 +121,7 @@ public class EventData extends SavedData {
         return eventDuration;
     }
 
-    public Event getActiveEvent() {
+    public VaultAdditionsEvent getActiveEvent() {
         return activeEvent;
     }
 
@@ -165,7 +165,7 @@ public class EventData extends SavedData {
 
         data.isActive = nbt.getBoolean("IsActive");
         data.eventDuration = nbt.getLong("EventDuration");
-        if(data.isActive) data.activeEvent = Event.deserialize((CompoundTag) nbt.get("ActiveEvent"));
+        if(data.isActive) data.activeEvent = VaultAdditionsEvent.deserialize((CompoundTag) nbt.get("ActiveEvent"));
 
 
         return data;
@@ -182,7 +182,7 @@ public class EventData extends SavedData {
 
         nbt.putBoolean("IsActive", isActive);
         nbt.putLong("EventDuration", eventDuration);
-        if(isActive) nbt.put("ActiveEvent", Event.serialize(this.activeEvent));
+        if(isActive) nbt.put("ActiveEvent", VaultAdditionsEvent.serialize(this.activeEvent));
 
         return nbt;
     }

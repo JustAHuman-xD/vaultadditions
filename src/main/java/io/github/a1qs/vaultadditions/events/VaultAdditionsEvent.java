@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
-public class Event {
+public class VaultAdditionsEvent {
     public static final ResourceLocation BORDER_EXPANSION_ENABLED = new ResourceLocation(VaultAdditions.MOD_ID, "event_re_enable_border_expansion");
     public static final ResourceLocation ADD_PORTAL_MODIFIERS = new ResourceLocation(VaultAdditions.MOD_ID, "event_add_portal_modifiers");
     public static final ResourceLocation ADD_VAULT_COMPLETION_ITEM = new ResourceLocation(VaultAdditions.MOD_ID, "event_vault_completion_item");
@@ -19,13 +19,13 @@ public class Event {
     private int crystalsSubmitted;
 
 
-    public Event(int configIndex, int requiredCrystals, int crystalsSubmitted) {
+    public VaultAdditionsEvent(int configIndex, int requiredCrystals, int crystalsSubmitted) {
         this.configIndex = configIndex;
         this.requiredCrystals = requiredCrystals;
         this.crystalsSubmitted = crystalsSubmitted;
     }
 
-    public static CompoundTag serialize(Event event) {
+    public static CompoundTag serialize(VaultAdditionsEvent event) {
         CompoundTag tag = new CompoundTag();
         tag.putInt("ConfigIndex", event.getConfigIndex());
         tag.putInt("RequiredCrystals", event.getRequiredCrystals());
@@ -33,8 +33,8 @@ public class Event {
         return tag;
     }
 
-    public static Event deserialize(CompoundTag tag) {
-        return new Event(
+    public static VaultAdditionsEvent deserialize(CompoundTag tag) {
+        return new VaultAdditionsEvent(
                 tag.getInt("ConfigIndex"),
                 tag.getInt("RequiredCrystals"),
                 tag.getInt("SubmittedCrystals")

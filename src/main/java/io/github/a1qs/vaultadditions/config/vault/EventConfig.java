@@ -4,15 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
-import io.github.a1qs.vaultadditions.events.Event;
-import io.github.a1qs.vaultadditions.events.EventEntry;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
+import io.github.a1qs.vaultadditions.config.vault.entry.EventEntry;
 import iskallia.vault.config.Config;
 import iskallia.vault.init.ModItems;
 import iskallia.vault.util.data.WeightedList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -31,7 +30,7 @@ public class EventConfig extends Config {
 
         // Add entries to the event list
         eventList.add(new EventEntry(
-                Event.BORDER_EXPANSION_ENABLED,
+                VaultAdditionsEvent.BORDER_EXPANSION_ENABLED,
                 createComplexStartMessage(),
                 createComplexEndMessage(),
                 createComplexLoginMessage(),
@@ -41,7 +40,7 @@ public class EventConfig extends Config {
                 false), 2);
 
         eventList.add(new EventEntry(
-                        Event.ADD_PORTAL_MODIFIERS,
+                        VaultAdditionsEvent.ADD_PORTAL_MODIFIERS,
                         createComplexStartMessage(),
                         createComplexEndMessage(),
                         createComplexLoginMessage(),
@@ -53,7 +52,7 @@ public class EventConfig extends Config {
                 3);
 
         eventList.add(new EventEntry(
-                        Event.ADD_VAULT_COMPLETION_ITEM,
+                        VaultAdditionsEvent.ADD_VAULT_COMPLETION_ITEM,
                         createComplexStartMessage(),
                         createComplexEndMessage(),
                         createComplexLoginMessage(),

@@ -2,10 +2,9 @@ package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.data.EventData;
-import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import iskallia.vault.block.VaultPortalBlock;
 import iskallia.vault.block.entity.VaultPortalTileEntity;
-import iskallia.vault.core.vault.Vault;
 import iskallia.vault.core.vault.modifier.VaultModifierStack;
 import iskallia.vault.core.vault.modifier.registry.VaultModifierRegistry;
 import iskallia.vault.core.vault.modifier.spi.VaultModifier;
@@ -31,7 +30,7 @@ public class MixinVaultPortalBlock {
     public void addEventModifier(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo ci) {
         if (level instanceof ServerLevel serverLevel) {
             EventData data = EventData.get(serverLevel);
-            if (data.conditionsCompleted() && data.getActiveEvent().getEventId().equals(Event.ADD_PORTAL_MODIFIERS)) {
+            if (data.conditionsCompleted() && data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.ADD_PORTAL_MODIFIERS)) {
                 BlockEntity te = level.getBlockEntity(pos);
                 VaultPortalTileEntity portal = te instanceof VaultPortalTileEntity ? (VaultPortalTileEntity)te : null;
                 if(portal != null && portal.getData().isPresent()) {

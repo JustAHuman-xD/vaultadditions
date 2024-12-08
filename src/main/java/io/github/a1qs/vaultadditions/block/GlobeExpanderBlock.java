@@ -5,7 +5,7 @@ import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
-import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
@@ -16,7 +16,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -84,7 +83,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
 
         boolean isActiveBorderEvent = false;
-        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getEventId().equals(Event.BORDER_EXPANSION_ENABLED) || data.getActiveEvent().isCrystalSubmissionEvent();
+        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED) || data.getActiveEvent().isCrystalSubmissionEvent();
 
         // If its past the configured date OR if theres NOT an active border event AND Config option returns true
         if((TimeUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {

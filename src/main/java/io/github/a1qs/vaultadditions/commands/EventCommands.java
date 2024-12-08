@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import io.github.a1qs.vaultadditions.data.EventData;
-import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -44,7 +44,7 @@ public class EventCommands {
 
     private int getCurrentEvent(CommandContext<CommandSourceStack> context) {
         EventData data = EventData.get(ServerLifecycleHooks.getCurrentServer());
-        Event activeEvent = data.getActiveEvent();
+        VaultAdditionsEvent activeEvent = data.getActiveEvent();
         if(activeEvent != null) {
             context.getSource().sendSuccess(new TextComponent("=== ")
                     .append(new TextComponent("Current active Event").withStyle(ChatFormatting.AQUA))

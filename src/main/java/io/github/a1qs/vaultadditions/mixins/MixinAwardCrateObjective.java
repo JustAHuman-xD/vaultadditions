@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.data.EventData;
-import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import iskallia.vault.core.random.ChunkRandom;
 import iskallia.vault.core.vault.Vault;
 import iskallia.vault.core.vault.objective.AwardCrateObjective;
@@ -19,7 +19,7 @@ public class MixinAwardCrateObjective {
     private void addBorderShardReward(Vault vault, Listener listener, ChunkRandom random, CallbackInfo ci) {
         StatCollector stats = vault.get(Vault.STATS).get(listener.get(Listener.ID));
         EventData d = EventData.getServer();
-        if(d.conditionsCompleted() && d.getActiveEvent().getEventId().equals(Event.ADD_VAULT_COMPLETION_ITEM)) {
+        if(d.conditionsCompleted() && d.getActiveEvent().getEventId().equals(VaultAdditionsEvent.ADD_VAULT_COMPLETION_ITEM)) {
             if(random.nextFloat() < d.getActiveEvent().getChance()) stats.get(StatCollector.REWARD).add(d.getActiveEvent().getItemStack());
         }
     }

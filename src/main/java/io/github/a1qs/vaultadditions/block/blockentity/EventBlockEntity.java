@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.block.blockentity;
 
 
 import io.github.a1qs.vaultadditions.data.EventData;
-import io.github.a1qs.vaultadditions.events.Event;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.util.nbt.NBTHelper;
@@ -43,7 +43,7 @@ public class EventBlockEntity extends BlockEntity {
 
         EventData data = EventData.get(ServerLifecycleHooks.getCurrentServer());
         if(data.isEventActive()) {
-            Event activeEvent = data.getActiveEvent();
+            VaultAdditionsEvent activeEvent = data.getActiveEvent();
             long remainingTime = data.getEventDuration();
 
 

@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.events;
+package io.github.a1qs.vaultadditions.config.vault.entry;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
