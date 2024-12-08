@@ -35,7 +35,7 @@ public class MixinSkillTabContainerElement {
 
     @Inject(method = "lambda$new$0(II)V", at = @At("TAIL"))
     private static void handleAdditionalIndex(int selectedIndex, int index, CallbackInfo ci) {
-        if (selectedIndex != index || VaultBarOverlay.vaultLevel == 100) {
+        if (selectedIndex != index) {
             if(index == 5) {
                 ModNetwork.CHANNEL.sendToServer(ServerboundOpenPowersMessage.INSTANCE);
             }
