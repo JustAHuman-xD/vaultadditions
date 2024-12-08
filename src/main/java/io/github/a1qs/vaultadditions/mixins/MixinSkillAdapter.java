@@ -25,5 +25,6 @@ public class MixinSkillAdapter {
         instance.register("power_vanilla_attribute_2", VanillaAttributePowerAdditional.class, VanillaAttributePowerAdditional::new);
         instance.register("power_gear_attribute", GearAttributePower.class, GearAttributePower::new);
         instance.register("power_gear_attribute_2", GearAttributePowerAdditional.class, GearAttributePowerAdditional::new);
+        instance.register("power_air_mobility", AirMobilityPower.class, AirMobilityPower::new);
     }
 }
