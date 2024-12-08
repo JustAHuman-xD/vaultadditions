@@ -5,12 +5,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.data.EventData;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class EventEntry {
     @Expose
@@ -115,9 +117,14 @@ public class EventEntry {
         placeholders.put("crystalSubmission", String.valueOf(this.crystalSubmission));
         placeholders.put("minCrystalsSubmitted", String.valueOf(this.minCrystalsSubmitted));
         placeholders.put("maxCrystalsSubmitted", String.valueOf(this.maxCrystalsSubmitted));
-        placeholders.put("item", this.itemToAdd.getItem().getRegistryName().toString());
-        placeholders.put("itemCount", String.valueOf(this.itemToAdd.getCount()));
 
+
+        if(d.isEventActive()){
+            if(d.getActiveEvent().getEventId().equals(VaultAdditionsEvent.ADD_VAULT_COMPLETION_ITEM)) {
+                placeholders.put("item", this.itemToAdd.getItem().getRegistryName().toString());
+                placeholders.put("itemCount", String.valueOf(this.itemToAdd.getCount()));
+            }
+        }
         // active event based data
         placeholders.put("eventDurationTicks", String.valueOf(eventActive ? d.getEventDuration() : null));
         placeholders.put("eventDurationSeconds", String.valueOf(eventActive ? (d.getEventDuration() / 20) % 60 : null));
