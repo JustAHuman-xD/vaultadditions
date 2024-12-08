@@ -143,7 +143,7 @@ public class LootStatueBlock extends BaseEntityBlock {
                         return MEGA_GIFT_SHAPE_90;
                     }
                     case "vaultadditions:loot_statue_arena" -> {
-                        return ARENA_SHAPE_180;
+                        return ARENA_SHAPE_90;
                     }
                 }
             }
