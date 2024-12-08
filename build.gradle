@@ -21,7 +21,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '1.6.0'
+version = '1.7.0'
 group = 'io.github.a1qs.vaultadditions'
 archivesBaseName = 'vaultadditions'
 
