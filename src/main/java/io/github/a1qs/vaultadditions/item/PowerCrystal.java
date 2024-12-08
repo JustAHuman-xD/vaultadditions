@@ -1,11 +1,18 @@
 package io.github.a1qs.vaultadditions.item;
 
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
+import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
+import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.world.data.PlayerVaultStatsData;
+import jdk.jfr.Event;
+import mezz.jei.forge.config.ServerConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,16 +39,35 @@ public class PowerCrystal extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if(!TimeUtil.pastDate()) {
-            pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+        if(ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) { // The time for expanding the border is limited to events & the specified timespan
+
+            // The Specified timespan hasnt passed
+            if(!TimeUtil.pastDate()) {
+                pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+            } else { // The specified timespan has passed
+                EventData data = EventData.getServer();
+                if(data.isEventActive()) {
+                    if(data.getActiveEvent().isCrystalSubmissionEvent() || data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED)) {
+                        pTooltipComponents.add(new TextComponent("Temporarily increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+                    }
+                }
+            }
         } else {
+            pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+        }
+
+        if(VaultBarOverlay.vaultLevel >= 100) {
             pTooltipComponents.add(
-                    new TextComponent("Adds a ")
-                            .append(new TextComponent("Power point").withStyle(ChatFormatting.YELLOW))
-                            .append(" upon right clicking\nRequires Vault level ")
-                            .append(new TextComponent("100").withStyle(ChatFormatting.YELLOW))
+                    new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                            .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                            .append(new TextComponent(" upon use.").withStyle(ChatFormatting.YELLOW))
             );
         }
+
+        if(pTooltipComponents.size() <= 1) {
+            pTooltipComponents.add(new TextComponent("I seem to be too weak to make use of this...").withStyle(ChatFormatting.ITALIC).withStyle(ChatFormatting.RED));
+        }
+
     }
 
     @Nonnull
