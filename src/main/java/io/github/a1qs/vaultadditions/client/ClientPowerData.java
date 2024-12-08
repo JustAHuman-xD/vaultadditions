@@ -27,6 +27,10 @@ public class ClientPowerData {
         return talents;
     }
 
+    public static PowerTree getPowerTree() {
+        return POWER_TREE;
+    }
+
     @Nullable
     public static TieredSkill getLearnedTalentNode(String talentName) {
         Iterator<TieredSkill> var1 = getLearnedTalentNodes().iterator();
