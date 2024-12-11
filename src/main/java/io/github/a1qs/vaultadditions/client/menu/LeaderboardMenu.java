@@ -5,6 +5,7 @@ import io.github.a1qs.vaultadditions.util.UsernameProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 public class LeaderboardMenu extends Screen {
     private final Map<UUID, Integer> leaderboard;
+
 
     public LeaderboardMenu(Component pTitle, Map<UUID, Integer> leaderboard) {
         super(pTitle);
@@ -32,8 +34,20 @@ public class LeaderboardMenu extends Screen {
         drawCenteredString(pPoseStack, this.font, this.title, this.width / 2, 10, 0xFFFFFF);
         renderLeaderboard(pPoseStack);
 
+        int renderX = (int) (this.width * 0.85);
+        int renderY = (int) (this.height * 0.6);
+        int scale = Math.min(this.width, this.height) / 8;
+
+        float mouseXOffset = renderX - pMouseX;
+        float mouseYOffset = (float) (renderY - (pMouseY + scale)); // renderY - pMouseY
+
+        InventoryScreen.renderEntityInInventory(renderX, renderY, scale, mouseXOffset, mouseYOffset, this.minecraft.player);
+
+
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
+
+
 
     private void renderLeaderboard(PoseStack pPoseStack) {
         int x = this.width / 2;
@@ -96,6 +110,9 @@ public class LeaderboardMenu extends Screen {
             Minecraft.getInstance().font.draw(pPoseStack, notFound, x - this.font.width(notFound) / 2.0f, y, 0xFFFFFF);
         }
     }
+
+
+
 
 //    ColorBlender colorBlender = new ColorBlender(1.0F);
 //    Optional.ofNullable(clientCache.getGearColorComponents()).ifPresent((colors) -> colors.forEach((color) -> colorBlender.add(color, 60.0F)));
