@@ -37,7 +37,7 @@ public class PowerCrystalData extends SavedData {
         for (Map.Entry<UUID, Integer> entry : playerContributedCrystals.entrySet()) {
             CompoundTag playerTag = new CompoundTag();
             playerTag.putString("UUID", entry.getKey().toString());
-            playerTag.putFloat("ContributedCrystals", entry.getValue());
+            playerTag.putInt("ContributedCrystals", entry.getValue());
             playersList.add(playerTag);
         }
 
@@ -60,7 +60,7 @@ public class PowerCrystalData extends SavedData {
         return playerContributedCrystals.getOrDefault(playerId, 0);
     }
 
-    public Map<UUID, Integer> getPLayerContributionsMap() {
+    public Map<UUID, Integer> getPlayerContributionsMap() {
         return playerContributedCrystals;
     }
 

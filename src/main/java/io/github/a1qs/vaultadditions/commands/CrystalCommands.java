@@ -89,7 +89,7 @@ public class CrystalCommands {
         MinecraftServer srv = context.getSource().getServer();
         int limit = IntegerArgumentType.getInteger(context, "listPlayerAmount");
 
-        List<MutableComponent> topContributions = getTopContributors(PowerCrystalData.getServer().getPLayerContributionsMap(), srv, limit);
+        List<MutableComponent> topContributions = getTopContributors(PowerCrystalData.getServer().getPlayerContributionsMap(), srv, limit);
         MutableComponent cmp = new TextComponent("=== ")
                 .append(new TextComponent("Contribution Leaderboard").withStyle(ChatFormatting.LIGHT_PURPLE))
                 .append(new TextComponent(" ===\n"));
