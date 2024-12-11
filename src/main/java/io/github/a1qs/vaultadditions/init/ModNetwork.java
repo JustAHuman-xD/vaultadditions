@@ -3,7 +3,9 @@ package io.github.a1qs.vaultadditions.init;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.network.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModNetwork {
@@ -18,10 +20,22 @@ public class ModNetwork {
         CHANNEL.registerMessage(nextId(), PowerPointMessage.class, PowerPointMessage::encode, PowerPointMessage::decode, PowerPointMessage::handle);
         CHANNEL.registerMessage(nextId(), StatueSelectItemMessage.class, StatueSelectItemMessage::encode, StatueSelectItemMessage::decode, StatueSelectItemMessage::handle);
         CHANNEL.registerMessage(nextId(), RenameStatueMessage.class, RenameStatueMessage::encode, RenameStatueMessage::decode, RenameStatueMessage::handle);
+        CHANNEL.registerMessage(nextId(), LeaderboardRequestPacket.class, LeaderboardRequestPacket::encode, LeaderboardRequestPacket::decode, LeaderboardRequestPacket::handle);
+        CHANNEL.registerMessage(nextId(), LeaderboardDataPacket.class, LeaderboardDataPacket::encode, LeaderboardDataPacket::decode, LeaderboardDataPacket::handle);
+
+
     }
 
     public static int nextId() {
         return ID++;
+    }
+
+    public static <T> void sendToServer(T message) {
+        CHANNEL.sendToServer(message);
+    }
+
+    public static <T> void sendToClient(T message, ServerPlayer player) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 
 }
