@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.util;
 
 import com.mojang.authlib.GameProfile;
-import io.github.a1qs.vaultadditions.client.ClientInfoHandler;
+
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -25,17 +25,11 @@ public class UsernameProvider {
     }
 
     public static String getUsernameFromUUID(UUID uuid) {
-        String cachedName = ClientInfoHandler.getCachedUsername(uuid);
-        if (!cachedName.equals("Unknown")) {
-            return cachedName;
-        }
-
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.getConnection() != null) {
             for (PlayerInfo playerInfo : minecraft.getConnection().getOnlinePlayers()) {
                 if (playerInfo.getProfile().getId().equals(uuid)) {
                     String name = playerInfo.getProfile().getName();
-                    ClientInfoHandler.updateCachedUsername(uuid, name);
                     return name;
                 }
             }
