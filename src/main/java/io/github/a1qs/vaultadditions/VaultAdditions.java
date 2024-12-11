@@ -55,6 +55,7 @@ public class VaultAdditions {
 
     private void clientSetup(final FMLClientSetupEvent event) {
         ModScreens.register();
+        ModKeybinds.register();
         BlockEntityRenderers.register(ModBlockEntities.EVENT_BLOCK_ENTITY.get(), EventBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), LootStatueBlockRenderer::new);
