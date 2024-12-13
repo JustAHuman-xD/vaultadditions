@@ -9,6 +9,7 @@ import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -60,5 +61,11 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.GLOBE_EXPANDER_ENTITY.get(), GlobeExpanderEntityRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), LootStatueBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.STATUE_CAULDRON_BLOCK_ENTITY.get(), StatueCauldronRenderer::new);
+    }
+
+
+
+    public static ResourceLocation id(String name) {
+        return new ResourceLocation(MOD_ID, name);
     }
 }
