@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powers;
+package io.github.a1qs.vaultadditions.vault.power;
 
 import com.google.gson.JsonObject;
 import iskallia.vault.core.data.adapter.Adapters;
@@ -15,17 +15,18 @@ import net.minecraft.server.level.ServerPlayer;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class GearAttributePower extends LearnableSkill implements GearAttributeSkill, TickingSkill {
+// why
+public class GearAttributePowerAdditional extends LearnableSkill implements GearAttributeSkill, TickingSkill {
     private VaultGearAttribute<?> attribute;
     private double value;
 
-    public GearAttributePower(int unlockLevel, int learnPointCost, int regretPointCost, VaultGearAttribute<?> attribute, double value) {
+    public GearAttributePowerAdditional(int unlockLevel, int learnPointCost, int regretPointCost, VaultGearAttribute<?> attribute, double value) {
         super(unlockLevel, learnPointCost, regretPointCost);
         this.attribute = attribute;
         this.value = value;
     }
 
-    public GearAttributePower() {
+    public GearAttributePowerAdditional() {
     }
 
     public VaultGearAttribute<?> getAttribute() {

@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powers;
+package io.github.a1qs.vaultadditions.vault.power;
 
 import com.google.gson.JsonObject;
 import iskallia.vault.core.data.adapter.Adapters;

@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
-import io.github.a1qs.vaultadditions.vault.powers.*;
+import io.github.a1qs.vaultadditions.vault.power.*;
 import iskallia.vault.skill.base.Skill;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
