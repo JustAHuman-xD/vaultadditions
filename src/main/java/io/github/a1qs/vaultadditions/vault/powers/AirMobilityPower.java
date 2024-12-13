@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.ClientPowerData;
 import io.github.a1qs.vaultadditions.events.KeybindEvents;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
 import iskallia.vault.skill.base.LearnableSkill;

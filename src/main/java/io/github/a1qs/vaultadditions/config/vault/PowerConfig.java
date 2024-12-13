@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.config.vault;
 
 import com.google.gson.annotations.Expose;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.config.Config;
 
 public class PowerConfig extends Config {

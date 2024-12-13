@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powermenu;
+package io.github.a1qs.vaultadditions.vault.menu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.util.MiscUtil;

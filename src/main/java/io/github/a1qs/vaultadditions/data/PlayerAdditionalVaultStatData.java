@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.skill.base.GroupedSkill;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.Skill;

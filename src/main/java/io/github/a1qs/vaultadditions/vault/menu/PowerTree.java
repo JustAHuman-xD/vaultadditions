@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powermenu;
+package io.github.a1qs.vaultadditions.vault.menu;
 
 
 import io.github.a1qs.vaultadditions.init.ModNetwork;

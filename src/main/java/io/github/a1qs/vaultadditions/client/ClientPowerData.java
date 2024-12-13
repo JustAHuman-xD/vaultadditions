@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.client;
 
 import io.github.a1qs.vaultadditions.network.KnownPowerMessage;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.core.net.ArrayBitBuffer;
 import iskallia.vault.skill.base.TieredSkill;
 

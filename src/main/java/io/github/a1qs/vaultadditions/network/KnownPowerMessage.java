@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.network;
 
 import io.github.a1qs.vaultadditions.client.ClientPowerData;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.core.net.ArrayBitBuffer;
 import iskallia.vault.core.net.BitBuffer;
 import net.minecraft.network.FriendlyByteBuf;

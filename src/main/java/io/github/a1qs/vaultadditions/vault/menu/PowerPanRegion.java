@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powermenu;
+package io.github.a1qs.vaultadditions.vault.menu;
 
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import iskallia.vault.client.gui.screen.player.legacy.tab.split.pan.SkillPanRegion;

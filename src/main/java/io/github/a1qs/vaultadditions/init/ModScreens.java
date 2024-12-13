@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.init;
 
 import io.github.a1qs.vaultadditions.client.menu.LootStatueMenu;
 import io.github.a1qs.vaultadditions.client.menu.RenameMenu;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerElementContainerScreen;
+import io.github.a1qs.vaultadditions.vault.menu.PowerElementContainerScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

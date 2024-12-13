@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.powermenu;
+package io.github.a1qs.vaultadditions.vault.menu;
 
 import iskallia.vault.client.gui.screen.player.legacy.widget.SkillWidget;
 import iskallia.vault.config.entry.SkillStyle;

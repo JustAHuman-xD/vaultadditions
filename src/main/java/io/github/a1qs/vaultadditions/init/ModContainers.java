@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.init;
 
 import io.github.a1qs.vaultadditions.container.LootStatueContainer;
 import io.github.a1qs.vaultadditions.container.RenameContainer;
-import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.container.NBTElementContainer;
 import iskallia.vault.core.net.ArrayBitBuffer;
 import net.minecraft.nbt.CompoundTag;
