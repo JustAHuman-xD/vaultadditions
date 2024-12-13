@@ -35,6 +35,7 @@ public class VaultAdditions {
         ModItems.ITEMS.register(eventBus);
         ModBlocks.BLOCKS.register(eventBus);
         ModBlockEntities.register(eventBus);
+        ModParticles.PARTICLE_TYPES.register(eventBus);
 
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
