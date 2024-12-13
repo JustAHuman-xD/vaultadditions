@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions.vault.powers;
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.ClientPowerData;
+import io.github.a1qs.vaultadditions.events.KeybindEvents;
 import io.github.a1qs.vaultadditions.vault.powermenu.PowerTree;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
@@ -34,6 +35,8 @@ public class AirMobilityPower extends LearnableSkill {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onAirMobilityTick(TickEvent.PlayerTickEvent event) {
+        if(KeybindEvents.isZephyrToggled) return;
+
         PowerTree tree = ClientPowerData.getPowerTree();
         for(AirMobilityPower power : tree.getAll(AirMobilityPower.class, Skill::isUnlocked)) {
             event.player.setSpeed(power.playerBaseSpeed);

@@ -6,10 +6,12 @@ import net.minecraftforge.client.ClientRegistry;
 
 public class ModKeybinds {
     public static KeyMapping openLeaderboard;
+    public static KeyMapping toggleZephyr;
 
 
     public static void register() {
         openLeaderboard = registerKeyMapping("open_leaderboard", -1);
+        toggleZephyr = registerKeyMapping("toggle_zephyr", -1);
     }
 
 
