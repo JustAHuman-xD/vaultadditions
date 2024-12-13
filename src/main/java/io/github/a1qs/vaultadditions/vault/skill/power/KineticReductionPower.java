@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.power;
+package io.github.a1qs.vaultadditions.vault.skill.power;
 
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
@@ -9,6 +9,7 @@ import iskallia.vault.core.net.BitBuffer;
 import iskallia.vault.skill.base.LearnableSkill;
 import iskallia.vault.skill.base.Skill;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = VaultAdditions.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class FallReductionPower extends LearnableSkill {
+public class KineticReductionPower extends LearnableSkill {
     private float damageReduction;
 
 
@@ -69,12 +70,12 @@ public class FallReductionPower extends LearnableSkill {
         LivingEntity var2 = event.getEntityLiving();
         if (var2 instanceof Player player) {
             if(player.getServer() == null) return;
-            if(!event.getSource().isFall()) return;
+            if(event.getSource() != DamageSource.FLY_INTO_WALL) return;
 
             float damageReduction = 0.0F;
             PowerTree expertises = PlayerPowersData.get(player.getServer()).getPowers(player);
 
-            for (FallReductionPower power : expertises.getAll(FallReductionPower.class, Skill::isUnlocked)) {
+            for (KineticReductionPower power : expertises.getAll(KineticReductionPower.class, Skill::isUnlocked)) {
                 damageReduction = power.getDamageReduction();
             }
 

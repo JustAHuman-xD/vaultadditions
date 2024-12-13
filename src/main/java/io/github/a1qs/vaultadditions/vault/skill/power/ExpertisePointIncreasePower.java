@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.power;
+package io.github.a1qs.vaultadditions.vault.skill.power;
 
 import com.google.gson.JsonObject;
 import iskallia.vault.core.data.adapter.Adapters;
@@ -11,14 +11,14 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
-public class SkillPointIncreasePower extends LearnableSkill {
+public class ExpertisePointIncreasePower extends LearnableSkill {
     private int pointIncrease;
 
     @Override
     public void onAdd(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent(serverPlayer -> {
             PlayerVaultStatsData data = PlayerVaultStatsData.get(serverPlayer.getLevel());
-            data.addSkillPoints(serverPlayer, pointIncrease);
+            data.addExpertisePoints(serverPlayer, pointIncrease);
         });
     }
 

@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.power;
+package io.github.a1qs.vaultadditions.vault.skill.power;
 
 import com.google.gson.JsonObject;
 import iskallia.vault.core.data.adapter.Adapters;
@@ -19,21 +19,21 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class VanillaAttributePower extends LearnableSkill implements GearAttributeSkill, TickingSkill {
+public class VanillaAttributePowerAdditional extends LearnableSkill implements GearAttributeSkill, TickingSkill {
     protected static final EnumAdapter<AttributeModifier.Operation> OPERATION_ORDINAL;
     protected static final EnumAdapter<AttributeModifier.Operation> OPERATION_NAME;
     private Attribute attribute;
     private AttributeModifier.Operation operation;
     public double amount;
 
-    public VanillaAttributePower(int unlockLevel, int learnPointCost, int regretPointCost, Attribute attribute, AttributeModifier.Operation operation, double amount) {
+    public VanillaAttributePowerAdditional(int unlockLevel, int learnPointCost, int regretPointCost, Attribute attribute, AttributeModifier.Operation operation, double amount) {
         super(unlockLevel, learnPointCost, regretPointCost);
         this.attribute = attribute;
         this.operation = operation;
         this.amount = amount;
     }
 
-    public VanillaAttributePower() {
+    public VanillaAttributePowerAdditional() {
     }
 
     public void onAdd(SkillContext context) {

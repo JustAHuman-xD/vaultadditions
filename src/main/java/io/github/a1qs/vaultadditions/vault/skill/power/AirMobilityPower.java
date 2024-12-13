@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.power;
+package io.github.a1qs.vaultadditions.vault.skill.power;
 
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
