@@ -77,7 +77,7 @@ public class ShieldWallAbility extends InstantManaAbility {
 
     protected void doSound(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
-            player.level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.GHOST_WALK_SFX, SoundSource.PLAYERS, 0.2F, 1.0F);
+            player.level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD, SoundSource.PLAYERS, 0.2F, 1.0F);
             player.playNotifySound(ModSounds.MANA_SHIELD, SoundSource.PLAYERS, 0.2F, 0.75F); // vol, pitch
         });
     }

@@ -16,6 +16,6 @@ public class ModEffects {
     }
 
     static {
-        SHIELD_WALL = new ShieldWallAbility.ShieldWallEffect(MobEffectCategory.BENEFICIAL, Color.GRAY.getRGB(), VaultAdditions.id("shield_bash"));
+        SHIELD_WALL = new ShieldWallAbility.ShieldWallEffect(MobEffectCategory.BENEFICIAL, Color.GRAY.getRGB(), VaultAdditions.id("shield_wall"));
     }
 }
