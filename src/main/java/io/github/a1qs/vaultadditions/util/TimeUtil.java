@@ -82,4 +82,26 @@ public class TimeUtil {
             return -1;
         }
     }
+
+
+    /**
+     *
+     * @param timestamp the given timestamp stored in a "dd/MM/yyyy HH:mm:ss" format
+     *
+     * @return a long array with the values for the time until the given timestamp from execution, contains seconds, minutes, hours and days
+     */
+    public static long[] untilTimestamp(String timestamp) {
+        if (timestamp.equals("No upcoming events!")) return null;
+
+        long targetTime = TimeUtil.convertToEpochMillis(timestamp);
+        long currentTime = System.currentTimeMillis();
+        long remainingTime = targetTime - currentTime;
+
+        long seconds = (remainingTime / 1000) % 60;
+        long minutes = (remainingTime / (1000 * 60)) % 60;
+        long hours = (remainingTime / (1000 * 60 * 60)) % 24;
+        long days = remainingTime / (1000 * 60 * 60 * 24);
+
+        return new long[]{seconds, minutes, hours, days};
+    }
 }

@@ -9,10 +9,17 @@
   "item.vaultadditions.power_orb": "Power Orb",
   "container.vault.power": "Powers",
 
-  "screen.vaultadditions.leaderboard": "Leaderboard",
+  "screen.vaultadditions.leaderboard": "§l§nLeaderboard",
   "key.category.vaultadditions": "VaultAdditions",
   "key.vaultadditions.open_leaderboard": "Open Leaderboard",
   "key.vaultadditions.toggle_zephyr": "Toggle Zephyr's Grace",
   "key.the_vault.quickselect.shield_wall": "Select and use ability: Shield Wall",
-  "effect.vaultadditions.shield_wall": "Shield Wall"
+  "effect.vaultadditions.shield_wall": "Shield Wall",
+
+  "text.leaderboard.no_event_scheduled": "§cNo Event Scheduled!",
+  "text.leaderboard.scheduled_event": "§e§nEvent scheduled in:§r %s",
+  "text.leaderboard.entry": "#%d | %s | Contributions: %s",
+  "text.leaderboard.missing_user": "???",
+  "text.leaderboard.own_placement": "§e--- Your Position ---",
+  "text.leaderboard.event_info": "§e--- Event Info ---"
 }

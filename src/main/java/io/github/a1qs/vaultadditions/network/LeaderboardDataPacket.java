@@ -14,9 +14,11 @@ import java.util.function.Supplier;
 
 public class LeaderboardDataPacket {
     private final Map<UUID, Integer> leaderboard;
+    private final String nextScheduledEvent;
 
-    public LeaderboardDataPacket(Map<UUID, Integer> leaderboard) {
+    public LeaderboardDataPacket(Map<UUID, Integer> leaderboard, String nextScheduledEvent) {
         this.leaderboard = leaderboard;
+        this.nextScheduledEvent = nextScheduledEvent;
     }
 
     public static void encode(LeaderboardDataPacket msg, FriendlyByteBuf buffer) {
@@ -25,6 +27,8 @@ public class LeaderboardDataPacket {
             buffer.writeUUID(uuid);
             buffer.writeInt(count);
         });
+
+        buffer.writeUtf(msg.nextScheduledEvent);
     }
 
     public static LeaderboardDataPacket decode(FriendlyByteBuf buffer) {
@@ -35,12 +39,20 @@ public class LeaderboardDataPacket {
             int score = buffer.readInt();
             leaderboard.put(uuid, score);
         }
-        return new LeaderboardDataPacket(leaderboard);
+
+        String nextEvent = buffer.readUtf();
+        return new LeaderboardDataPacket(leaderboard, nextEvent);
     }
 
     public static void handle(LeaderboardDataPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(new LeaderboardMenu(new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"), msg.leaderboard));
+            Minecraft.getInstance().setScreen(
+                    new LeaderboardMenu(
+                            new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"),
+                            msg.leaderboard,
+                            msg.nextScheduledEvent
+                    )
+            );
         });
         contextSupplier.get().setPacketHandled(true);
     }
