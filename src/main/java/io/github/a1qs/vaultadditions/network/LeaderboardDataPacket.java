@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.network;
 
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.menu.LeaderboardMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -39,12 +40,8 @@ public class LeaderboardDataPacket {
 
     public static void handle(LeaderboardDataPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
         Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(new LeaderboardMenu(new TranslatableComponent("dev.leaderboard.test"), msg.leaderboard));
+            Minecraft.getInstance().setScreen(new LeaderboardMenu(new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"), msg.leaderboard));
         });
         contextSupplier.get().setPacketHandled(true);
-    }
-
-    public Map<UUID, Integer> getLeaderboard() {
-        return leaderboard;
     }
 }

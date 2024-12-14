@@ -7,5 +7,12 @@
   "block.vaultadditions.statue_cauldron": "Statue Cauldron",
   "item.vaultadditions.power_crystal": "Power Crystal",
   "item.vaultadditions.power_orb": "Power Orb",
-  "container.vault.power": "Powers"
+  "container.vault.power": "Powers",
+
+  "screen.vaultadditions.leaderboard": "Leaderboard",
+  "key.category.vaultadditions": "VaultAdditions",
+  "key.vaultadditions.open_leaderboard": "Open Leaderboard",
+  "key.vaultadditions.toggle_zephyr": "Toggle Zephyr's Grace",
+  "key.the_vault.quickselect.shield_wall": "Select and use ability: Shield Wall",
+  "effect.vaultadditions.shield_wall": "Shield Wall"
 }
