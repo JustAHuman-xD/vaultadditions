@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.client;
+package io.github.a1qs.vaultadditions.client.vault;
 
 import io.github.a1qs.vaultadditions.network.KnownPowerMessage;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;

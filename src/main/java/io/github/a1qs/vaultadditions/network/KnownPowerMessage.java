@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.network;
 
-import io.github.a1qs.vaultadditions.client.ClientPowerData;
+import io.github.a1qs.vaultadditions.client.vault.ClientPowerData;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.core.net.ArrayBitBuffer;
 import iskallia.vault.core.net.BitBuffer;
