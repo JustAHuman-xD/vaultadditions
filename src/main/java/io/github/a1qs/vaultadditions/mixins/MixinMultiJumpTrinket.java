@@ -12,11 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMultiJumpTrinket {
     @Shadow private static boolean clientIsJumpHeld = false;
 
+    /**
+     * Fixes an issue present when holding the jump button and landing on the ground again,
+     * <p>
+     * If the player held the jump button as they land, they would not receive the additional velocity boost upwards,
+     * this mixin aims to resolve this.
+     */
     @Inject(
             method = "onClientTick",
             at = @At(value = "FIELD",
                     target = "Liskallia/vault/gear/trinket/effects/MultiJumpTrinket;clientJumpCount:I",
-            ordinal = 0),
+                    ordinal = 0),
             require = 1
     )
     private void afterResetJumpCount(Player player, CallbackInfo ci) {
