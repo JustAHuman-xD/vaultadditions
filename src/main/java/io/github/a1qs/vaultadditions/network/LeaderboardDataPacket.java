@@ -17,11 +17,13 @@ public class LeaderboardDataPacket {
     private final Map<UUID, Integer> leaderboard;
     private final String nextScheduledEvent;
     private final VaultAdditionsEvent optionalEvent;
+    private final long optionalEventDuration;
 
-    public LeaderboardDataPacket(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent) {
+    public LeaderboardDataPacket(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
         this.optionalEvent = optionalEvent;
+        this.optionalEventDuration = optionalEventDuration;
     }
 
     public static void encode(LeaderboardDataPacket msg, FriendlyByteBuf buffer) {
@@ -38,6 +40,7 @@ public class LeaderboardDataPacket {
             buffer.writeInt(msg.optionalEvent.getConfigIndex());
             buffer.writeInt(msg.optionalEvent.getRequiredCrystals());
             buffer.writeInt(msg.optionalEvent.getCrystalsSubmitted());
+            buffer.writeLong(msg.optionalEventDuration);
         } else {
             buffer.writeBoolean(false); // No event present
         }
@@ -53,16 +56,17 @@ public class LeaderboardDataPacket {
         }
 
         String nextEvent = buffer.readUtf();
-
+        long eventDuration = -1L;
         VaultAdditionsEvent optionalEvent = null;
         if (buffer.readBoolean()) { // Check if event is present
             int configIndex = buffer.readInt();
             int requiredCrystals = buffer.readInt();
             int crystalsSubmitted = buffer.readInt();
             optionalEvent = new VaultAdditionsEvent(configIndex, requiredCrystals, crystalsSubmitted);
+            eventDuration = buffer.readLong();
         }
 
-        return new LeaderboardDataPacket(leaderboard, nextEvent, optionalEvent);
+        return new LeaderboardDataPacket(leaderboard, nextEvent, optionalEvent, eventDuration);
     }
 
     public static void handle(LeaderboardDataPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -72,7 +76,8 @@ public class LeaderboardDataPacket {
                             new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"),
                             msg.leaderboard,
                             msg.nextScheduledEvent,
-                            msg.optionalEvent
+                            msg.optionalEvent,
+                            msg.optionalEventDuration
                     )
             );
         });

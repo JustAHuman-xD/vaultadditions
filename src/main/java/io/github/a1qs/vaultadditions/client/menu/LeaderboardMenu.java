@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.client.menu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import io.github.a1qs.vaultadditions.util.UsernameProvider;
 import net.minecraft.ChatFormatting;
@@ -18,12 +19,16 @@ import java.util.*;
 public class LeaderboardMenu extends Screen {
     private final Map<UUID, Integer> leaderboard;
     private final String nextScheduledEvent;
+    private final VaultAdditionsEvent optionalEvent;
+    private final long optionalEventDuration;
 
 
-    public LeaderboardMenu(Component pTitle, Map<UUID, Integer> leaderboard, String nextScheduledEvent) {
-        super(pTitle);
+    public LeaderboardMenu(Component title, Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
+        super(title);
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
+        this.optionalEvent = optionalEvent;
+        this.optionalEventDuration = optionalEventDuration;
     }
 
     @Override
@@ -126,20 +131,40 @@ public class LeaderboardMenu extends Screen {
     }
 
     private void renderEventInfo(PoseStack pPoseStack, int x, int y) {
-        MutableComponent splitter = new TranslatableComponent("text.leaderboard.event_info");
-        Minecraft.getInstance().font.draw(pPoseStack, splitter, x - this.font.width(splitter) / 2.0f, y, 0xFFFFFF);
-
         int lineSpacing = 15;
-        MutableComponent textComponent;
-        textComponent = new TranslatableComponent("text.leaderboard.no_event_scheduled");
 
-        if (TimeUtil.untilTimestamp(nextScheduledEvent) != null) {
-            long[] time = TimeUtil.untilTimestamp(nextScheduledEvent);
-            String timeString = String.format("%dd %dh %dm %ds", time[3], time[2], time[1], time[0]);
-            textComponent = new TranslatableComponent("text.leaderboard.scheduled_event", timeString);
+        MutableComponent splitter = new TranslatableComponent("text.leaderboard.event_info");
+        int adjustedX = adjustXToFit(splitter.getString(), x);
+        Minecraft.getInstance().font.draw(pPoseStack, splitter, adjustedX - this.font.width(splitter) / 2.0f, y, 0xFFFFFF);
+
+
+
+        if(this.optionalEvent != null) {
+            MutableComponent textComponent = new TranslatableComponent("text.leaderboard.event_id", optionalEvent.getEventId());
+            adjustedX = adjustXToFit(textComponent.getString(), x);
+            Minecraft.getInstance().font.draw(pPoseStack, textComponent, adjustedX - this.font.width(textComponent) / 2.0f, y + lineSpacing, 0xFFFFFF);
+            long remainingTime = optionalEventDuration;
+            long seconds = (remainingTime / 20) % 60;
+            long minutes = (remainingTime / (20 * 60)) % 60;
+            long hours = (remainingTime / (20 * 60 * 60)) % 24;
+            long days = remainingTime / (20 * 60 * 60 * 24);
+
+            MutableComponent textComponent2 = new TranslatableComponent("text.leaderboard.event_time_remaining", days, hours, minutes, seconds);
+            adjustedX = adjustXToFit(textComponent2.getString(), x);
+            Minecraft.getInstance().font.draw(pPoseStack, textComponent2, adjustedX - this.font.width(textComponent2) / 2.0f, y + lineSpacing*2, 0xFFFFFF);
+        } else {
+            MutableComponent textComponent;
+            textComponent = new TranslatableComponent("text.leaderboard.no_event_scheduled");
+
+            if (TimeUtil.untilTimestamp(nextScheduledEvent) != null) {
+                long[] time = TimeUtil.untilTimestamp(nextScheduledEvent);
+                String timeString = String.format("%dd %dh %dm %ds", time[3], time[2], time[1], time[0]);
+                textComponent = new TranslatableComponent("text.leaderboard.scheduled_event", timeString);
+            }
+            adjustedX = adjustXToFit(textComponent.getString(), x); // Adjust X position
+            Minecraft.getInstance().font.draw(pPoseStack, textComponent, adjustedX - this.font.width(textComponent) / 2.0f, y + lineSpacing, 0xFFFFFF);
+
         }
-
-        Minecraft.getInstance().font.draw(pPoseStack, textComponent, x - this.font.width(textComponent) / 2.0f, y + lineSpacing, 0xFFFFFF);
     }
 
 
@@ -153,6 +178,21 @@ public class LeaderboardMenu extends Screen {
         float mouseXOffset = pRenderX - pMouseX;
         float mouseYOffset = pRenderY - (pMouseY + pScale);
         InventoryScreen.renderEntityInInventory(pRenderX, pRenderY, pScale, mouseXOffset, mouseYOffset, this.minecraft.player);
+    }
+
+    private int adjustXToFit(String text, int centerX) {
+        int screenWidth = this.width;
+        int textWidth = this.font.width(text);
+        int leftEdge = centerX - textWidth / 2;
+        int rightEdge = centerX + textWidth / 2;
+
+        if (leftEdge < 0) {
+            return centerX - leftEdge + 5; // Shift right to align left edge + 5 buffer
+        } else if (rightEdge > screenWidth) {
+            return centerX - (rightEdge - screenWidth) -5; // Shift left to align right edge - 5 buffer
+        } else {
+            return centerX; // No adjustment needed
+        }
     }
 
 

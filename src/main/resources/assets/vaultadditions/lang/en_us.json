@@ -17,9 +17,11 @@
   "effect.vaultadditions.shield_wall": "Shield Wall",
 
   "text.leaderboard.no_event_scheduled": "§cNo Event Scheduled!",
-  "text.leaderboard.scheduled_event": "§e§nEvent scheduled in:§r %s",
+  "text.leaderboard.scheduled_event": "§eEvent scheduled in:§r %s",
   "text.leaderboard.entry": "#%d | %s | Contributions: %s",
   "text.leaderboard.missing_user": "???",
   "text.leaderboard.own_placement": "§e--- Your Position ---",
-  "text.leaderboard.event_info": "§e--- Event Info ---"
+  "text.leaderboard.event_info": "§e--- Event Info ---",
+  "text.leaderboard.event_id": "§eEvent type:§r %s",
+  "text.leaderboard.event_time_remaining": "§eEvent ends in:§r %dd %dh %dm %ds"
 }
