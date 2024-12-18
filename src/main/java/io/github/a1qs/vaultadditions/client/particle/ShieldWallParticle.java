@@ -86,7 +86,7 @@ public class ShieldWallParticle extends TextureSheetParticle {
         if (this.entity != null) {
             Vec3 offset = new Vec3(this.radius * Math.cos(this.rotation), 0.0F, this.radius * Math.sin(this.rotation));
             this.x = this.entity.getX() + offset.x();
-            this.y = this.entity.getY() + (double)0.8F;
+            this.y = this.entity.getY() + (double)1.0F;
             this.z = this.entity.getZ() + offset.z();
         }
 
