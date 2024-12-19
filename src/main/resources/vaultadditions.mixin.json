@@ -8,6 +8,7 @@
     "MixinAttributeSnapshotCalculator$AccessorAttributeSnapshot",
     "MixinAttributeSnapshotCalculator$InvokeAttributeSnapshotAttributeValue",
     "MixinAwardCrateObjective",
+    "MixinClassicLootLogic",
     "MixinLootStatueBlock",
     "MixinModConfigs",
     "MixinMultiJumpTrinket",
