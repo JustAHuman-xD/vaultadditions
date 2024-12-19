@@ -31,4 +31,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> LOOT_STATUE_ARENA = ModItems.ITEMS.register("loot_statue_arena",
             () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_ARENA.get()));
+
+    public static final RegistryObject<Item> SHIELD = ModItems.ITEMS.register("shield",
+            () -> new Item(new Item.Properties()));
 }
