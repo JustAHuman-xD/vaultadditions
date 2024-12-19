@@ -1,33 +1,35 @@
 package io.github.a1qs.vaultadditions.client.render;
 
-import com.github.alexthe666.citadel.Citadel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.particle.ShieldWallParticle;
 import io.github.a1qs.vaultadditions.init.ModEffects;
 import io.github.a1qs.vaultadditions.init.ModParticles;
-import iskallia.vault.client.particles.EntityLockedParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.ShieldModel;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.commons.lang3.ArrayUtils;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class ShieldWallRenderer {
@@ -74,50 +76,50 @@ public class ShieldWallRenderer {
         if (!(event.getEntity() instanceof Player player)) return;
 
         if (player.hasEffect(ModEffects.SHIELD_WALL)) {
-            PoseStack poseStack = event.getPoseStack();
-            MultiBufferSource bufferSource = event.getMultiBufferSource();
-
-            // Calculate positions around the player
-            int shieldCount = 4; // Number of shields
-            float range = 1.2F; // Distance from the player
-
-            for (int i = 0; i < shieldCount; i++) {
-                float angle = player.tickCount + event.getPartialTick() % 360 + (i * (360F / shieldCount));
-                float xOffset = range * (float) Math.cos(Math.toRadians(angle));
-                float zOffset = range * (float) Math.sin(Math.toRadians(angle));
-
-                poseStack.pushPose();
-
-                // Position the shield
-                poseStack.translate(player.getX() + xOffset - event.getEntity().getX(),
-                        player.getY() + 0.75F - event.getEntity().getY(),
-                        player.getZ() + zOffset - event.getEntity().getZ());
-
-                // Rotate to face outward
-                poseStack.mulPose(Vector3f.YN.rotationDegrees(angle - 100F));
-                float scale = 3.0F;
-                poseStack.scale(scale, scale, scale);
-
-                // Render the shield model
-                renderShieldModel(poseStack, bufferSource);
-
-                poseStack.popPose();
-            }
+            renderShields(event.getPoseStack(), event.getMultiBufferSource(), player, event.getPartialTick(), 3, 0.8F);
         }
     }
 
-    private static void renderShieldModel(PoseStack poseStack, MultiBufferSource bufferSource) {
-        ItemStack shieldStack = new ItemStack(Items.SHIELD);
 
-        Minecraft.getInstance().getItemRenderer().renderStatic(
-                shieldStack,
-                ItemTransforms.TransformType.GROUND,
-                LightTexture.FULL_BRIGHT,
-                OverlayTexture.NO_OVERLAY,
-                poseStack,
-                bufferSource,
-                0
-        );
+    private static void renderShields(PoseStack stack, MultiBufferSource buffer, LivingEntity entity, float partialTicks, int count, float scale) {
+        ModelResourceLocation modelResourceLocation = new ModelResourceLocation(new ResourceLocation(VaultAdditions.MOD_ID, "shield"), "inventory");
+        Direction[] directions = ArrayUtils.add(Direction.values(), null);
+
+        float age = entity.tickCount + partialTicks;
+        float rotateAngleY = age / -8.0F;
+        float rotateAngleX = Mth.sin(age / 6.0F) / -4.0F;
+        float rotateAngleZ = Mth.cos(age / 6.0F) / -4.0F;
+
+        for (int c = 0; c < count; c++) {
+            stack.pushPose();
+
+            stack.translate(-0.5, 1.2, -0.5);
+
+            stack.translate(0.5, -0.25, 0.5);
+            stack.mulPose(Vector3f.ZP.rotationDegrees(rotateAngleZ * (90F / (float) Math.PI))); //LEFTRIGHT
+            stack.mulPose(Vector3f.YP.rotationDegrees(rotateAngleY * (111F / (float) Math.PI) + (c * (360F / count)))); //MOVEMENT
+            stack.mulPose(Vector3f.XP.rotationDegrees(rotateAngleX * (45F / (float) Math.PI))); // UPDOWN
+            stack.translate(-0.5, -0.5, -0.5);
+
+            // Push the shields further away from the centre
+            stack.translate(0.0, 0.0, -1.0);
+            stack.scale(scale, scale, scale);
+
+            BakedModel model = Minecraft.getInstance().getModelManager().getModel(modelResourceLocation);
+
+            for (Direction dir : directions) {
+                Minecraft.getInstance().getItemRenderer().renderQuadList(
+                        stack,
+                        buffer.getBuffer(Sheets.translucentCullBlockSheet()),
+                        model.getQuads(null, dir, entity.getRandom(), EmptyModelData.INSTANCE),
+                        ItemStack.EMPTY,
+                        LightTexture.FULL_BRIGHT,
+                        OverlayTexture.NO_OVERLAY
+                );
+            }
+            stack.popPose();
+        }
     }
+
 
 }

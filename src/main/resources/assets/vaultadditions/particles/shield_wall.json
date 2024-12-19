@@ -1,8 +1,9 @@
 {
   "textures": [
-    "minecraft:generic_7",
-    "minecraft:generic_6",
-    "minecraft:generic_5",
-    "minecraft:generic_4"
+    "the_vault:mana_drain_0",
+    "the_vault:mana_drain_1",
+    "the_vault:mana_drain_2",
+    "the_vault:mana_drain_3",
+    "the_vault:mana_drain_4"
   ]
 }
