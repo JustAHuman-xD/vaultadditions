@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
+import io.github.a1qs.vaultadditions.vault.skill.ability.LegacyManaShieldAbility;
 import io.github.a1qs.vaultadditions.vault.skill.ability.ShieldWallAbility;
 import io.github.a1qs.vaultadditions.vault.skill.power.*;
 import iskallia.vault.skill.base.Skill;
@@ -33,6 +34,7 @@ public class MixinSkillAdapter {
         /* Abilities */
 
         instance.register("shield_wall", ShieldWallAbility.class, ShieldWallAbility::new);
+        instance.register("legacy_mana_shield", LegacyManaShieldAbility.class, LegacyManaShieldAbility::new);
 
 
     }

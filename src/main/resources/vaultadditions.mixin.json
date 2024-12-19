@@ -10,6 +10,7 @@
     "MixinAwardCrateObjective",
     "MixinClassicLootLogic",
     "MixinLootStatueBlock",
+    "MixinModAbilityLabelBindings",
     "MixinModConfigs",
     "MixinMultiJumpTrinket",
     "MixinSkillAdapter",
