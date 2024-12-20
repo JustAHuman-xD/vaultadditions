@@ -36,6 +36,7 @@ public class VaultAdditions {
         ModBlocks.BLOCKS.register(eventBus);
         ModBlockEntities.register(eventBus);
         ModParticles.PARTICLE_TYPES.register(eventBus);
+        ModSounds.SOUNDS.register(eventBus);
 
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);

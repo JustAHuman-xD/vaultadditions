@@ -1,0 +1,11 @@
+{
+  "blade_frenzy": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:blade_frenzy",
+        "stream": true
+      }
+    ]
+  }
+}
