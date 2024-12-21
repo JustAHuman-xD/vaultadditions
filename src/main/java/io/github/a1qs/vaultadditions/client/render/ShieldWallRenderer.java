@@ -34,7 +34,6 @@ import org.apache.commons.lang3.ArrayUtils;
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class ShieldWallRenderer {
 
-
     @SubscribeEvent
     public static void onTick(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
@@ -46,7 +45,6 @@ public class ShieldWallRenderer {
 
                 float range = 1.2F;
 
-                //int color = 15186688;
                 int color = 7131872;
                 float red = (float)(color >>> 16 & 255) / 255.0F;
                 float green = (float)(color >>> 8 & 255) / 255.0F;
@@ -61,15 +59,11 @@ public class ShieldWallRenderer {
                         particle.setColor(Mth.clamp(red, 0.0F, 1.0F), Mth.clamp(green, 0.0F, 1.0F), Mth.clamp(blue, 0.0F, 1.0F));
                         entityLockedParticle.setEntity(player);
                         entityLockedParticle.setPosO();
-
-
-
                     }
                 }
             }
         }
     }
-
 
     @SubscribeEvent
     public static void onRenderPlayer(RenderLivingEvent.Pre<Player, PlayerModel<Player>> event) {
@@ -120,6 +114,4 @@ public class ShieldWallRenderer {
             stack.popPose();
         }
     }
-
-
 }
