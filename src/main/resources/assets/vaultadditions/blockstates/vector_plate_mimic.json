@@ -1,7 +1,8 @@
 {
   "variants": {
-    "": {
-      "model": "minecraft:block/black_carpet"
-    }
+    "facing=north": { "model": "darkutils:block/vector_plate" },
+    "facing=south": { "model": "darkutils:block/vector_plate", "y": 180 },
+    "facing=west": { "model": "darkutils:block/vector_plate", "y": 270 },
+    "facing=east": { "model": "darkutils:block/vector_plate", "y": 90 }
   }
 }
