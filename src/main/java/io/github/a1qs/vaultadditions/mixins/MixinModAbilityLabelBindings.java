@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.vault.skill.ability.BladeFrenzyAbility;
 import io.github.a1qs.vaultadditions.vault.skill.ability.LegacyManaShieldAbility;
 import iskallia.vault.init.ModAbilityLabelBindings;
 import iskallia.vault.skill.ability.component.AbilityLabelFormatters;
@@ -21,6 +22,17 @@ public class MixinModAbilityLabelBindings {
                         ability -> AbilityLabelFormatters.percentRounded(ability.getPercentageDamageAbsorbed()),
                         "manaPerDamage",
                         ability -> AbilityLabelFormatters.decimal(ability.getManaPerDamageScalar())
+                )
+        );
+        ModAbilityLabelBindings.register(
+                BladeFrenzyAbility.class,
+                Map.of(
+                        "percentAttackDealt",
+                        ability -> AbilityLabelFormatters.percentRounded(ability.getPercentAttackDealt()),
+                        "radius",
+                        ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
+                        "knockbackStrengthMultiplier",
+                        ability -> AbilityLabelFormatters.decimal(ability.getKnockbackStrengthMultiplier())
                 )
         );
     }
