@@ -136,7 +136,7 @@ public class BladeFrenzyAbility extends InstantManaAbility {
         context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
             Vec3 pos = context.getSource().getPos().orElse(player.position());
             player.level.playSound(player, pos.x, pos.y, pos.z, ModSounds.BLADE_FRENZY.get(), SoundSource.PLAYERS, 0.1F, 1.0F);
-            player.playNotifySound(ModSounds.BLADE_FRENZY.get(), SoundSource.PLAYERS, 0.2F, 1.0F);
+            player.playNotifySound(ModSounds.BLADE_FRENZY.get(), SoundSource.PLAYERS, 0.3F, 1.0F);
         });
     }
 
