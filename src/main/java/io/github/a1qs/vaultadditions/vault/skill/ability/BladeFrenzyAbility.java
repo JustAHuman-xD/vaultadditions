@@ -100,11 +100,12 @@ public class BladeFrenzyAbility extends InstantManaAbility {
         return realRadius;
     }
 
-    private float getDamage(ServerPlayer player) {
+    protected float getDamage(ServerPlayer player) {
         return (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * this.getPercentAttackDealt();
     }
 
-    private @NotNull List<LivingEntity> getTargetEntities(Level world, LivingEntity attacker, Vec3 pos) {
+    @NotNull
+    protected List<LivingEntity> getTargetEntities(Level world, LivingEntity attacker, Vec3 pos) {
         float radius = this.getRadius(attacker);
         return world.getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range(radius).selector((entity) -> !(entity instanceof Player)), attacker, AABBHelper.create(pos, radius));
     }
