@@ -13,20 +13,20 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class LeaderboardDataPacket {
+public class LeaderboardDataMessage {
     private final Map<UUID, Integer> leaderboard;
     private final String nextScheduledEvent;
     private final VaultAdditionsEvent optionalEvent;
     private final long optionalEventDuration;
 
-    public LeaderboardDataPacket(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
+    public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
         this.optionalEvent = optionalEvent;
         this.optionalEventDuration = optionalEventDuration;
     }
 
-    public static void encode(LeaderboardDataPacket msg, FriendlyByteBuf buffer) {
+    public static void encode(LeaderboardDataMessage msg, FriendlyByteBuf buffer) {
         buffer.writeInt(msg.leaderboard.size());
         msg.leaderboard.forEach((uuid, count) -> {
             buffer.writeUUID(uuid);
@@ -46,7 +46,7 @@ public class LeaderboardDataPacket {
         }
     }
 
-    public static LeaderboardDataPacket decode(FriendlyByteBuf buffer) {
+    public static LeaderboardDataMessage decode(FriendlyByteBuf buffer) {
         int size = buffer.readInt();
         Map<UUID, Integer> leaderboard = new HashMap<>();
         for (int i = 0; i < size; i++) {
@@ -66,10 +66,10 @@ public class LeaderboardDataPacket {
             eventDuration = buffer.readLong();
         }
 
-        return new LeaderboardDataPacket(leaderboard, nextEvent, optionalEvent, eventDuration);
+        return new LeaderboardDataMessage(leaderboard, nextEvent, optionalEvent, eventDuration);
     }
 
-    public static void handle(LeaderboardDataPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(LeaderboardDataMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
         Minecraft.getInstance().execute(() -> {
             Minecraft.getInstance().setScreen(
                     new LeaderboardMenu(

@@ -9,21 +9,21 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class LeaderboardRequestPacket {
-    public LeaderboardRequestPacket() {}
+public class LeaderboardRequestMessage {
+    public LeaderboardRequestMessage() {}
 
-    public static void encode(LeaderboardRequestPacket msg, FriendlyByteBuf buffer) {}
+    public static void encode(LeaderboardRequestMessage msg, FriendlyByteBuf buffer) {}
 
-    public static LeaderboardRequestPacket decode(FriendlyByteBuf buffer) {
-        return new LeaderboardRequestPacket();
+    public static LeaderboardRequestMessage decode(FriendlyByteBuf buffer) {
+        return new LeaderboardRequestMessage();
     }
 
-    public static void handle(LeaderboardRequestPacket msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(LeaderboardRequestMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
         ServerPlayer player = contextSupplier.get().getSender();
         if (player != null) {
             PowerCrystalData powerData = PowerCrystalData.getServer();
             EventData eventData = EventData.getServer();
-            ModNetwork.sendToClient(new LeaderboardDataPacket(powerData.getPlayerContributionsMap(), eventData.getNextScheduledEvent(), eventData.getActiveEvent(), eventData.getEventDuration()), player);
+            ModNetwork.sendToClient(new LeaderboardDataMessage(powerData.getPlayerContributionsMap(), eventData.getNextScheduledEvent(), eventData.getActiveEvent(), eventData.getEventDuration()), player);
         }
         contextSupplier.get().setPacketHandled(true);
     }
