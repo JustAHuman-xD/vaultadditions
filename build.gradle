@@ -21,7 +21,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '1.7.0'
+version = '1.7.0_dev'
 group = 'io.github.a1qs.vaultadditions'
 archivesBaseName = 'vaultadditions'
 
@@ -120,11 +120,13 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-core-618298:4665730")
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
     implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
+    implementation fg.deobf("curse.maven:create-328085:5797603")
 
     runtimeOnly fg.deobf("curse.maven:observable-509575:3745494")
     runtimeOnly fg.deobf("curse.maven:ferritecore-429235:4074294")
     runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4147231")
     runtimeOnly fg.deobf("curse.maven:kotlin-for-forge-351264:4513187")
+
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
