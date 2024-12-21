@@ -2,32 +2,22 @@ package io.github.a1qs.vaultadditions.vault.skill.ability;
 
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.init.ModEffects;
+import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.init.ModSounds;
+import io.github.a1qs.vaultadditions.network.BladeFrenzyParticleMessage;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
 import iskallia.vault.event.ActiveFlags;
-import iskallia.vault.init.ModNetwork;
-import iskallia.vault.init.ModParticles;
-import iskallia.vault.network.message.NovaParticleMessage;
-import iskallia.vault.skill.ability.effect.NovaAbility;
 import iskallia.vault.skill.ability.effect.spi.core.Ability;
 import iskallia.vault.skill.ability.effect.spi.core.InstantManaAbility;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.util.AABBHelper;
-import iskallia.vault.util.calc.AbilityPowerHelper;
 import iskallia.vault.util.calc.AreaOfEffectHelper;
-import iskallia.vault.util.damage.PlayerDamageHelper;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -88,9 +78,18 @@ public class BladeFrenzyAbility extends InstantManaAbility {
     }
 
 
-    private float getUnmodifiedRadius() {
+    public float getUnmodifiedRadius() {
         return this.radius;
     }
+
+    public float getPercentAttackDealt() {
+        return percentAttackDealt;
+    }
+
+    public float getKnockbackStrengthMultiplier() {
+        return this.knockbackStrengthMultiplier;
+    }
+
 
     private float getRadius(Entity attacker) {
         float realRadius = this.getUnmodifiedRadius();
@@ -101,21 +100,13 @@ public class BladeFrenzyAbility extends InstantManaAbility {
         return realRadius;
     }
 
-    private float getPercentAttackDealt() {
-        return percentAttackDealt;
-    }
-
     private float getDamage(ServerPlayer player) {
         return (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * this.getPercentAttackDealt();
     }
 
-    private float getKnockbackStrengthMultiplier() {
-        return this.knockbackStrengthMultiplier;
-    }
-
     private @NotNull List<LivingEntity> getTargetEntities(Level world, LivingEntity attacker, Vec3 pos) {
         float radius = this.getRadius(attacker);
-        return world.getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range((double)radius).selector((entity) -> !(entity instanceof Player)), attacker, AABBHelper.create(pos, radius));
+        return world.getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range(radius).selector((entity) -> !(entity instanceof Player)), attacker, AABBHelper.create(pos, radius));
     }
 
     protected float getDamageModifier(float radius, float dist) {
@@ -136,7 +127,7 @@ public class BladeFrenzyAbility extends InstantManaAbility {
         context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
             Vec3 pos = context.getSource().getPos().orElse(player.position());
             float radius = this.getRadius(player);
-            ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), new NovaParticleMessage(new Vec3(pos.x, pos.y + (double)0.15F, pos.z), radius));
+            ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), new BladeFrenzyParticleMessage(new Vec3(pos.x, pos.y + (double)0.15F, pos.z), radius));
         });
     }
 
