@@ -20,9 +20,9 @@ public class ModNetwork {
         CHANNEL.registerMessage(nextId(), PowerPointMessage.class, PowerPointMessage::encode, PowerPointMessage::decode, PowerPointMessage::handle);
         CHANNEL.registerMessage(nextId(), StatueSelectItemMessage.class, StatueSelectItemMessage::encode, StatueSelectItemMessage::decode, StatueSelectItemMessage::handle);
         CHANNEL.registerMessage(nextId(), RenameStatueMessage.class, RenameStatueMessage::encode, RenameStatueMessage::decode, RenameStatueMessage::handle);
-        CHANNEL.registerMessage(nextId(), LeaderboardRequestPacket.class, LeaderboardRequestPacket::encode, LeaderboardRequestPacket::decode, LeaderboardRequestPacket::handle);
-        CHANNEL.registerMessage(nextId(), LeaderboardDataPacket.class, LeaderboardDataPacket::encode, LeaderboardDataPacket::decode, LeaderboardDataPacket::handle);
-
+        CHANNEL.registerMessage(nextId(), LeaderboardRequestMessage.class, LeaderboardRequestMessage::encode, LeaderboardRequestMessage::decode, LeaderboardRequestMessage::handle);
+        CHANNEL.registerMessage(nextId(), LeaderboardDataMessage.class, LeaderboardDataMessage::encode, LeaderboardDataMessage::decode, LeaderboardDataMessage::handle);
+        CHANNEL.registerMessage(nextId(), BladeFrenzyParticleMessage.class, BladeFrenzyParticleMessage::encode, BladeFrenzyParticleMessage::decode, BladeFrenzyParticleMessage::handle);
 
     }
 
