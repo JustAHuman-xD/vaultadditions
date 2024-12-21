@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.item;
 
 
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.init.ModBlocks;
 import net.minecraft.ChatFormatting;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class LootStatueBlockItem extends BlockItem {
     public LootStatueBlockItem(Block block) {
-        super(block, (new Item.Properties()).tab(CreativeModeTab.TAB_MISC).stacksTo(1));
+        super(block, (new Item.Properties()).tab(VaultAdditions.VAULT_ADDITIONS_TAB).stacksTo(1));
     }
 
     @OnlyIn(Dist.CLIENT)

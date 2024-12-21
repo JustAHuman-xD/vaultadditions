@@ -30,8 +30,4 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<StatueCauldronBlockEntity>> STATUE_CAULDRON_BLOCK_ENTITY = BLOCK_ENTITIES.register("statue_cauldron_block_entity",
             () -> BlockEntityType.Builder.of(StatueCauldronBlockEntity::new, ModBlocks.STATUE_CAULDRON.get()).build(null));
-
-    public static void register(IEventBus eventBus) {
-        BLOCK_ENTITIES.register(eventBus);
-    }
 }

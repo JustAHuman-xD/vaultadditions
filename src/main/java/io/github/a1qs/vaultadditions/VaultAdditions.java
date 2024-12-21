@@ -10,6 +10,7 @@ import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,13 +29,14 @@ public class VaultAdditions {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "vaultadditions";
     public static boolean isWorldBorderFixerLoaded = ModList.get().isLoaded("worldborderfixer");
+    public static final CreativeModeTab VAULT_ADDITIONS_TAB = new ModCreativeTab(MOD_ID);
 
     public VaultAdditions() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.ITEMS.register(eventBus);
         ModBlocks.BLOCKS.register(eventBus);
-        ModBlockEntities.register(eventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(eventBus);
         ModParticles.PARTICLE_TYPES.register(eventBus);
         ModSounds.SOUNDS.register(eventBus);
 

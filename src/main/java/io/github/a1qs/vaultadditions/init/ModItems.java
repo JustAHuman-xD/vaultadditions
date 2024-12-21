@@ -15,10 +15,10 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, VaultAdditions.MOD_ID);
 
     public static final RegistryObject<Item> POWER_CRYSTAL = ITEMS.register("power_crystal",
-            () -> new PowerCrystal(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
+            () -> new PowerCrystal(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 
     public static final RegistryObject<Item> POWER_ORB = ITEMS.register("power_orb",
-            () -> new PowerOrb(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)));
+            () -> new PowerOrb(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 
     public static final RegistryObject<Item> LOOT_STATUE_VAULT = ModItems.ITEMS.register("loot_statue_vault",
             () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_VAULT.get()));
@@ -33,5 +33,5 @@ public class ModItems {
             () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_ARENA.get()));
 
     public static final RegistryObject<Item> SHIELD = ModItems.ITEMS.register("shield",
-            () -> new Item(new Item.Properties()));
+            () -> new Item(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 }
