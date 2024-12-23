@@ -8,10 +8,12 @@
     "MixinAttributeSnapshotCalculator$AccessorAttributeSnapshot",
     "MixinAttributeSnapshotCalculator$InvokeAttributeSnapshotAttributeValue",
     "MixinAwardCrateObjective",
+    "MixinBattlestaffs",
     "MixinClassicLootLogic",
     "MixinLootStatueBlock",
     "MixinModAbilityLabelBindings",
     "MixinModConfigs",
+    "MixinModDynamicModels$Armor",
     "MixinMultiJumpTrinket",
     "MixinSkillAdapter",
     "MixinSkillGates",
@@ -21,6 +23,7 @@
     "MixinVirtualWorlds"
   ],
   "refmap": "vaultadditions.mixin-refmap.json",
+  "plugin": "io.github.a1qs.vaultadditions.mixins.plugins.AdditionsMixinPlugin",
   "client": [
     "MixinVaultBarOverlay"
   ]
