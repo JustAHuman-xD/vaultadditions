@@ -11,6 +11,7 @@ public class CustomVaultConfigRegistry {
     public static ArenaGiftStatueLootConfig STATUE_LOOT_ARENA;
     public static EventConfig EVENT_CONFIG;
     public static NameProviderConfig NAME_PROVIDER_CONFIG;
+    public static ExtraVaultChestMeta EXTRA_VAULT_CHEST_META;
 
     public static void registerCustomConfigs() {
         POWERS_GUI = new PowerGUIConfig().readConfig();
@@ -21,5 +22,6 @@ public class CustomVaultConfigRegistry {
         STATUE_LOOT_ARENA = new ArenaGiftStatueLootConfig().readConfig();
         NAME_PROVIDER_CONFIG = new NameProviderConfig().readConfig();
         EVENT_CONFIG = new EventConfig().readConfig();
+        EXTRA_VAULT_CHEST_META = new ExtraVaultChestMeta().readConfig();
     }
 }
