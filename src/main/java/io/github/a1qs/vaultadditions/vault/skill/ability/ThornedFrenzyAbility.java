@@ -26,8 +26,6 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
     private int damageDelay;
     private float thornsMultiplier;
 
-
-
     public ThornedFrenzyAbility() {
     }
 
@@ -67,7 +65,7 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
 
             ThornCloudEntity thornCloud = new ThornCloudEntity(player.level, pos.x, pos.y, pos.z);
             thornCloud.setOwner(player);
-            thornCloud.setRadius(radius);
+            thornCloud.setRadius(radius / 2);
             thornCloud.setDuration(getDurationTicks(player));
             thornCloud.setDamageDelay(damageDelay);
             thornCloud.setDamage(this.getThornsDamage(player));

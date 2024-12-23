@@ -39,10 +39,10 @@ public class ThornCloudEntity extends Entity {
     private static final EntityDataAccessor<Float> RADIUS  = SynchedEntityData.defineId(ThornCloudEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> IGNORE_RADIUS = SynchedEntityData.defineId(ThornCloudEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> DAMAGE = SynchedEntityData.defineId(ThornCloudEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DAMAGE_DELAY = SynchedEntityData.defineId(ThornCloudEntity.class, EntityDataSerializers.INT);
 
     private int duration; // Duration of the Cloud
     private int waitTime; // Time to wait until being effective
-    private int damageDelay; // Damage Delay of the Cloud
     private LivingEntity owner; // Owner of the Cloud
     private UUID ownerUniqueId; // UUID of the Owner
 
@@ -50,7 +50,6 @@ public class ThornCloudEntity extends Entity {
         super(cloud, world);
         this.duration = 600;
         this.waitTime = 20;
-        this.damageDelay = 20;
         this.noPhysics = true;
         this.setRadius(3.0F);
     }
@@ -64,7 +63,8 @@ public class ThornCloudEntity extends Entity {
     protected void defineSynchedData() {
         this.getEntityData().define(RADIUS, 0.5F);
         this.getEntityData().define(IGNORE_RADIUS, false);
-        this.getEntityData().define(DAMAGE, 1.0F); // Initialize the DAMAGE field with a default value
+        this.getEntityData().define(DAMAGE, 1.0F);
+        this.getEntityData().define(DAMAGE_DELAY, 10); // Default value for damageDelay
     }
 
     public float getRadius() {
@@ -102,8 +102,14 @@ public class ThornCloudEntity extends Entity {
         this.duration = durationIn;
     }
 
+    public int getDamageDelay() {
+        return this.getEntityData().get(DAMAGE_DELAY);
+    }
+
     public void setDamageDelay(int damageDelay) {
-        this.damageDelay = damageDelay;
+        if (!this.level.isClientSide) {
+            this.getEntityData().set(DAMAGE_DELAY, damageDelay);
+        }
     }
 
     public void setDamage(float damage) {
@@ -141,7 +147,7 @@ public class ThornCloudEntity extends Entity {
                 return;
             }
 
-            if (this.tickCount % this.damageDelay == 0) {
+            if (this.tickCount % this.getDamageDelay() == 0) {
                 List<LivingEntity> entitiesInRadius = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(radius));
 
                 for (LivingEntity entity : entitiesInRadius) {
@@ -160,74 +166,82 @@ public class ThornCloudEntity extends Entity {
     private int summonTimer = 0; // Timer to track particle summon phase
 
     private void tickParticles() {
-        // Get the current bounding box of the entity
         var boundingBox = this.getBoundingBox();
-
         double centerX = (boundingBox.minX + boundingBox.maxX) / 2.0;
         double centerZ = (boundingBox.minZ + boundingBox.maxZ) / 2.0;
-        double groundY = boundingBox.minY; // Ground level
-        double staticY = (boundingBox.minY + boundingBox.maxY) / 2.0; // Middle of the entity height
-
-        // Use the radius of the bounding box to determine the circle size
-        double radius = Math.max(boundingBox.maxX - boundingBox.minX, boundingBox.maxZ - boundingBox.minZ) / 2.0;
-
-        // Number of particles around the circle
-        int particleCount = 10;
+        double staticY = (boundingBox.minY + boundingBox.maxY) / 2.0;
+        double radius = this.getRadius() * 2.2;
+        int particleCount = (int) (2 * radius * 0.5);
 
         ParticleEngine pm = Minecraft.getInstance().particleEngine;
 
-        // Phase 1: Rising Phase
-        if (summonTimer < 10) { // Rising phase
-            double progress = summonTimer / 10.0; // Progress from 0.0 to 1.0
-            double currentY = groundY + progress * (staticY - groundY); // Interpolate Y position
+        // Add vertical motion
+        double oscillationY = 0.5 * Math.sin(summonTimer * 0.2);
+        double currentY = staticY + oscillationY;
 
-            for (int i = 0; i < particleCount; i++) {
-                double angle = 2 * Math.PI * i / particleCount; // Angle in radians
-                double x = centerX + radius * Math.cos(angle);
-                double z = centerZ + radius * Math.sin(angle);
 
-                Particle particle = pm.createParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, currentY, z, 0.0D, 0.05D, 0.0D);
-                if (particle != null) {
-                    float mix = (float) progress; // Progress determines the color transition
-                    particle.setColor(
-                            Mth.lerp(mix, 1.0F, 0.8F), // Red: high intensity for warm colors
-                            Mth.lerp(mix, 0.8F, 0.7F), // Green: medium to high intensity
-                            Mth.lerp(mix, 0.3F, 0.1F)  // Blue: low intensity for orange/yellow, near 0 for warm
-                    );
-                    particle.setLifetime(10);
-                    particle.scale(2.0F);
-                }
+        for (int i = 0; i < particleCount; i++) {
+            double angle = (2 * Math.PI * i / particleCount) + (summonTimer * 0.1);
+            double x = centerX + radius * Math.cos(angle);
+            double z = centerZ + radius * Math.sin(angle);
+            double shakeX = (Math.random() - 0.5) * 0.1;
+            double shakeZ = (Math.random() - 0.5) * 0.1;
+
+            Particle particle = pm.createParticle(ModParticles.NOVA_SPEED.get(), x + shakeX, currentY, z + shakeZ, 0.0D, 0.0D, 0.0D);
+            if (particle != null) {
+                particle.setColor(0.1F, 0.9F, 0.3F);
+                particle.scale(2.0F);
             }
 
-            summonTimer++;
-        } else { // Rotating and Shaking phase
-            double currentY = staticY; // Particles stay at the static height
 
-            for (int i = 0; i < particleCount; i++) {
-                // Create a base angle for rotation
-                double angle = (2 * Math.PI * i / particleCount) + (summonTimer * 0.1); // Gradually increase the angle to make particles rotate
-                double x = centerX + radius * Math.cos(angle);
-                double z = centerZ + radius * Math.sin(angle);
 
-                // Add some randomness to simulate shaking
-                double shakeX = (Math.random() - 0.5) * 0.1; // Small random offset
-                double shakeZ = (Math.random() - 0.5) * 0.1;
-
-                Particle particle = pm.createParticle(ParticleTypes.CRIT, x + shakeX, currentY + 0.75, z + shakeZ, 0.0D, 0.0D, 0.0D);
-                if (particle != null) {
-                    float mix = 0.5F + (float) Math.sin(summonTimer * 0.1) * 0.5F; // Oscillating mix value for dynamic color
-                    particle.setColor(
-                            Mth.lerp(mix, 1.0F, 0.8F), // Red
-                            Mth.lerp(mix, 0.8F, 0.7F), // Green
-                            Mth.lerp(mix, 0.3F, 0.1F)  // Blue
-                    );
-                    particle.scale(2.0F);
+            for (int trail = 1; trail < 3; trail++) {
+                if(summonTimer % this.getDamageDelay() == 0 && summonTimer >= waitTime) {
+                    double trailProgress = (double) trail / 3.0;
+                    double trailX = centerX + (x - centerX) * trailProgress;
+                    double trailZ = centerZ + (z - centerZ) * trailProgress;
+                    Particle trailParticle = pm.createParticle(ParticleTypes.SWEEP_ATTACK, trailX, currentY, trailZ, 0.0D, 0.0D, 0.0D);
+                    if (trailParticle != null) {
+                        float mix = (float) trail / 3.0F;
+                        trailParticle.setColor(1.5F, 0.7F, 0.3F);
+                        trailParticle.scale(0.6F + mix);
+                    }
                 }
             }
-
-            summonTimer++;
         }
+
+        if (summonTimer % 20 == 0) {
+            for (int i = 0; i < 5; i++) {
+                double burstAngle = 2 * Math.PI * i / 5;
+                double burstX = centerX + Math.cos(burstAngle) * (radius + 0.5);
+                double burstZ = centerZ + Math.sin(burstAngle) * (radius + 0.5);
+                Particle burstParticle = pm.createParticle(ModParticles.UBER_PYLON.get(), burstX, currentY, burstZ, Math.cos(burstAngle) * 0.2, 0.1, Math.sin(burstAngle) * 0.2);
+                if (burstParticle != null) burstParticle.scale(5.0F);
+            }
+        }
+
+        int sphereParticleCount = 10; // More particles for sphere
+        for (int i = 0; i < sphereParticleCount; i++) {
+            // Spherical coordinates
+            double theta = Math.random() * 2 * Math.PI; // Random horizontal angle
+            double phi = Math.random() * Math.PI;      // Random vertical angle
+            double sphereX = centerX + radius * Math.sin(phi) * Math.cos(theta);
+            double sphereY = staticY + radius * Math.cos(phi); // Static Y-level with vertical offset
+            double sphereZ = centerZ + radius * Math.sin(phi) * Math.sin(theta);
+
+            // Create particles to define the sphere
+            Particle sphereParticle = pm.createParticle(ModParticles.UBER_PYLON.get(), sphereX, sphereY, sphereZ, 0.0D, 0.0D, 0.0D);
+            if (sphereParticle != null) {
+                sphereParticle.scale(1.5F);
+                sphereParticle.setLifetime(30);
+            }
+        }
+
+        summonTimer++;
     }
+
+
+
 
     protected boolean canApplyEffects(LivingEntity target) {
         if (this.ownerUniqueId == null) {
@@ -293,7 +307,6 @@ public class ThornCloudEntity extends Entity {
         this.tickCount = compound.getInt("Age");
         this.duration = compound.getInt("Duration");
         this.waitTime = compound.getInt("WaitTime");
-        this.damageDelay = compound.getInt("DamageDelay");
         this.setRadius(compound.getFloat("Radius"));
         if (compound.hasUUID("Owner")) {
             this.ownerUniqueId = compound.getUUID("Owner");
@@ -305,7 +318,6 @@ public class ThornCloudEntity extends Entity {
         compound.putInt("Age", this.tickCount);
         compound.putInt("Duration", this.duration);
         compound.putInt("WaitTime", this.waitTime);
-        compound.putInt("DamageDelay", this.damageDelay);
         compound.putFloat("Radius", this.getRadius());
 
         if (this.ownerUniqueId != null) {
