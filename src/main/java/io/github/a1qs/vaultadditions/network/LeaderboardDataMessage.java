@@ -1,11 +1,13 @@
 package io.github.a1qs.vaultadditions.network;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.client.ClientMessageHandler;
 import io.github.a1qs.vaultadditions.client.menu.LeaderboardMenu;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
@@ -14,10 +16,10 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class LeaderboardDataMessage {
-    private final Map<UUID, Integer> leaderboard;
-    private final String nextScheduledEvent;
-    private final VaultAdditionsEvent optionalEvent;
-    private final long optionalEventDuration;
+    public final Map<UUID, Integer> leaderboard;
+    public final String nextScheduledEvent;
+    public final VaultAdditionsEvent optionalEvent;
+    public final long optionalEventDuration;
 
     public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
         this.leaderboard = leaderboard;
@@ -70,17 +72,12 @@ public class LeaderboardDataMessage {
     }
 
     public static void handle(LeaderboardDataMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(
-                    new LeaderboardMenu(
-                            new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"),
-                            msg.leaderboard,
-                            msg.nextScheduledEvent,
-                            msg.optionalEvent,
-                            msg.optionalEventDuration
-                    )
-            );
+        contextSupplier.get().enqueueWork(() -> {
+            if (FMLEnvironment.dist.isClient()) {
+                ClientMessageHandler.handle(msg);
+            }
         });
+
         contextSupplier.get().setPacketHandled(true);
     }
 }
