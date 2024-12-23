@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.vault.skill.ability.BladeFrenzyAbility;
 import io.github.a1qs.vaultadditions.vault.skill.ability.LegacyManaShieldAbility;
+import io.github.a1qs.vaultadditions.vault.skill.ability.ThornedFrenzyAbility;
 import iskallia.vault.init.ModAbilityLabelBindings;
 import iskallia.vault.skill.ability.component.AbilityLabelFormatters;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,6 +34,20 @@ public class MixinModAbilityLabelBindings {
                         ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
                         "knockbackStrengthMultiplier",
                         ability -> AbilityLabelFormatters.decimal(ability.getKnockbackStrengthMultiplier())
+                )
+        );
+
+        ModAbilityLabelBindings.register(
+                ThornedFrenzyAbility.class,
+                Map.of(
+                        "durationSeconds",
+                        ability -> AbilityLabelFormatters.integer(ability.getDurationSeconds()),
+                        "radius",
+                        ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
+                        "damageDelay",
+                        ability -> AbilityLabelFormatters.integer(ability.getDamageDelay()),
+                        "thornsMultiplier",
+                        ability -> AbilityLabelFormatters.decimal(ability.getThornsMultiplier())
                 )
         );
     }

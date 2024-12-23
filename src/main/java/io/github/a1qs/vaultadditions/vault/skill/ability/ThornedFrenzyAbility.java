@@ -8,11 +8,13 @@ import iskallia.vault.init.ModSounds;
 import iskallia.vault.skill.ability.effect.spi.core.Ability;
 import iskallia.vault.skill.ability.effect.spi.core.InstantManaAbility;
 import iskallia.vault.skill.base.SkillContext;
+import iskallia.vault.util.calc.AreaOfEffectHelper;
 import iskallia.vault.util.calc.EffectDurationHelper;
 import iskallia.vault.util.calc.ThornsHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
@@ -58,6 +60,31 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
         return EffectDurationHelper.adjustEffectDurationFloor(entity, (float)durationTicks);
     }
 
+    public float getUnmodifiedRadius() {
+        return radius;
+    }
+
+    private float getRadius(Entity attacker) {
+        float realRadius = this.getUnmodifiedRadius();
+        if (attacker instanceof LivingEntity livingEntity) {
+            realRadius = AreaOfEffectHelper.adjustAreaOfEffect(livingEntity, this, realRadius);
+        }
+
+        return realRadius;
+    }
+
+    public float getThornsMultiplier() {
+        return thornsMultiplier;
+    }
+
+    public int getDamageDelay() {
+        return damageDelay;
+    }
+
+    public int getDurationSeconds() {
+        return durationSeconds;
+    }
+
     @Override
     protected Ability.ActionResult doAction(SkillContext context) {
         return context.getSource().as(ServerPlayer.class).map((player) -> {
@@ -65,7 +92,7 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
 
             ThornCloudEntity thornCloud = new ThornCloudEntity(player.level, pos.x, pos.y, pos.z);
             thornCloud.setOwner(player);
-            thornCloud.setRadius(radius / 2);
+            thornCloud.setRadius(getRadius(player) / 2);
             thornCloud.setDuration(getDurationTicks(player));
             thornCloud.setDamageDelay(damageDelay);
             thornCloud.setDamage(this.getThornsDamage(player));
