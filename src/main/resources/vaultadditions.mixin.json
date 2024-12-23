@@ -19,6 +19,7 @@
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinStatueRecyclingConfig",
+    "MixinVaultModifierTypeRegistry",
     "MixinVaultPortalBlock",
     "MixinVirtualWorlds"
   ],
