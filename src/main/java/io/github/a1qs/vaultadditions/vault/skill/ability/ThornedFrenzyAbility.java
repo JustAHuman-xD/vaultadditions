@@ -23,19 +23,19 @@ import java.util.Optional;
 
 
 public class ThornedFrenzyAbility extends InstantManaAbility {
-    private int durationSeconds;
+    private int durationTicks;
     private float radius;
-    private int damageDelay;
+    private int damageTickDelay;
     private float thornsMultiplier;
 
     public ThornedFrenzyAbility() {
     }
 
-    public ThornedFrenzyAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCost, int durationSeconds, float radius, int damageDelay, float thornsMultiplier) {
+    public ThornedFrenzyAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCost, int durationTicks, float radius, int damageTickDelay, float thornsMultiplier) {
         super(unlockLevel, learnPointCost, regretPointCost, cooldownTicks, manaCost);
-        this.durationSeconds = durationSeconds;
+        this.durationTicks = durationTicks;
         this.radius = radius;
-        this.damageDelay = damageDelay;
+        this.damageTickDelay = damageTickDelay;
         this.thornsMultiplier = thornsMultiplier;
     }
 
@@ -55,8 +55,7 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
         return reflectedDamage;
     }
 
-    public int getDurationTicks(LivingEntity entity) {
-        int durationTicks = this.durationSeconds * 20;
+    public int getScaledDurationTicks(LivingEntity entity) {
         return EffectDurationHelper.adjustEffectDurationFloor(entity, (float)durationTicks);
     }
 
@@ -77,12 +76,16 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
         return thornsMultiplier;
     }
 
-    public int getDamageDelay() {
-        return damageDelay;
+    public int getDamageTickDelay() {
+        return damageTickDelay;
+    }
+
+    public int getDurationTicks() {
+        return durationTicks;
     }
 
     public int getDurationSeconds() {
-        return durationSeconds;
+        return durationTicks * 20;
     }
 
     @Override
@@ -93,8 +96,8 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
             ThornCloudEntity thornCloud = new ThornCloudEntity(player.level, pos.x, pos.y, pos.z);
             thornCloud.setOwner(player);
             thornCloud.setRadius(getRadius(player) / 2);
-            thornCloud.setDuration(getDurationTicks(player));
-            thornCloud.setDamageDelay(damageDelay);
+            thornCloud.setDuration(getScaledDurationTicks(player));
+            thornCloud.setDamageDelay(damageTickDelay);
             thornCloud.setDamage(this.getThornsDamage(player));
             thornCloud.setWaitTime(20);
 
@@ -118,27 +121,27 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
     @Override
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.INT.writeBits(this.durationSeconds, buffer);
+        Adapters.INT.writeBits(this.durationTicks, buffer);
         Adapters.FLOAT.writeBits(this.radius, buffer);
-        Adapters.INT.writeBits(this.damageDelay, buffer);
+        Adapters.INT.writeBits(this.damageTickDelay, buffer);
         Adapters.FLOAT.writeBits(this.thornsMultiplier, buffer);
     }
 
     @Override
     public void readBits(BitBuffer buffer) {
         super.readBits(buffer);
-        this.durationSeconds = Adapters.INT.readBits(buffer).orElseThrow();
+        this.durationTicks = Adapters.INT.readBits(buffer).orElseThrow();
         this.radius = Adapters.FLOAT.readBits(buffer).orElseThrow();
-        this.damageDelay = Adapters.INT.readBits(buffer).orElseThrow();
+        this.damageTickDelay = Adapters.INT.readBits(buffer).orElseThrow();
         this.thornsMultiplier = Adapters.FLOAT.readBits(buffer).orElseThrow();
     }
 
     @Override
     public Optional<CompoundTag> writeNbt() {
         return super.writeNbt().map(nbt -> {
-            Adapters.INT.writeNbt(this.durationSeconds).ifPresent(tag -> nbt.put("durationSeconds", tag));
+            Adapters.INT.writeNbt(this.durationTicks).ifPresent(tag -> nbt.put("durationTicks", tag));
             Adapters.FLOAT.writeNbt(this.radius).ifPresent(tag -> nbt.put("radius", tag));
-            Adapters.INT.writeNbt(this.damageDelay).ifPresent(tag -> nbt.put("damageDelay", tag));
+            Adapters.INT.writeNbt(this.damageTickDelay).ifPresent(tag -> nbt.put("damageTickDelay", tag));
             Adapters.FLOAT.writeNbt(this.thornsMultiplier).ifPresent(tag -> nbt.put("thornsMultiplier", tag));
             return nbt;
         });
@@ -147,18 +150,18 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
     @Override
     public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
-        this.durationSeconds = Adapters.INT.readNbt(nbt.get("durationSeconds")).orElse(0);
+        this.durationTicks = Adapters.INT.readNbt(nbt.get("durationTicks")).orElse(0);
         this.radius = Adapters.FLOAT.readNbt(nbt.get("radius")).orElse(0.0F);
-        this.damageDelay = Adapters.INT.readNbt(nbt.get("damageDelay")).orElse(0);
+        this.damageTickDelay = Adapters.INT.readNbt(nbt.get("damageTickDelay")).orElse(0);
         this.thornsMultiplier = Adapters.FLOAT.readNbt(nbt.get("thornsMultiplier")).orElse(0.0F);
     }
 
     @Override
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map(json -> {
-            Adapters.INT.writeJson(this.durationSeconds).ifPresent(element -> json.add("durationSeconds", element));
+            Adapters.INT.writeJson(this.durationTicks).ifPresent(element -> json.add("durationTicks", element));
             Adapters.FLOAT.writeJson(this.radius).ifPresent(element -> json.add("radius", element));
-            Adapters.INT.writeJson(this.damageDelay).ifPresent(element -> json.add("damageDelay", element));
+            Adapters.INT.writeJson(this.damageTickDelay).ifPresent(element -> json.add("damageTickDelay", element));
             Adapters.FLOAT.writeJson(this.thornsMultiplier).ifPresent(element -> json.add("thornsMultiplier", element));
             return json;
         });
@@ -167,9 +170,9 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
     @Override
     public void readJson(JsonObject json) {
         super.readJson(json);
-        this.durationSeconds = Adapters.INT.readJson(json.get("durationSeconds")).orElse(0);
+        this.durationTicks = Adapters.INT.readJson(json.get("durationTicks")).orElse(0);
         this.radius = Adapters.FLOAT.readJson(json.get("radius")).orElse(0.0F);
-        this.damageDelay = Adapters.INT.readJson(json.get("damageDelay")).orElse(0);
+        this.damageTickDelay = Adapters.INT.readJson(json.get("damageTickDelay")).orElse(0);
         this.thornsMultiplier = Adapters.FLOAT.readJson(json.get("thornsMultiplier")).orElse(0.0F);
     }
 }

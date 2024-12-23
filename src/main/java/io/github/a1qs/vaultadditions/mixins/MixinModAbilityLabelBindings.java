@@ -28,11 +28,11 @@ public class MixinModAbilityLabelBindings {
         ModAbilityLabelBindings.register(
                 BladeFrenzyAbility.class,
                 Map.of(
-                        "percentAttackDealt",
-                        ability -> AbilityLabelFormatters.percentRounded(ability.getPercentAttackDealt()),
+                        "damage",
+                        ability -> AbilityLabelFormatters.percentTwoDecimalPlaces(ability.getPercentAttackDealt()),
                         "radius",
                         ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
-                        "knockbackStrengthMultiplier",
+                        "knockback",
                         ability -> AbilityLabelFormatters.decimal(ability.getKnockbackStrengthMultiplier())
                 )
         );
@@ -40,14 +40,14 @@ public class MixinModAbilityLabelBindings {
         ModAbilityLabelBindings.register(
                 ThornedFrenzyAbility.class,
                 Map.of(
-                        "durationSeconds",
-                        ability -> AbilityLabelFormatters.integer(ability.getDurationSeconds()),
+                        "duration",
+                        ability -> AbilityLabelFormatters.ticks(ability.getDurationTicks()),
                         "radius",
                         ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
-                        "damageDelay",
-                        ability -> AbilityLabelFormatters.integer(ability.getDamageDelay()),
-                        "thornsMultiplier",
-                        ability -> AbilityLabelFormatters.decimal(ability.getThornsMultiplier())
+                        "damageInterval",
+                        ability -> AbilityLabelFormatters.ticks(ability.getDamageTickDelay()),
+                        "additional_thorns_damage",
+                        ability -> AbilityLabelFormatters.percentRounded(ability.getThornsMultiplier())
                 )
         );
     }

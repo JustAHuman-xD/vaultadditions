@@ -203,7 +203,12 @@ public class ThornCloudEntity extends Entity {
                     Particle trailParticle = pm.createParticle(ParticleTypes.SWEEP_ATTACK, trailX, currentY, trailZ, 0.0D, 0.0D, 0.0D);
                     if (trailParticle != null) {
                         float mix = (float) trail / 3.0F;
-                        trailParticle.setColor(1.5F, 0.7F, 0.3F);
+
+                        float red = 23 / 255.0F;
+                        float green = 145 / 255.0F;
+                        float blue = 2 / 255.0F;
+
+                        trailParticle.setColor(red, green, blue);
                         trailParticle.scale(0.6F + mix);
                     }
                 }
