@@ -31,7 +31,7 @@ public class MixinVaultBarOverlay {
             int gap = 5;
 
             minecraft.getProfiler().popPush("batchPowerPointText");
-            if (MiscUtil.unspentPowerPoints != 0) {
+            if (MiscUtil.unspentPowerPoints != 0 && VaultBarOverlay.vaultLevel >= 100) {
                 MiscUtil.POWER_POINT_SUPPLIER.ifChanged(MixinVaultBarOverlay::vaultadditions$onUnspentPowerPointsChanged);
                 x = right - MiscUtil.unspentPowerPointComponentWidth - gap;
                 minecraft.font.drawInBatch(MiscUtil.unspentPowerPointComponent, (float)x, 18.0F, 16777215, true, matrixStack.last().pose(), buffer, false, 0, 15728880);
