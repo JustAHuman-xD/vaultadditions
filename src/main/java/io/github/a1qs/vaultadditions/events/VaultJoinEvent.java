@@ -29,39 +29,15 @@ public class VaultJoinEvent {
         if (alreadyApplied) return;
 
 
-        ExtraVaultTimeContributionsConfig cfg = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS;
         UUID ownerID = vault.get(Vault.OWNER);
         PowerCrystalData powerCrystalData = PowerCrystalData.get(srv);
 
-        int extraTicks = calculateCappedTicks(
-                powerCrystalData.getPlayerContributedCrystals(ownerID),
-                cfg.CONTRIBUTIONS_UNTIL_TIME_INCREASE_PLAYER,
-                cfg.TICKS_PER_EFFECTIVE_CONTRIBUTION_PLAYER,
-                cfg.MAX_EXTRA_PLAYER_TICKS
-        );
-
-        int totalContributions = powerCrystalData.getPlayerContributionsMap()
-                .values()
-                .stream()
-                .mapToInt(Integer::intValue)
-                .sum();
-
-        int extraTotalTicks = calculateCappedTicks(
-                totalContributions,
-                cfg.CONTRIBUTIONS_UNTIL_TIME_INCREASE_SERVER,
-                cfg.TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER,
-                cfg.MAX_EXTRA_SERVER_TICKS
-        );
+        int extraTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedTicks(powerCrystalData.getPlayerContributedCrystals(ownerID));
+        int extraTotalTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedTicks(powerCrystalData.getTotalContributedCrystals());
 
         int totalTicks = extraTicks + extraTotalTicks;
         vault.get(Vault.CLOCK).addModifier(new PowerCrystalExtension(vault.get(Vault.ID), totalTicks));
-
-
-
     }
 
-    private static int calculateCappedTicks(int contributions, int contributionsUntilIncrease, int ticksPerContribution, int maxTicks) {
-        int ticks = (contributions / contributionsUntilIncrease) * ticksPerContribution;
-        return Math.min(ticks, maxTicks);
-    }
+
 }
