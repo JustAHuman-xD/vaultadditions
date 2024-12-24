@@ -23,7 +23,7 @@ public class LeaderboardRequestMessage {
         if (player != null) {
             PowerCrystalData powerData = PowerCrystalData.getServer();
             EventData eventData = EventData.getServer();
-            ModNetwork.sendToClient(new LeaderboardDataMessage(powerData.getPlayerContributionsMap(), eventData.getNextScheduledEvent(), eventData.getActiveEvent(), eventData.getEventDuration()), player);
+            ModNetwork.sendToClient(new LeaderboardDataMessage(powerData.getPlayerContributionsMap(), eventData.getNextScheduledEvent(), eventData.getActiveEvent(), eventData.getEventDuration(), powerData.getTotalContributedCrystals()), player);
         }
         contextSupplier.get().setPacketHandled(true);
     }

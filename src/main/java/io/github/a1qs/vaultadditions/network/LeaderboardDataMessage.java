@@ -20,12 +20,14 @@ public class LeaderboardDataMessage {
     public final String nextScheduledEvent;
     public final VaultAdditionsEvent optionalEvent;
     public final long optionalEventDuration;
+    public final int totalContributions;
 
-    public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration) {
+    public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration, int totalContributions) {
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
         this.optionalEvent = optionalEvent;
         this.optionalEventDuration = optionalEventDuration;
+        this.totalContributions = totalContributions;
     }
 
     public static void encode(LeaderboardDataMessage msg, FriendlyByteBuf buffer) {
@@ -46,6 +48,7 @@ public class LeaderboardDataMessage {
         } else {
             buffer.writeBoolean(false); // No event present
         }
+        buffer.writeInt(msg.totalContributions);
     }
 
     public static LeaderboardDataMessage decode(FriendlyByteBuf buffer) {
@@ -67,8 +70,9 @@ public class LeaderboardDataMessage {
             optionalEvent = new VaultAdditionsEvent(configIndex, requiredCrystals, crystalsSubmitted);
             eventDuration = buffer.readLong();
         }
+        int totalContributions = buffer.readInt();
 
-        return new LeaderboardDataMessage(leaderboard, nextEvent, optionalEvent, eventDuration);
+        return new LeaderboardDataMessage(leaderboard, nextEvent, optionalEvent, eventDuration, totalContributions);
     }
 
     public static void handle(LeaderboardDataMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {

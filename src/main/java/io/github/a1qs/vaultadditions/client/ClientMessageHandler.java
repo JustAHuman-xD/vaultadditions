@@ -15,7 +15,8 @@ public class ClientMessageHandler {
                             msg.leaderboard,
                             msg.nextScheduledEvent,
                             msg.optionalEvent,
-                            msg.optionalEventDuration
+                            msg.optionalEventDuration,
+                            msg.totalContributions
                     )
             );
         });
