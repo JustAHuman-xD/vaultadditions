@@ -21,6 +21,7 @@
     "MixinStatueRecyclingConfig",
     "MixinVaultModifierTypeRegistry",
     "MixinVaultPortalBlock",
+    "MixinVaultRegistry",
     "MixinVirtualWorlds"
   ],
   "refmap": "vaultadditions.mixin-refmap.json",
