@@ -1,14 +1,12 @@
 package io.github.a1qs.vaultadditions.item;
 
+import io.github.a1qs.vaultadditions.block.GlobeExpanderBlock;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
-import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.world.data.PlayerVaultStatsData;
-import jdk.jfr.Event;
-import mezz.jei.forge.config.ServerConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -40,28 +38,26 @@ public class PowerCrystal extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if(ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) { // The time for expanding the border is limited to events & the specified timespan
-
-            // The Specified timespan hasnt passed
-            if(!TimeUtil.pastDate()) {
-                pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
-            } else { // The specified timespan has passed
-                EventData data = EventData.getServer();
-                if(data.isEventActive()) {
-                    if(data.getActiveEvent().isCrystalSubmissionEvent() || data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED)) {
-                        pTooltipComponents.add(new TextComponent("Temporarily increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
-                    }
+            if(!TimeUtil.pastDate() || EventData.getServer().globeExpanderRequired()) {
+                String isTemp = EventData.getServer().globeExpanderRequired() ? "Temporarily " : "";
+                pTooltipComponents.add(new TextComponent(isTemp + "Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+                if(VaultBarOverlay.vaultLevel >= 100) {
+                    pTooltipComponents.add(
+                            new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                                    .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                                    .append(new TextComponent(" upon use with the Globe Expander").withStyle(ChatFormatting.YELLOW))
+                    );
                 }
             }
         } else {
             pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
-        }
-
-        if(VaultBarOverlay.vaultLevel >= 100) {
-            pTooltipComponents.add(
-                    new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
-                            .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
-                            .append(new TextComponent(" upon use.").withStyle(ChatFormatting.YELLOW))
-            );
+            if(VaultBarOverlay.vaultLevel >= 100) {
+                pTooltipComponents.add(
+                        new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                                .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                                .append(new TextComponent(" upon use with the Globe Expander").withStyle(ChatFormatting.YELLOW))
+                );
+            }
         }
 
         if(pTooltipComponents.size() <= 1) {
@@ -73,15 +69,17 @@ public class PowerCrystal extends Item {
     @Nonnull
     public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack heldItemStack = player.getItemInHand(hand);
-        if(!TimeUtil.pastDate()) return InteractionResultHolder.fail(heldItemStack);
+        if(GlobeExpanderBlock.isCurrentlyInUse()) InteractionResultHolder.fail(heldItemStack);
 
 
         if (!world.isClientSide) {
             PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
             if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
 
             PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
+
+
             if(player.isCrouching()) {
                 int itemStackCount = heldItemStack.getCount();
                 if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
