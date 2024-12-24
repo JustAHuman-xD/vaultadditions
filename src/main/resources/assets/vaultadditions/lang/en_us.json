@@ -67,5 +67,7 @@
   "text.leaderboard.own_placement": "§e--- Your Position ---",
   "text.leaderboard.event_info": "§e--- Event Info ---",
   "text.leaderboard.event_id": "§eEvent type:§r %s",
-  "text.leaderboard.event_time_remaining": "§eEvent ends in:§r %dd %dh %dm %ds"
+  "text.leaderboard.event_time_remaining": "§eEvent ends in:§r %dd %dh %dm %ds",
+  "text.leaderboard.bonus_vault_time_player": "Your current Bonus Vault Time: ",
+  "text.leaderboard.global_time_increase": "Total Server Bonus Vault Time: "
 }
