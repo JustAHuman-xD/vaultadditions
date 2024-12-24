@@ -26,4 +26,27 @@ public class ExtraVaultTimeContributionsConfig extends Config {
         TICKS_PER_EFFECTIVE_CONTRIBUTION_PLAYER = 200;
         TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER = 200;
     }
+
+
+
+
+    public int getServerCappedTicks(int contributions) {
+        int ticks = (contributions / CONTRIBUTIONS_UNTIL_TIME_INCREASE_SERVER) * TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER;
+        return Math.min(ticks, MAX_EXTRA_SERVER_TICKS);
+    }
+
+    public int getPlayerCappedTicks(int contributions) {
+        int ticks = (contributions / CONTRIBUTIONS_UNTIL_TIME_INCREASE_PLAYER) * TICKS_PER_EFFECTIVE_CONTRIBUTION_PLAYER;
+        return Math.min(ticks, MAX_EXTRA_PLAYER_TICKS);
+    }
+
+    public int getServerCappedSeconds(int contributions) {
+        return getServerCappedTicks(contributions) / 20;
+    }
+
+    public int getPlayerCappedSeconds(int contributions) {
+        return getPlayerCappedTicks(contributions) / 20;
+    }
+
+
 }
