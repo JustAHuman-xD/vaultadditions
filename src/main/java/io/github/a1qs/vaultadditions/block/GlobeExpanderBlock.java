@@ -4,6 +4,7 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
+import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
@@ -18,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -43,9 +45,9 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class GlobeExpanderBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Shapes.box(.1, .1, .1, .9, .9, .9);
@@ -91,15 +93,11 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
-        List<ServerLevel> dimensions = Arrays.asList(
+        List<ServerLevel> validDimensions = Stream.of(
                 srv.getLevel(Level.OVERWORLD),
                 srv.getLevel(Level.NETHER),
                 srv.getLevel(Level.END)
-        );
-
-        List<ServerLevel> validDimensions = dimensions.stream()
-                .filter(Objects::nonNull)
-                .toList();
+        ).filter(Objects::nonNull).toList();
 
 
         if(blockEntity instanceof GlobeExpanderBlockEntity expanderEntity) {
@@ -128,7 +126,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 if (!pPlayer.getAbilities().instabuild) {
                     pPlayer.getMainHandItem().setCount(0);
                 }
-
+                PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, handCount);
                 handlePlayerGrowth(pPlayer, handCount);
 
                 expanderEntity.resetSpinTime();
