@@ -152,6 +152,12 @@ public class EventData extends SavedData {
                 .orElse("No upcoming events!");
     }
 
+    public boolean globeExpanderRequired() {
+        if(!isEventActive()) return false;
+
+        return this.getActiveEvent().isCrystalSubmissionEvent() || this.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED);
+    }
+
 
     // Load-Save methods
     public static EventData load(CompoundTag nbt) {
