@@ -69,6 +69,14 @@ public class PowerCrystalData extends SavedData {
         this.setDirty();
     }
 
+    public int getTotalContributedCrystals() {
+        return playerContributedCrystals
+                .values()
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
 
     //Gets the data via the current serverlifecycle
     public static PowerCrystalData getServer() {
