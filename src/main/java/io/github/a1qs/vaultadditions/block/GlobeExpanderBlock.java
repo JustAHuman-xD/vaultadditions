@@ -12,10 +12,13 @@ import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
+import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -194,5 +197,11 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
             sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
         }
+    }
+
+    public static boolean isCurrentlyInUse() {
+        if(!ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) return true;
+
+        return !TimeUtil.pastDate() || EventData.getServer().globeExpanderRequired();
     }
 }
