@@ -25,6 +25,7 @@ import java.util.List;
 public class EventBlockEntity extends BlockEntity {
     @Nonnull
     protected List<String> lines = new LinkedList();
+    private int tickCounter = 0;
 
     public EventBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.EVENT_BLOCK_ENTITY.get(), pos, state);
@@ -114,9 +115,13 @@ public class EventBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
         if (!level.isClientSide()) {
-            if(blockEntity instanceof EventBlockEntity eventBlock) {
-                eventBlock.updateLines();
-                level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL);
+            if (blockEntity instanceof EventBlockEntity eventBlock) {
+                if (eventBlock.tickCounter == 0) {
+                    eventBlock.updateLines();
+                    level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_ALL);
+                }
+
+                eventBlock.tickCounter = (eventBlock.tickCounter + 1) % 20;
             }
         }
     }
