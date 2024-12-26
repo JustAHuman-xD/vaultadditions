@@ -12,14 +12,11 @@ import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
-import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -76,7 +73,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             return InteractionResult.PASS;
         }
 
-
         // Handle non-crystal interactions
         if (!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
             handleWorldBorderInfo(pPlayer);
@@ -88,10 +84,10 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
 
         boolean isActiveBorderEvent = false;
-        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED) || data.getActiveEvent().isCrystalSubmissionEvent();
+        if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().isCrystalSubmissionEvent() || data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED);
 
-        // If its past the configured date OR if theres NOT an active border event AND Config option returns true
-        if((TimeUtil.pastDate() || !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
+        // If its past the configured date AND if theres NOT an active crystal submission event AND Config option returns true
+        if((TimeUtil.pastDate() && !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
             pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
             return InteractionResult.PASS;
         }
@@ -112,31 +108,53 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
                 int handCount = pPlayer.getMainHandItem().getCount();
 
-                for (ServerLevel dimension : validDimensions) {
-                    WorldBorder dimensionBorder = dimension.getWorldBorder();
 
-                    double blocksExpanded = calculateDimensionSpecificExpansion(dimension, powerCrystalIncrease, handCount);
-                    double newSize = dimensionBorder.getSize() + blocksExpanded;
-                    if(newSize >= 5.9999968E7) {
-                        VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension(), newSize, 5.9999968E7);
-                        pPlayer.displayClientMessage(new TextComponent("Please report this to a server admin, see logs for more information.").withStyle(ChatFormatting.RED), true);
-                        return InteractionResult.FAIL;
+                if(!isActiveBorderEvent || (data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED) && data.getActiveEvent().isModifierActive())) {
+                    for (ServerLevel dimension : validDimensions) {
+                        WorldBorder dimensionBorder = dimension.getWorldBorder();
+
+                        double blocksExpanded = calculateDimensionSpecificExpansion(dimension, powerCrystalIncrease, handCount);
+                        double newSize = dimensionBorder.getSize() + blocksExpanded;
+                        if(newSize >= 5.9999968E7) {
+                            VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension(), newSize, 5.9999968E7);
+                            pPlayer.displayClientMessage(new TextComponent("Please report this to a server admin, see logs for more information.").withStyle(ChatFormatting.RED), true);
+                            return InteractionResult.FAIL;
+                        }
+                        dimensionBorder.lerpSizeBetween(dimensionBorder.getSize(), newSize, 1000);
                     }
-                    dimensionBorder.lerpSizeBetween(dimensionBorder.getSize(), newSize, 1000);
 
-                    Objects.requireNonNull(expanderEntity.getLevel()).playSound(null, pPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 0.75F, 0.9F);
+                    expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), powerCrystalIncrease * handCount);
+
+                    if (!pPlayer.getAbilities().instabuild) {
+                        pPlayer.getMainHandItem().setCount(0);
+                    }
+
+                    PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, handCount);
+                    handlePlayerGrowth(pPlayer, handCount);
+
+                } else {
+                    if(!data.getActiveEvent().isModifierActive()) {
+                        int consumed = Math.min(handCount,  data.getActiveEvent().getRequiredCrystals() - data.getActiveEvent().getCrystalsSubmitted());
+                        data.getActiveEvent().addCrystalsSubmitted(consumed);
+                        if(data.getActiveEvent().isModifierActive()) {
+                            srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
+                        }
+                        PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, consumed);
+                        handlePlayerGrowth(pPlayer, consumed);
+
+                        if (!pPlayer.getAbilities().instabuild) {
+                            pPlayer.getMainHandItem().shrink(consumed);
+                        }
+                    } else {
+                        return InteractionResult.PASS;
+                    }
                 }
-                if (!pPlayer.getAbilities().instabuild) {
-                    pPlayer.getMainHandItem().setCount(0);
-                }
-                PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, handCount);
-                handlePlayerGrowth(pPlayer, handCount);
+                Objects.requireNonNull(expanderEntity.getLevel()).playSound(null, pPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 0.75F, 0.9F);
+
 
                 expanderEntity.resetSpinTime();
                 expanderEntity.setChanged();
                 pLevel.sendBlockUpdated(pPos, expanderEntity.getBlockState(), expanderEntity.getBlockState(), 3);
-
-                expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), powerCrystalIncrease * handCount);
             }
         }
 
