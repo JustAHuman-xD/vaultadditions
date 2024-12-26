@@ -4,10 +4,12 @@ import io.github.a1qs.vaultadditions.block.GlobeExpanderBlock;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
+import io.github.a1qs.vaultadditions.init.ModBlocks;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.client.gui.overlay.VaultBarOverlay;
 import iskallia.vault.world.data.PlayerVaultStatsData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
@@ -23,7 +25,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -69,6 +75,19 @@ public class PowerCrystal extends Item {
     @Nonnull
     public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack heldItemStack = player.getItemInHand(hand);
+
+        if (!world.isClientSide) {
+            BlockHitResult blockHitResult = getPlayerPOVHitResult(world, player, ClipContext.Fluid.ANY);
+            if (blockHitResult.getType() == HitResult.Type.BLOCK) {
+                BlockPos blockPos = blockHitResult.getBlockPos();
+                BlockState blockState = world.getBlockState(blockPos);
+
+                if (blockState.is(ModBlocks.GLOBE_EXPANDER.get())) {
+                    return InteractionResultHolder.fail(heldItemStack);
+                }
+            }
+        }
+
         if(GlobeExpanderBlock.isCurrentlyInUse()) InteractionResultHolder.fail(heldItemStack);
 
 
