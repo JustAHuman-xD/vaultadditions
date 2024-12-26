@@ -54,23 +54,7 @@ public class PowerOrb extends Item {
             }
 
             if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
-            player.awardStat(Stats.ITEM_USED.get(this));
-        }
-
-        if (!world.isClientSide) {
-
-            PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
-            if(player.isCrouching()) {
-                int itemStackCount = heldItemStack.getCount();
-                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
-
-                additionalStatsData.addPowerPoints((ServerPlayer) player, itemStackCount);
-                player.awardStat(Stats.ITEM_USED.get(this));
-                return InteractionResultHolder.success(heldItemStack);
-            }
-
-            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
-            additionalStatsData.addPowerPoints((ServerPlayer) player, 1);
+            statsData.addPowerPoints((ServerPlayer) player, 1);
             player.awardStat(Stats.ITEM_USED.get(this));
             return InteractionResultHolder.success(heldItemStack);
         }
