@@ -52,24 +52,18 @@ public class GlobeExpanderBlockEntity extends BlockEntity {
             } else if (expanderEntity.ticksSpinning >= expanderEntity.maxSpinTicks) {
                 expanderEntity.stopAnimation();
                 world.playSound(null, pos, SoundEvents.ENDER_EYE_DEATH, SoundSource.BLOCKS, 1.0f, 1.25f);
-
                 BlockPos crystalPos = new BlockPos(pos.getX(), pos.getY() + 1.5, pos.getZ());
                 world.levelEvent(2003, crystalPos,0);
-                MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
-                srv.getPlayerList().broadcastMessage(
-                        new TextComponent("[World Border] " + playerName + " expanded the World border by " + blocksExpanded + " Blocks!")
-                                .withStyle(ChatFormatting.YELLOW),
-                        ChatType.CHAT,
-                        Util.NIL_UUID
-                );
                 EventData data = EventData.get(ServerLifecycleHooks.getCurrentServer());
-                if(data.isEventActive() && data.getActiveEvent().isCrystalSubmissionEvent()) {
-                    if(!data.getActiveEvent().isModifierActive()) {
-                        data.getActiveEvent().addCrystalsSubmitted((int) blocksExpanded / ServerConfigs.POWER_CRYSTAL_INCREASE.get());
-                        if(data.getActiveEvent().isModifierActive()) {
-                            srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
-                        }
-                    }
+
+                if(!(data.isEventActive() && data.getActiveEvent().isCrystalSubmissionEvent())) {
+                    MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
+                    srv.getPlayerList().broadcastMessage(
+                            new TextComponent("[World Border] " + playerName + " expanded the World border by " + blocksExpanded + " Blocks!")
+                                    .withStyle(ChatFormatting.YELLOW),
+                            ChatType.CHAT,
+                            Util.NIL_UUID
+                    );
                 }
             }
         }
