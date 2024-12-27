@@ -43,7 +43,6 @@ public class VaultAdditions {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "vaultadditions-server.toml");
 
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.addListener(OnPlayerLogInEvent::onPlayerLogin);
 
         if(FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             if(!isWorldBorderFixerLoaded) LOGGER.error("Worldborderfixer is not installed. Please install 'Multi World Borders Unofficial'!");

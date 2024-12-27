@@ -24,11 +24,15 @@ import net.minecraft.world.entity.animal.Fox;
 import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import xyz.iwolfking.woldsvaults.init.ModItems;
 
 import java.util.Set;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class OnPlayerLogInEvent {
 
     @SubscribeEvent
@@ -52,8 +56,9 @@ public class OnPlayerLogInEvent {
     @SubscribeEvent
     public static void grantHoyModelsOnLogin(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getPlayer();
+        String name = event.getPlayer().getDisplayName().getString();
 
-        if(player.getUUID().equals(UUID.fromString("59c32f6e-9b2e-42ae-b6a4-b5d30fad494b"))) { // UUID from HoY_82
+        if(name.toLowerCase().contains("HoY_82".toLowerCase())) {
             DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get((ServerLevel)player.level);
             ResourceLocation modelId = ModModels.Armor.HOY_82.getId();
             ResourceLocation modelId2 = ModModels.Armor.HOY_82_GROGU.getId();
@@ -71,12 +76,11 @@ public class OnPlayerLogInEvent {
                 discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, ModModels.Armor.HOY_82_GROGU);
             }
 
-            if (!discoveredModelsData.getDiscoveredModels(player.getUUID()).contains(modelId3)) {
+            if (!discoveredModelsData.getDiscoveredModels(player.getUUID()).contains(modelId3) && ModList.get().isLoaded("woldsvaults")) {
                 MutableComponent info = (new TextComponent("You have been granted the Darksaber set!")).withStyle(ChatFormatting.GOLD);
                 player.sendMessage(info, Util.NIL_UUID);
                 discoveredModelsData.discoverModelAndBroadcast(ModItems.BATTLESTAFF.asItem(), modelId3, player);
             }
         }
-
     }
 }
