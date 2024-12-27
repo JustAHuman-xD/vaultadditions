@@ -1,18 +1,18 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 license="GPLv3"
-#issueTrackerURL="https://github.com/a1qs"
+issueTrackerURL="https://github.com/a1qs/vaultadditions/issues"
 
 [[mods]]
 modId="vaultadditions"
 version="${file.jarVersion}"
 displayName="Vault Additions"
-#displayURL="https://github.com/a1qs"
-#logoFile="vaultutils.png"
+displayURL="https://github.com/a1qs/vaultadditions"
+logoFile="vaultadditions.png"
 authors="a1qs"
 description='''
-This mod is a mod designed to work with Vault Hunters 3rd edition
-This Mod adds the Globe Expander, which works similarly to the one on the VHSMP
+This mod is a mod designed to work with Vault Hunters 3rd edition,
+It adds a variety of features, which can be seen fully documented on the github page of this project.
 '''
 
 [[dependencies.vaultadditions]]
