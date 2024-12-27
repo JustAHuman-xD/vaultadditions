@@ -1,10 +1,7 @@
 package io.github.a1qs.vaultadditions.init;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.block.blockentity.EventBlockEntity;
-import io.github.a1qs.vaultadditions.block.blockentity.GlobeExpanderBlockEntity;
-import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
-import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;
+import io.github.a1qs.vaultadditions.block.blockentity.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,6 +25,11 @@ public class ModBlockEntities {
                     ModBlocks.LOOT_STATUE_GIFT_MEGA.get()
                     ).build(null));
 
+
+
     public static final RegistryObject<BlockEntityType<StatueCauldronBlockEntity>> STATUE_CAULDRON_BLOCK_ENTITY = BLOCK_ENTITIES.register("statue_cauldron_block_entity",
             () -> BlockEntityType.Builder.of(StatueCauldronBlockEntity::new, ModBlocks.STATUE_CAULDRON.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<PlayerTraderBlockEntity>> PLAYER_TRADER_BLOCK_ENTITY = BLOCK_ENTITIES.register("player_trader_block_entity",
+            () -> BlockEntityType.Builder.of(PlayerTraderBlockEntity::new, ModBlocks.PLAYER_TRADER.get()).build(null));
 }

@@ -59,6 +59,12 @@ public class ModBlocks {
             VaultAdditions.VAULT_ADDITIONS_TAB,
             true);
 
+    public static final RegistryObject<Block> PLAYER_TRADER = registerBlock("player_trader",
+            () -> new PlayerTraderBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(20, 3.6E8F).noOcclusion()),
+            VaultAdditions.VAULT_ADDITIONS_TAB,
+            true);
+
 
 
     public static final RegistryObject<Block> CUT_CALCITE_BRICKS = registerBlock("cut_calcite_bricks_mimic",
