@@ -28,10 +28,3 @@ It adds a variety of features, which can be seen documented on the github page o
     versionRange="[1.18.2-3.15.1.3298,)"
     ordering="NONE"
     side="BOTH"
-
-[[dependencies.vaultadditions]]
-modId="woldsvaults"
-mandatory=true
-versionRange="[0.15.2,)"
-ordering="NONE"
-side="BOTH"
