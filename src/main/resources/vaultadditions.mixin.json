@@ -25,7 +25,6 @@
     "MixinVirtualWorlds"
   ],
   "refmap": "vaultadditions.mixin-refmap.json",
-  "plugin": "io.github.a1qs.vaultadditions.mixins.plugins.AdditionsMixinPlugin",
   "client": [
     "MixinVaultBarOverlay"
   ]

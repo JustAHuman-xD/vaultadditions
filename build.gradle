@@ -104,13 +104,11 @@ repositories {
     flatDir {
         dir 'libs'
     }
-    maven { url = "https://jitpack.io" }
 
 
     maven {
         url "https://www.cursemaven.com"
     }
-    maven { url 'https://maven.fallenbreath.me/releases' }
     mavenCentral()
 }
 
@@ -129,7 +127,7 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
     implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
     implementation fg.deobf("curse.maven:create-328085:5797603")
-
+    compileOnly fg.deobf("curse.maven:wolds-vaults-standalone-1132404:6013909")
 
     runtimeOnly fg.deobf("curse.maven:observable-509575:3745494")
     runtimeOnly fg.deobf("curse.maven:ferritecore-429235:4074294")
@@ -138,12 +136,7 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:3853078")
     runtimeOnly fg.deobf("curse.maven:citadel-331936:3783096")
 
-    compileOnly fg.deobf("curse.maven:wolds-vaults-standalone-1132404:6013909")
 
-    implementation files('libs/conditional-mixin-forge-0.6.3.jar')
-    jarJar(group: 'me.fallenbreath', name: 'conditional-mixin-forge', version: '[0.6.2,)') {
-        jarJar.pin(it, '0.6.2')
-    }
 
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -180,6 +173,19 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+tasks.named('jarJar', Jar).configure {
+    archiveClassifier.set('')
+
+    archiveBaseName.set("vaultadditions")  // Replace 'mymod' with your mod's name
+    archiveVersion.set("1.10.0")     // Set your mod's version
+}
+
+reobf {
+    jar {
+        dependsOn tasks.named('jarJar')  // Ensure reobfJar uses the jar task that includes MixinExtras
+    }
 }
 
 mixin {
