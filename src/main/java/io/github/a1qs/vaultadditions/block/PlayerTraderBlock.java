@@ -1,7 +1,8 @@
 package io.github.a1qs.vaultadditions.block;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.PlayerTraderBlockEntity;
+import io.github.a1qs.vaultadditions.container.LootStatueContainer;
+import io.github.a1qs.vaultadditions.container.PlayerTraderContainer;
 import iskallia.vault.container.oversized.OverSizedItemStack;
 import iskallia.vault.init.ModBlocks;
 import iskallia.vault.item.CoinBlockItem;
@@ -11,11 +12,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -33,6 +39,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -42,6 +50,7 @@ public class PlayerTraderBlock extends Block implements EntityBlock {
 
     public static final VoxelShape SHAPE = Shapes.or(Block.box(0, 12, 0, 16, 16, 16),
             Block.box(2, 0, 2, 14, 12, 14));
+
 
     private record CoinDefinition(Item coinItem, @Nullable Item previousHigherDenomination, @Nullable Item nextLowerDenomination, int coinValue) {}
     private static Map<Item, PlayerTraderBlock.CoinDefinition> COIN_DEFINITIONS;
@@ -70,59 +79,72 @@ public class PlayerTraderBlock extends Block implements EntityBlock {
         return PushReaction.BLOCK;
     }
 
-
+    @Override
+    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
+        if (pPlacer instanceof ServerPlayer player) {
+            if (pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity playerTraderEntity) {
+                playerTraderEntity.setOwner(player.getUUID());
+            }
+        }
+    }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (worldIn.isClientSide()) {
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (pLevel.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-
-        if(player.isSecondaryUseActive() && player.getAbilities().instabuild) {
-            if (worldIn.getBlockEntity(pos) instanceof PlayerTraderBlockEntity tile) {
-                tile.clear();
-                return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        if(pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity blockEntity) {
+            if(pPlayer.getUUID().equals(blockEntity.getOwner())) {
+                NetworkHooks.openGui((ServerPlayer) pPlayer, blockEntity, buffer -> buffer.writeBlockPos(pPos));
             }
         }
 
-        if (player.getAbilities().instabuild) {
+
+        if(pPlayer.isSecondaryUseActive() && pPlayer.getAbilities().instabuild) {
+            if (pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity blockEntity) {
+                blockEntity.clear();
+                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+            }
+        }
+
+        if (pPlayer.getAbilities().instabuild) {
             // Temporary setting of offers if the player is in creative
-            ItemStack o = player.getItemInHand(InteractionHand.MAIN_HAND);
-            ItemStack c = player.getItemInHand(InteractionHand.OFF_HAND);
+            ItemStack o = pPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+            ItemStack c = pPlayer.getItemInHand(InteractionHand.OFF_HAND);
             if (!c.isEmpty() && !o.isEmpty()) {
-                if (worldIn.getBlockEntity(pos) instanceof PlayerTraderBlockEntity tile) {
-                    tile.setOffer(o.copy(), OverSizedItemStack.of(c.copy()));
-                    return InteractionResult.sidedSuccess(worldIn.isClientSide);
+                if (pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity blockEntity) {
+                    blockEntity.setOffer(OverSizedItemStack.of(o.copy()), OverSizedItemStack.of(c.copy()));
+                    return InteractionResult.sidedSuccess(pLevel.isClientSide);
                 }
             }
         }
 
-        if (worldIn.getBlockEntity(pos) instanceof PlayerTraderBlockEntity tile && handIn == InteractionHand.MAIN_HAND) {
-            ItemStack offerStack = tile.getOfferStack();
+        if (pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity blockEntity && pHand == InteractionHand.MAIN_HAND) {
+            ItemStack offerStack = blockEntity.getOffer();
 
             if (!offerStack.isEmpty()) {
 
-                return player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).map(itemHandler -> {
+                return pPlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).map(itemHandler -> {
                     List<InventoryUtil.ItemAccess> allItems = List.of();
-                    if (!player.isCreative()) {
-                        allItems = InventoryUtil.findAllItems(player);
-                        if (!hasEnoughCurrency(allItems, tile.getCurrencyStack())) {
-                            player.displayClientMessage(new TranslatableComponent("message.the_vault.shop_pedestal.fail",
-                                    tile.getCurrencyStack().getHoverName()), true);
-                            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+                    if (!pPlayer.isCreative()) {
+                        allItems = InventoryUtil.findAllItems(pPlayer);
+                        if (!hasEnoughCurrency(allItems, blockEntity.getCurrencyStack())) {
+                            pPlayer.displayClientMessage(new TranslatableComponent("message.the_vault.shop_pedestal.fail",
+                                    blockEntity.getCurrencyStack().getHoverName()), true);
+                            return InteractionResult.sidedSuccess(pLevel.isClientSide);
                         }
                     }
-                    if (!player.isCreative()) {
-                        if(extractCurrency(player, allItems, tile.getCurrencyStack(), (tile.getCurrencyStack().getItem() instanceof CoinBlockItem))) {
-                            player.displayClientMessage(new TranslatableComponent("message.the_vault.shop_pedestal.purchase",
-                                    offerStack.getCount(), offerStack.getHoverName(), tile.getCurrencyStack().getCount(), tile.getCurrencyStack().getHoverName()), true);
-                            tile.clear(); // Clear the offer, needs to be changed when players can add their offers to support multiple offers.
+                    if (!pPlayer.isCreative()) {
+                        if(extractCurrency(pPlayer, allItems, blockEntity.getCurrencyStack(), (blockEntity.getCurrencyStack().getItem() instanceof CoinBlockItem))) {
+                            pPlayer.displayClientMessage(new TranslatableComponent("message.the_vault.shop_pedestal.purchase",
+                                    offerStack.getCount(), offerStack.getHoverName(), blockEntity.getCurrencyStack().getCount(), blockEntity.getCurrencyStack().getHoverName()), true);
+                            blockEntity.clear(); // Clear the offer, TODO needs to be changed when players can add their offers to support multiple offers.
                         }
                     }
-                    ItemHandlerHelper.giveItemToPlayer(player, offerStack.copy());
+                    ItemHandlerHelper.giveItemToPlayer(pPlayer, offerStack.copy());
 
-                    worldIn.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 1, 1);
-                    return InteractionResult.sidedSuccess(worldIn.isClientSide);
+                    pLevel.playSound(null, pPos, SoundEvents.AMETHYST_BLOCK_STEP, SoundSource.BLOCKS, 1, 1);
+                    return InteractionResult.sidedSuccess(pLevel.isClientSide);
                 }).orElse(InteractionResult.PASS);
             }
             return InteractionResult.PASS;

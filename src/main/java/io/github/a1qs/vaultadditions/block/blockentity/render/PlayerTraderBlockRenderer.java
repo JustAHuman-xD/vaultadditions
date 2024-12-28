@@ -51,7 +51,7 @@ public class PlayerTraderBlockRenderer implements BlockEntityRenderer<PlayerTrad
 
     @Override
     public void render(PlayerTraderBlockEntity tile, float partialTicks, PoseStack pPoseStack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        ItemStack offerStack = tile.getOfferStack();
+        ItemStack offerStack = tile.getOffer();
         if (!offerStack.isEmpty()) {
             ItemStack currency = tile.getCurrencyStack();
 
