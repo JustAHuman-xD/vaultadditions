@@ -4,6 +4,8 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import io.github.a1qs.vaultadditions.config.vault.entry.EventEntry;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
+import io.github.a1qs.vaultadditions.init.ModNetwork;
+import io.github.a1qs.vaultadditions.network.EventSyncMessage;
 import io.github.a1qs.vaultadditions.util.EntryHelper;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import net.minecraft.Util;
@@ -54,6 +56,7 @@ public class EventData extends SavedData {
         this.activeEvent = activeEventInstance;
 
         ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(this.activeEvent.getEventStartMessage(), ChatType.SYSTEM, Util.NIL_UUID);
+        ModNetwork.broadcastToAllPlayers(new EventSyncMessage(this.globeExpanderRequired(), this.isEventActive()));
         setDirty();
     }
 
@@ -64,6 +67,7 @@ public class EventData extends SavedData {
         ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastMessage(this.activeEvent.getEventEndMessage(), ChatType.SYSTEM, Util.NIL_UUID);
         this.activeEvent = null;
         this.isActive = false;
+        ModNetwork.broadcastToAllPlayers(new EventSyncMessage(this.globeExpanderRequired(), this.isEventActive()));
         setDirty();
     }
 

@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.item;
 
 import io.github.a1qs.vaultadditions.block.GlobeExpanderBlock;
+import io.github.a1qs.vaultadditions.client.ClientEventData;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
@@ -44,8 +45,8 @@ public class PowerCrystal extends Item {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         if(ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) { // The time for expanding the border is limited to events & the specified timespan
-            if(!TimeUtil.pastDate() || EventData.getServer().globeExpanderRequired()) {
-                String isTemp = EventData.getServer().globeExpanderRequired() ? "Temporarily " : "";
+            if(!TimeUtil.pastDate() || ClientEventData.isGlobeExpanderRequired()) {
+                String isTemp = ClientEventData.isGlobeExpanderRequired() ? "Temporarily " : "";
                 pTooltipComponents.add(new TextComponent(isTemp + "Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
                 if(VaultBarOverlay.vaultLevel >= 100) {
                     pTooltipComponents.add(
