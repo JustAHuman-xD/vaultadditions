@@ -23,7 +23,7 @@ public class ModNetwork {
         CHANNEL.registerMessage(nextId(), LeaderboardRequestMessage.class, LeaderboardRequestMessage::encode, LeaderboardRequestMessage::decode, LeaderboardRequestMessage::handle);
         CHANNEL.registerMessage(nextId(), LeaderboardDataMessage.class, LeaderboardDataMessage::encode, LeaderboardDataMessage::decode, LeaderboardDataMessage::handle);
         CHANNEL.registerMessage(nextId(), BladeFrenzyParticleMessage.class, BladeFrenzyParticleMessage::encode, BladeFrenzyParticleMessage::decode, BladeFrenzyParticleMessage::handle);
-
+        CHANNEL.registerMessage(nextId(), EventSyncMessage.class, EventSyncMessage::encode, EventSyncMessage::decode, EventSyncMessage::handle);
     }
 
     public static int nextId() {
@@ -37,5 +37,11 @@ public class ModNetwork {
     public static <T> void sendToClient(T message, ServerPlayer player) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
+
+    public static <T> void broadcastToAllPlayers(T message) {
+        CHANNEL.send(PacketDistributor.ALL.noArg(), message);
+    }
+
+
 
 }
