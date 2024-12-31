@@ -1,12 +1,10 @@
 package io.github.a1qs.vaultadditions.client.menu;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.a1qs.vaultadditions.VaultAdditions;
+import com.mojang.blaze3d.platform.InputConstants;
+import io.github.a1qs.vaultadditions.client.element.TextInputElementMul;
 import io.github.a1qs.vaultadditions.container.PlayerTraderContainer;
-import io.github.a1qs.vaultadditions.container.RenameContainer;
-import iskallia.vault.VaultMod;
-import iskallia.vault.client.atlas.TextureAtlasRegion;
+import io.github.a1qs.vaultadditions.init.ModNetwork;
+import io.github.a1qs.vaultadditions.network.UpdatePlayerTraderDataMessage;
 import iskallia.vault.client.gui.framework.ScreenRenderers;
 import iskallia.vault.client.gui.framework.ScreenTextures;
 import iskallia.vault.client.gui.framework.element.*;
@@ -15,43 +13,52 @@ import iskallia.vault.client.gui.framework.render.TooltipDirection;
 import iskallia.vault.client.gui.framework.screen.AbstractElementContainerScreen;
 import iskallia.vault.client.gui.framework.spatial.Spatials;
 import iskallia.vault.client.gui.framework.text.LabelTextStyle;
-import iskallia.vault.init.ModTextureAtlases;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Inventory;
 
 public class PlayerTraderMenu extends AbstractElementContainerScreen<PlayerTraderContainer> {
-    private static final TextureAtlasRegion TEXTURE = TextureAtlasRegion.of(ModTextureAtlases.SCREEN, VaultMod.id("gui/screen/player_trader"));
-    private final TextInputElement<?> levelInput;
-    private EditBox nameField;
-    private String name;
+    private final TextInputElementMul<?> sellAmount;
+    private final TextInputElementMul<?> traderName;
 
     public PlayerTraderMenu(PlayerTraderContainer container, Inventory inventory, Component title) {
         super(container, inventory, title, ScreenRenderers.getBuffered(), ScreenTooltipRenderer::create);
         this.imageWidth = 176;
-        this.imageHeight = 176;
+        this.imageHeight = 180;
+
 
         // Background Texture
         this.addElement(
-                new TextureAtlasElement<>(
-                        Spatials.positionXY(0, -10).size(imageWidth, imageHeight),
-                        TEXTURE
+                new NineSliceElement<>(
+                        this.getGuiSpatial(),
+                        ScreenTextures.DEFAULT_WINDOW_BACKGROUND
                 ).layout((screen, gui, parent, world) -> world
                         .translateXY(gui)
-                        .size(Spatials.copy(gui).add(Spatials.size(0, 10))))
+                        .size(Spatials.copy(gui))
+                )
         );
 
-        // Title
+        // Menu Title
         this.addElement(
                 new LabelElement<>(
-                        Spatials.positionXY(7, -4),
+                        Spatials.positionXY(5, 4),
                         ((MutableComponent)this.title).withStyle(Style.EMPTY.withColor(0xFF_3f3f3f)),
                         LabelTextStyle.defaultStyle()
                 ).layout((screen, gui, parent, world) -> world.translateXY(gui))
         );
 
-        // Slots? idk
+        // "Inventory" Title
+        MutableComponent inventoryName = inventory.getDisplayName().copy();
+        inventoryName.withStyle(Style.EMPTY.withColor(0xFF_3F3F3F));
+        this.addElement(
+                new LabelElement<>(
+                        Spatials.positionXY(8, 88),
+                        inventoryName,
+                        LabelTextStyle.defaultStyle()
+                ).layout((screen, gui, parent, world) -> world.translateXY(gui))
+        );
+
+        // Slots
         this.addElement(
                 new SlotsElement<>(
                         Spatials.zero(),
@@ -61,71 +68,121 @@ public class PlayerTraderMenu extends AbstractElementContainerScreen<PlayerTrade
         );
 
 
-        // something something input of items idk
-        this.levelInput = this.addElement(
-                new TextInputElement<>(
-                        Spatials.copy(Spatials.positionXY(143, 20)).size(26, 12),
+        // Input element for itemCount.
+        this.sellAmount = this.addElement(
+                new TextInputElementMul<>(
+                        Spatials.copy(Spatials.positionXY(140, 20)).size(26, 12),
                         Minecraft.getInstance().font
                 ).layout((screen, gui, parent, world) -> world.translateXY(gui))
         ).adjustEditBox(editBox -> {
             editBox.setFilter(input -> {
                 if (input.isEmpty()) return true;
-                int parsedLevel;
+                int parsedAmount;
+
                 try {
-                    parsedLevel = Integer.parseInt(input);
+                    parsedAmount = Integer.parseInt(input);
                 } catch (NumberFormatException exc) {
                     return false;
                 }
-                return parsedLevel <= 64;
+
+                if (parsedAmount <= 64) {
+                    return true;
+                }
+
+                // If the input exceeds the cap, adjust it to the maximum value
+                editBox.setValue("64");
+                return false;
             });
-            editBox.setMaxLength(2);
+            editBox.setMaxLength(3);
             editBox.setValue("1");
         });
-        this.levelInput.setVisible(false);
-        this.levelInput.tooltip((tooltipRenderer, poseStack, mouseX, mouseY, tooltipFlag) -> {
-            if (!this.levelInput.isVisible()) {
+
+        this.sellAmount.tooltip((tooltipRenderer, poseStack, mouseX, mouseY, tooltipFlag) -> {
+            if (!this.sellAmount.isVisible()) {
                 return false;
             }
-            Component cmp = new TextComponent("Level of crafted gear");
+            Component cmp = new TextComponent("Items per sale");
             tooltipRenderer.renderTooltip(poseStack, cmp, mouseX, mouseY, TooltipDirection.RIGHT);
             return true;
         });
-        this.name = "dev";
+
+        this.addElement(this.traderName = new TextInputElementMul<>(
+                Spatials.positionXY(7, 16).size(100, 12),
+                Minecraft.getInstance().font
+        ).layout((screen, gui, parent, world) -> world.translateXY(gui))
+        ).adjustEditBox(box -> {
+            box.setCanLoseFocus(true);
+            box.setMaxLength(16);
+            box.setValue(this.getMenu().getBlockEntity().getTraderName());
+        });
+
+
+        this.traderName.tooltip((tooltipRenderer, poseStack, mouseX, mouseY, tooltipFlag) -> {
+            if (!this.traderName.isVisible()) {
+                return false;
+            }
+            Component cmp = new TextComponent("Trader display name");
+            tooltipRenderer.renderTooltip(poseStack, cmp, mouseX, mouseY, TooltipDirection.RIGHT);
+            return true;
+        });
     }
 
     @Override
     protected void init() {
         super.init();
-        this.initFields();
     }
 
-    private void initFields() {
-        this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        int i = (this.width - this.imageWidth) / 2;
-        int j = (this.height - this.imageHeight) / 2;
-        this.nameField = new EditBox(this.font, i + 34, j + 26, 103, 12, new TextComponent(this.name));
-        this.nameField.setCanLoseFocus(false);
-        this.nameField.setTextColor(-1);
-        this.nameField.setTextColorUneditable(-1);
-        this.nameField.setBordered(false);
-        this.nameField.setMaxLength(16);
-        this.nameField.setResponder(this::rename);
-        this.addWidget(this.nameField);
-        this.setInitialFocus(this.nameField);
-        this.nameField.setValue(this.name);
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+
+
+        this.sellAmount.tickEditBox();
+        this.traderName.tickEditBox();
     }
 
-    private void addBackgroundElement() {
-        this.addElement(
-                new NineSliceElement<>(
-                        this.getGuiSpatial(),
-                        ScreenTextures.DEFAULT_WINDOW_BACKGROUND
-                ).layout((screen, gui, parent, world) -> world
-                        .translateXY(gui)
-                        .size(Spatials.copy(gui))));
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+
+
+        InputConstants.Key key = InputConstants.getKey(keyCode, scanCode);
+        if (this.sellAmount.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        }
+
+        if (this.traderName.keyPressed(keyCode, scanCode, modifiers)) {
+            return true;
+        }
+
+        if (Minecraft.getInstance().options.keyInventory.isActiveAndMatches(key)) {
+            if (!this.sellAmount.isFocused() && !this.traderName.isFocused()) {
+                this.onClose();
+            }
+
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    private void rename(String name) {
-        this.name = name;
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (this.sellAmount.charTyped(codePoint, modifiers)) {
+            return true;
+        }
+        if (this.traderName.charTyped(codePoint, modifiers)) {
+            return true;
+        }
+        return super.charTyped(codePoint, modifiers);
+    }
+
+    @Override
+    public void onClose() {
+        if(!this.traderName.getInput().equals(this.getMenu().getBlockEntity().getTraderName())) {
+            //TODO: test if this occurs if the names equal/dont equal
+
+            ModNetwork.CHANNEL.sendToServer(new UpdatePlayerTraderDataMessage(this.getMenu().getPos(), this.traderName.getInput()));
+        }
+
+        super.onClose();
     }
 }
