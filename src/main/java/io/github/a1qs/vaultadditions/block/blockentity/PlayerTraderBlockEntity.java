@@ -24,6 +24,8 @@ public class PlayerTraderBlockEntity extends BlockEntity implements MenuProvider
     private OverSizedItemStack offer = OverSizedItemStack.EMPTY;
     private OverSizedItemStack currency = OverSizedItemStack.EMPTY;
     private UUID ownerUUID;
+    private String traderName;
+
 
     public PlayerTraderBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), pos, state);
@@ -40,6 +42,7 @@ public class PlayerTraderBlockEntity extends BlockEntity implements MenuProvider
         this.offer = OverSizedItemStack.deserialize(tag.getCompound("offer"));
         this.currency = OverSizedItemStack.deserialize(tag.getCompound("currencyStack"));
         this.ownerUUID = tag.getUUID("ownerUUID");
+        this.traderName = tag.getString("traderName");
     }
 
     @Override
@@ -48,6 +51,7 @@ public class PlayerTraderBlockEntity extends BlockEntity implements MenuProvider
         tag.put("offer", this.offer.serialize());
         tag.put("currencyStack", this.currency.serialize());
         tag.putUUID("ownerUUID", this.ownerUUID);
+        tag.putString("traderName", this.traderName);
     }
 
 
@@ -68,6 +72,14 @@ public class PlayerTraderBlockEntity extends BlockEntity implements MenuProvider
         return ownerUUID;
     }
 
+    public void setTraderName(String traderName) {
+        this.traderName = traderName;
+    }
+
+    public String getTraderName() {
+        return traderName;
+    }
+
     @Override
     public CompoundTag getUpdateTag() {
         return this.saveWithoutMetadata();
@@ -82,13 +94,16 @@ public class PlayerTraderBlockEntity extends BlockEntity implements MenuProvider
     public void clear() {
         this.offer = OverSizedItemStack.EMPTY;
         this.currency = OverSizedItemStack.EMPTY;
-        this.setChanged();
-        this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        this.updateBlock();
     }
 
     public void setOffer(OverSizedItemStack offer, OverSizedItemStack currency) {
         this.offer = offer;
         this.currency = currency;
+        this.updateBlock();
+    }
+
+    public void updateBlock() {
         this.setChanged();
         this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
     }
