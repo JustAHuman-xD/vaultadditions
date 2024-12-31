@@ -48,6 +48,7 @@
   "container.vault.power": "Powers",
   "itemGroup.vaultadditions": "VaultAdditions",
   "screen.vaultadditions.leaderboard": "§l§nLeaderboard",
+  "menu.vaultadditions.player_trader": "Player Trader",
 
   "key.category.vaultadditions": "VaultAdditions",
   "key.vaultadditions.open_leaderboard": "Open Leaderboard",
