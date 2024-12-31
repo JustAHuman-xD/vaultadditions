@@ -2,19 +2,11 @@ package io.github.a1qs.vaultadditions.container;
 
 import io.github.a1qs.vaultadditions.block.blockentity.PlayerTraderBlockEntity;
 import io.github.a1qs.vaultadditions.init.ModContainers;
-import iskallia.vault.container.TransmogTableContainer;
-import iskallia.vault.container.inventory.TransmogTableInventory;
 import iskallia.vault.container.oversized.OverSizedSlotContainer;
-import iskallia.vault.container.oversized.OverSizedTabSlot;
-import iskallia.vault.container.slot.RecipeOutputSlot;
 import iskallia.vault.container.slot.TabSlot;
-import iskallia.vault.container.slot.VaultGearSlot;
-import iskallia.vault.init.ModBlocks;
-import iskallia.vault.init.ModSlotIcons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 
 public class PlayerTraderContainer extends OverSizedSlotContainer {
@@ -39,7 +31,7 @@ public class PlayerTraderContainer extends OverSizedSlotContainer {
 
     private void initInventory() {
         int offsetX = 0;
-        int offsetY = 0;
+        int offsetY = 15;
 
         int containerSlotIndex = 0;
 
@@ -63,20 +55,15 @@ public class PlayerTraderContainer extends OverSizedSlotContainer {
             containerSlotIndex++;
         }
         this.hotbarIndexRange = new SlotIndexRange(this.playerInventoryIndexRange.end(), containerSlotIndex);
-
-//        this.addSlot(new VaultGearSlot(internalInventory, TransmogTableInventory.GEAR_SLOT, 63, 61) {
-//            @Override
-//            public void setChanged() {
-//                super.setChanged();
-//                if (this.getItem().isEmpty()) {
-//                    TransmogTableContainer.this.selectModelId(null);
-//                }
-//            }
-//        });
     }
 
+    public BlockPos getPos() {
+        return pos;
+    }
 
-
+    public PlayerTraderBlockEntity getBlockEntity() {
+        return blockEntity;
+    }
 
     @Override
     public boolean stillValid(Player pPlayer) {
