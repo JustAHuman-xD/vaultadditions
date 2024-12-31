@@ -175,19 +175,6 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-tasks.named('jarJar', Jar).configure {
-    archiveClassifier.set('')
-
-    archiveBaseName.set("vaultadditions")  // Replace 'mymod' with your mod's name
-    archiveVersion.set("1.10.0")     // Set your mod's version
-}
-
-reobf {
-    jar {
-        dependsOn tasks.named('jarJar')  // Ensure reobfJar uses the jar task that includes MixinExtras
-    }
-}
-
 mixin {
     add sourceSets.main, 'vaultadditions.mixin-refmap.json'
     config 'vaultadditions.mixin.json'
