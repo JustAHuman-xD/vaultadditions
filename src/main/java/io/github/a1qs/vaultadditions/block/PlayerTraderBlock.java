@@ -61,7 +61,7 @@ public class PlayerTraderBlock extends Block implements EntityBlock {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-        pTooltip.add(new TextComponent("NYI").withStyle(ChatFormatting.RED));
+        pTooltip.add(new TextComponent("[NYI]").withStyle(ChatFormatting.RED));
     }
 
     @Override
@@ -84,6 +84,7 @@ public class PlayerTraderBlock extends Block implements EntityBlock {
         if (pPlacer instanceof ServerPlayer player) {
             if (pLevel.getBlockEntity(pPos) instanceof PlayerTraderBlockEntity playerTraderEntity) {
                 playerTraderEntity.setOwner(player.getUUID());
+                playerTraderEntity.setTraderName(player.getName().getString());
             }
         }
     }
