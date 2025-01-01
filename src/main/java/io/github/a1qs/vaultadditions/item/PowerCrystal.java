@@ -44,10 +44,12 @@ public class PowerCrystal extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        int increase = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
+        String append = Math.abs(ServerConfigs.POWER_CRYSTAL_INCREASE.get()) == 1 ? "" : "s";
         if(ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) { // The time for expanding the border is limited to events & the specified timespan
             if(!TimeUtil.pastDate() || ClientEventData.isGlobeExpanderRequired()) {
                 String isTemp = ClientEventData.isGlobeExpanderRequired() ? "Temporarily " : "";
-                pTooltipComponents.add(new TextComponent(isTemp + "Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+                pTooltipComponents.add(new TextComponent(isTemp + "Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
                 if(VaultBarOverlay.vaultLevel >= 100) {
                     pTooltipComponents.add(
                             new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
@@ -57,7 +59,7 @@ public class PowerCrystal extends Item {
                 }
             }
         } else {
-            pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(ServerConfigs.POWER_CRYSTAL_INCREASE.get().toString()).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+            pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
             if(VaultBarOverlay.vaultLevel >= 100) {
                 pTooltipComponents.add(
                         new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
