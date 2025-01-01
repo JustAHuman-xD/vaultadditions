@@ -85,8 +85,10 @@ public class VaultStatueLootConfig extends Config {
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.ITEM));
             stack = new ItemStack(item);
             if (entry.NBT != null) {
-                CompoundTag nbt = TagParser.parseTag(entry.NBT);
-                stack.setTag(nbt);
+                if(!entry.NBT.equals("{}")) {
+                    CompoundTag nbt = TagParser.parseTag(entry.NBT);
+                    stack.setTag(nbt);
+                }
             }
         } catch (Exception var5) {
             Exception e = var5;
