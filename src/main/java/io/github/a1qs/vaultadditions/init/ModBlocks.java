@@ -21,7 +21,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> GLOBE_EXPANDER = registerBlock("globe_expander",
             () -> new GlobeExpanderBlock(BlockBehaviour.Properties.of(Material.METAL)
-                    .strength(-1).noOcclusion()), VaultAdditions.VAULT_ADDITIONS_TAB,
+                    .strength(-1, 3.6E8F).noOcclusion()), VaultAdditions.VAULT_ADDITIONS_TAB,
             true);
 
     public static final RegistryObject<Block> EVENT_BLOCK = registerBlock("event_block",
@@ -31,37 +31,37 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> LOOT_STATUE_VAULT = registerBlock("loot_statue_vault",
             () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             false);
 
     public static final RegistryObject<Block> LOOT_STATUE_GIFT = registerBlock("loot_statue_gift",
             () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             false);
 
     public static final RegistryObject<Block> LOOT_STATUE_GIFT_MEGA = registerBlock("loot_statue_gift_mega",
             () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             false);
 
     public static final RegistryObject<Block> LOOT_STATUE_ARENA = registerBlock("loot_statue_arena",
             () -> new LootStatueBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             false);
 
     public static final RegistryObject<Block> STATUE_CAULDRON = registerBlock("statue_cauldron",
             () -> new StatueCauldronBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             true);
 
     public static final RegistryObject<Block> PLAYER_TRADER = registerBlock("player_trader",
             () -> new PlayerTraderBlock(BlockBehaviour.Properties.of(Material.STONE)
-                    .strength(20, 3.6E8F).noOcclusion()),
+                    .strength(3.0F, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
             VaultAdditions.VAULT_ADDITIONS_TAB,
             true);
 
