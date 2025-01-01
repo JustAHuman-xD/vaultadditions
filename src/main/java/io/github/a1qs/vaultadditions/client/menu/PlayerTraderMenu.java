@@ -1,8 +1,11 @@
 package io.github.a1qs.vaultadditions.client.menu;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.client.element.TextInputElementMul;
 import io.github.a1qs.vaultadditions.container.PlayerTraderContainer;
+import io.github.a1qs.vaultadditions.container.slot.GhostSlot;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.UpdatePlayerTraderDataMessage;
 import iskallia.vault.client.gui.framework.ScreenRenderers;
@@ -14,8 +17,11 @@ import iskallia.vault.client.gui.framework.screen.AbstractElementContainerScreen
 import iskallia.vault.client.gui.framework.spatial.Spatials;
 import iskallia.vault.client.gui.framework.text.LabelTextStyle;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerTraderMenu extends AbstractElementContainerScreen<PlayerTraderContainer> {
     private final TextInputElementMul<?> sellAmount;
@@ -178,11 +184,29 @@ public class PlayerTraderMenu extends AbstractElementContainerScreen<PlayerTrade
     @Override
     public void onClose() {
         if(!this.traderName.getInput().equals(this.getMenu().getBlockEntity().getTraderName())) {
-            //TODO: test if this occurs if the names equal/dont equal
-
             ModNetwork.CHANNEL.sendToServer(new UpdatePlayerTraderDataMessage(this.getMenu().getPos(), this.traderName.getInput()));
         }
 
         super.onClose();
+    }
+
+
+    //TODO it works but its not great.
+    @Override
+    protected void renderSlotItems(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        super.renderSlotItems(poseStack, mouseX, mouseY, partialTick);
+
+        for (int k = 0; k < this.menu.slots.size(); ++k) {
+            Slot slot = this.menu.slots.get(k);
+
+            if(slot instanceof GhostSlot && slot.hasItem()) {
+                RenderSystem.disableDepthTest();
+                GuiComponent.fill(poseStack, slot.x + 125, slot.y + 34, slot.x + 141, slot.y + 50, 0x99FFFFF0);
+
+                RenderSystem.enableDepthTest();
+
+            }
+        }
+
     }
 }
