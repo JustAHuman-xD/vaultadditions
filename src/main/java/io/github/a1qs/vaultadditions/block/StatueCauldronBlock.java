@@ -60,7 +60,6 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         if(itemstack.isEmpty()) return InteractionResult.PASS;
         if(itemstack.getItem() != ModItems.INFINITE_WATER_BUCKET && itemstack.getItem() != Items.WATER_BUCKET) return InteractionResult.PASS;
-        System.out.println("Hello.");
 
 
 
