@@ -59,8 +59,8 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
     public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         if(itemstack.isEmpty()) return InteractionResult.PASS;
-        if(itemstack.getItem() != ModItems.INFINITE_WATER_BUCKET) return InteractionResult.PASS;
-        if(itemstack.getItem() != Items.WATER_BUCKET) return InteractionResult.PASS;
+        if(itemstack.getItem() != ModItems.INFINITE_WATER_BUCKET && itemstack.getItem() != Items.WATER_BUCKET) return InteractionResult.PASS;
+        System.out.println("Hello.");
 
 
 
@@ -82,10 +82,8 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
             }
 
             return InteractionResult.sidedSuccess(pLevel.isClientSide());
-        } else {
-            return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         }
-
+        return InteractionResult.PASS;
     }
 
 
