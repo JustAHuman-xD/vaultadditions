@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions.block;
 import io.github.a1qs.vaultadditions.block.blockentity.StatueCauldronBlockEntity;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import iskallia.vault.init.ModConfigs;
+import iskallia.vault.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.EntityBlock;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
@@ -55,31 +58,34 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        if (itemstack.isEmpty() || itemstack.getItem().equals(Items.POTION)) {
-            return InteractionResult.PASS;
-        } else {
-            int i = pState.getValue(LEVEL);
-            Item item = itemstack.getItem();
-            if (item instanceof BucketItem && ((BucketItem)item).getFluid() == Fluids.WATER) {
-                if (i < 3 && !pLevel.isClientSide()) {
-                    if (!pPlayer.isCreative()) {
-                        LazyOptional<IFluidHandlerItem> providerOptional = itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
-                        providerOptional.ifPresent((provider) -> {
-                            provider.drain(1000, IFluidHandler.FluidAction.EXECUTE);
-                        });
-                    }
+        if(itemstack.isEmpty()) return InteractionResult.PASS;
+        if(itemstack.getItem() != ModItems.INFINITE_WATER_BUCKET) return InteractionResult.PASS;
+        if(itemstack.getItem() != Items.WATER_BUCKET) return InteractionResult.PASS;
 
-                    pPlayer.awardStat(Stats.FILL_CAULDRON);
-                    pLevel.setBlock(pPos, pState.setValue(LEVEL, 3), 3);
-                    pLevel.updateNeighbourForOutputSignal(pPos, this);
-                    pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+
+        int i = pState.getValue(LEVEL);
+        Item item = itemstack.getItem();
+        if (item instanceof BucketItem && ((BucketItem)item).getFluid() == Fluids.WATER) {
+            if (i < 3 && !pLevel.isClientSide()) {
+                if (!pPlayer.isCreative()) {
+                    LazyOptional<IFluidHandlerItem> providerOptional = itemstack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
+                    providerOptional.ifPresent((provider) -> {
+                        provider.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                    });
                 }
 
-                return InteractionResult.sidedSuccess(pLevel.isClientSide());
-            } else {
-                return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+                pPlayer.awardStat(Stats.FILL_CAULDRON);
+                pLevel.setBlock(pPos, pState.setValue(LEVEL, 3), 3);
+                pLevel.updateNeighbourForOutputSignal(pPos, this);
+                pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
+
+            return InteractionResult.sidedSuccess(pLevel.isClientSide());
+        } else {
+            return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         }
+
     }
 
 
@@ -161,5 +167,15 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
             BlockEntityType<E> eBlockEntityType,
             BlockEntityTicker<? super E> blockEntityTicker) {
         return eBlockEntityType == aBlockEntityType ? (BlockEntityTicker<A>) blockEntityTicker : null;
+    }
+
+    @Override
+    public void handlePrecipitation(BlockState pState, Level pLevel, BlockPos pPos, Biome.Precipitation pPrecipitation) {
+
+    }
+
+    @Override
+    protected boolean canReceiveStalactiteDrip(Fluid pFluid) {
+        return false;
     }
 }
