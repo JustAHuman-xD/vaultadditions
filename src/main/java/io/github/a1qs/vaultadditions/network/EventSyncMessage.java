@@ -29,11 +29,7 @@ public class EventSyncMessage {
 
     public static void handle(EventSyncMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
         contextSupplier.get().enqueueWork(() -> {
-            MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
-            if(srv == null) return; // may break the data but its fineeee
-            EventData data = EventData.get(srv);
-
-            ClientEventData.update(data.globeExpanderRequired(), data.isEventActive());
+            ClientEventData.update(msg.globeExpanderRequired, msg.isEventActive);
         });
         contextSupplier.get().setPacketHandled(true);
     }
