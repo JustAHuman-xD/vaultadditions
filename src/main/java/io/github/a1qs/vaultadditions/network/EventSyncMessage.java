@@ -3,7 +3,9 @@ package io.github.a1qs.vaultadditions.network;
 import io.github.a1qs.vaultadditions.client.ClientEventData;
 import io.github.a1qs.vaultadditions.data.EventData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.function.Supplier;
 
@@ -27,7 +29,10 @@ public class EventSyncMessage {
 
     public static void handle(EventSyncMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
         contextSupplier.get().enqueueWork(() -> {
-            EventData data = EventData.getServer();
+            MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
+            if(srv == null) return; // may break the data but its fineeee
+            EventData data = EventData.get(srv);
+
             ClientEventData.update(data.globeExpanderRequired(), data.isEventActive());
         });
         contextSupplier.get().setPacketHandled(true);
