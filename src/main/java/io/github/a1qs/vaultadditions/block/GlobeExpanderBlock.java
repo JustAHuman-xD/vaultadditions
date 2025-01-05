@@ -130,7 +130,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                     }
 
                     PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, handCount);
-                    handlePlayerGrowth(pPlayer, handCount);
+                    addCrystalContributionGrowPlayer(pPlayer, handCount);
 
                 } else {
                     if(!data.getActiveEvent().isModifierActive()) {
@@ -140,7 +140,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                             srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
                         }
                         PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, consumed);
-                        handlePlayerGrowth(pPlayer, consumed);
+                        addCrystalContributionGrowPlayer(pPlayer, consumed);
 
                         if (!pPlayer.getAbilities().instabuild) {
                             pPlayer.getMainHandItem().shrink(consumed);
@@ -197,24 +197,27 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         player.displayClientMessage(new TextComponent("Current World Border size diameter: " + worldBorderSize), true);
     }
 
-    private void handlePlayerGrowth(Player player, int handCount) {
-        if (!ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) return;
-
+    private void addCrystalContributionGrowPlayer(Player player, int handCount) {
+        //TODO: add commands to modify submissions of players & the whole server, % based and ints.
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         PowerCrystalData crystalData = PowerCrystalData.get(server);
 
         crystalData.addCrystalContribution(player.getUUID(), handCount);
-        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
 
-        if (sizeScaleAttribute != null) {
-            double growthAmount = crystalData.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
-            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
+        if(ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) {
+            var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
 
-            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
+            if (sizeScaleAttribute != null) {
+                double growthAmount = crystalData.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
+                growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
 
-            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
+                AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
+                if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
+
+                sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
+            }
         }
+
     }
 
     public static boolean isCurrentlyInUse() {
