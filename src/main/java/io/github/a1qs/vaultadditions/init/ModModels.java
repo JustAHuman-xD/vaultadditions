@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.init;
 
+import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HokageRobesArmorLayers;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HoyArmorLayers;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HoyGroguArmorLayers;
 import iskallia.vault.VaultMod;
@@ -23,6 +24,14 @@ public class ModModels {
         public static final ArmorModel HOY_82_GROGU = new ArmorModel(VaultMod.id("gear/armor/hoy_with_grogu"), "Beskar & Grogu")
                 .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
                 .usingLayers(new HoyGroguArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
+
+        public static final ArmorModel HOKAGE_ROBES = new ArmorModel(VaultMod.id("gear/armor/hokage_robes"), "Hokage Robes")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new HokageRobesArmorLayers())
                 .addSlot(EquipmentSlot.HEAD)
                 .addSlot(EquipmentSlot.CHEST)
                 .addSlot(EquipmentSlot.LEGS)
