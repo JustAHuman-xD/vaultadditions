@@ -198,7 +198,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
     }
 
     private void addCrystalContributionGrowPlayer(Player player, int handCount) {
-        //TODO: add commands to modify submissions of players & the whole server, % based and ints.
+
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         PowerCrystalData crystalData = PowerCrystalData.get(server);
 

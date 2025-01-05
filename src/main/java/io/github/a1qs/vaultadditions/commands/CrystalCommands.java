@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -39,6 +40,20 @@ public class CrystalCommands {
                                         .executes(this::resetContributions)
                                 )
                         )
+                        .then(Commands.literal("modifyContributionPercentage")
+                                .then(Commands.argument("player", EntityArgument.player())
+                                        .then(Commands.argument("percentage", FloatArgumentType.floatArg(0.0F))
+                                                .executes(this::modifyContributionPercentage)
+                                        )
+                                )
+                        )
+                        .then(Commands.literal("modifyContributionAmount")
+                                .then(Commands.argument("player", EntityArgument.player())
+                                        .then(Commands.argument("amount", IntegerArgumentType.integer())
+                                                .executes(this::modifyContributionAmount)
+                                        )
+                                )
+                        )
                         .then(Commands.literal("contributionLeaderboard")
                                 .then(Commands.argument("listPlayerAmount", IntegerArgumentType.integer(1))
                                         .executes(this::contributionLeaderboard)
@@ -47,6 +62,8 @@ public class CrystalCommands {
                 )
         );
     }
+
+    //TODO: add commands to modify submissions of players & the whole server, % based and ints.
 
 
 
@@ -82,6 +99,57 @@ public class CrystalCommands {
 
         context.getSource().sendSuccess(new TextComponent("Reset Contributions for " + player.getName().getString()), true);
 
+        return 0;
+    }
+
+    private int modifyContributionPercentage(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        float percentage = FloatArgumentType.getFloat(context, "percentage");
+        PowerCrystalData data = PowerCrystalData.get(ServerLifecycleHooks.getCurrentServer());
+
+        data.setPlayerContributedCrystals(player.getUUID(), (int) (data.getPlayerContributedCrystals(player.getUUID()) * percentage));
+
+
+        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
+
+        if (sizeScaleAttribute != null) {
+            // Update the player size
+            double growthAmount = data.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
+            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
+
+            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
+            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
+
+            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
+        }
+
+
+        context.getSource().sendSuccess(new TextComponent("Modified Contributions of player '" + player.getName().getString() + "' to: " + data.getPlayerContributedCrystals(player.getUUID())), true);
+        return 0;
+    }
+
+    private int modifyContributionAmount(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        int amount = IntegerArgumentType.getInteger(context, "amount");
+        PowerCrystalData data = PowerCrystalData.get(ServerLifecycleHooks.getCurrentServer());
+
+        data.addCrystalContribution(player.getUUID(), amount);
+
+
+        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
+
+        if (sizeScaleAttribute != null) {
+            // Update the player size
+            double growthAmount = data.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
+            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
+
+            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
+            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
+
+            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
+        }
+
+        context.getSource().sendSuccess(new TextComponent("Modified Contributions of player '" + player.getName().getString() + "' to: " + data.getPlayerContributedCrystals(player.getUUID())), true);
         return 0;
     }
 
