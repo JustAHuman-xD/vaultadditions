@@ -82,7 +82,7 @@ public class OnPlayerLogInEvent {
                         MutableComponent info = new TextComponent(grant.getMessage()).withStyle(ChatFormatting.GOLD);
                         player.sendMessage(info, Util.NIL_UUID);
 
-                        if (grant.hasItem()) {
+                        if (grant.getItem() != null) {
                             discoveredModelsData.discoverModelAndBroadcast(grant.getItem(), modelId, player);
                         } else if(grant.getModel() instanceof ArmorModel armorModel) {
                             discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, armorModel);
@@ -92,58 +92,4 @@ public class OnPlayerLogInEvent {
             }
         }
     }
-
-//        if(name.toLowerCase().contains("HoY_82".toLowerCase()) || !FMLEnvironment.production) {
-//
-//            ResourceLocation modelId1 = ModModels.Armor.HOY_82.getId();
-//            ResourceLocation modelId2 = ModModels.Armor.HOY_82_GROGU.getId();
-//            ResourceLocation modelId3 = ModModels.WoldsBattleStaffs.DARKSABER.getId();
-//
-//            boolean hasModel1 = discoveredModelsData.getDiscoveredModels(player.getUUID())
-//                    .stream()
-//                    .anyMatch(id -> id.toString().startsWith(modelId1.toString()));
-//
-//            boolean hasModel2 = discoveredModelsData.getDiscoveredModels(player.getUUID())
-//                    .stream()
-//                    .anyMatch(id -> id.toString().startsWith(modelId2.toString()));
-//
-//            boolean hasModel3 = discoveredModelsData.getDiscoveredModels(player.getUUID())
-//                    .stream()
-//                    .anyMatch(id -> id.toString().startsWith(modelId3.toString()));
-//
-//            if (!hasModel1) {
-//                MutableComponent info = new TextComponent("You have been granted the Beskar armor set!").withStyle(ChatFormatting.GOLD);
-//                player.sendMessage(info, Util.NIL_UUID);
-//                discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, ModModels.Armor.HOY_82);
-//            }
-//
-//            if (!hasModel2) {
-//                MutableComponent info = new TextComponent("You have been granted the Beskar & Grogu armor set!").withStyle(ChatFormatting.GOLD);
-//                player.sendMessage(info, Util.NIL_UUID);
-//                discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, ModModels.Armor.HOY_82_GROGU);
-//            }
-//
-//            if (!hasModel3 && ModList.get().isLoaded("woldsvaults")) {
-//                MutableComponent info = new TextComponent("You have been granted the Darksaber set!").withStyle(ChatFormatting.GOLD);
-//                player.sendMessage(info, Util.NIL_UUID);
-//                discoveredModelsData.discoverModelAndBroadcast(ModItems.BATTLESTAFF.asItem(), modelId3, player);
-//            }
-//        }
-//
-//        if(name.toLowerCase().contains("TigerShrimp88".toLowerCase()) || !FMLEnvironment.production) {
-//            DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get((ServerLevel)player.level);
-//            ResourceLocation modelId = ModModels.Armor.HOKAGE_ROBES.getId();
-//
-//            boolean hasModel = discoveredModelsData.getDiscoveredModels(player.getUUID())
-//                    .stream()
-//                    .anyMatch(id -> id.toString().startsWith(modelId.toString()));
-//
-//            if (!hasModel) {
-//                MutableComponent info = new TextComponent("You have been granted the Hokage Robes armor set!").withStyle(ChatFormatting.GOLD);
-//                player.sendMessage(info, Util.NIL_UUID);
-//                discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, ModModels.Armor.HOKAGE_ROBES);
-//            }
-//        }
-
-
 }

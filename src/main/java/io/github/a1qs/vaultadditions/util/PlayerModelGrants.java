@@ -35,13 +35,14 @@ public class PlayerModelGrants {
                         new ArmorGrantData(ModModels.Armor.HOY_82, "You have been granted the Beskar armor set!"),
                         new ArmorGrantData(ModModels.Armor.HOY_82_GROGU, "You have been granted the Beskar & Grogu armor set!"),
                         ModList.get().isLoaded("woldsvaults")
-                                ? new ArmorGrantData(ModModels.WoldsBattleStaffs.DARKSABER, "You have been granted the Darksaber set!", ModItems.BATTLESTAFF.asItem())
+                                ? new ArmorGrantData(ModModels.WoldsBattleStaffs.DARKSABER, "You have been granted the Darksaber Battlestaff Transmog!", ModItems.BATTLESTAFF.asItem())
                                 : null
                 ).filter(Objects::nonNull).toList()), // Filter out null entries
 
                 // TigerShrimp88
                 new PlayerModelGrants("tigershrimp88", List.of(
-                        new ArmorGrantData(ModModels.Armor.HOKAGE_ROBES, "You have been granted the Hokage Robes armor set!")
+                        new ArmorGrantData(ModModels.Armor.HOKAGE_ROBES, "You have been granted the Hokage Robes armor set!"),
+                        new ArmorGrantData(ModModels.Armor.HOKAGE_ROBES_MASKLESS, "You have been granted the Hokage Robes Maskless Armor Set!")
                 ))
         );
     }
@@ -73,8 +74,5 @@ public class PlayerModelGrants {
             return item;
         }
 
-        public boolean hasItem() {
-            return this.item != null;
-        }
     }
 }
