@@ -192,10 +192,14 @@ public class LeaderboardMenu extends Screen {
     }
 
     private void renderMisc(PoseStack pPoseStack) {
-        MutableComponent component = new TranslatableComponent("text.leaderboard.global_time_increase").append(
+        MutableComponent cmp1 = new TranslatableComponent("text.leaderboard.global_time_increase").append(
                 TextUtil.blendString(CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedSeconds(this.totalContributions) + "s", 20.0F, TextUtil.RAINBOW));
 
-        drawCenteredString(pPoseStack, this.font, component, this.width / 2, (int) (this.height * 0.95), 0xFFFFFF);
+        MutableComponent cmp2 = new TranslatableComponent("text.leaderboard.total_contributions").append(
+                TextUtil.blendString(String.valueOf(this.totalContributions), 20.0F, TextUtil.RAINBOW));
+
+        drawCenteredString(pPoseStack, this.font, cmp1, this.width / 2, (int) (this.height * 0.95), 0xFFFFFF);
+        drawCenteredString(pPoseStack, this.font, cmp2, this.width / 2, (int) (this.height * 0.95) - 15, 0xFFFFFF);
     }
 
     private int adjustXToFit(String text, int centerX) {

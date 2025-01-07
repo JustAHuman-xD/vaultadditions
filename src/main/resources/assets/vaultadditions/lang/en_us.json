@@ -70,5 +70,6 @@
   "text.leaderboard.event_id": "§eEvent type:§r %s",
   "text.leaderboard.event_time_remaining": "§eEvent ends in:§r %dd %dh %dm %ds",
   "text.leaderboard.bonus_vault_time_player": "Your current Bonus Vault Time: ",
-  "text.leaderboard.global_time_increase": "Total Server Bonus Vault Time: "
+  "text.leaderboard.global_time_increase": "Total Server Bonus Vault Time: ",
+  "text.leaderboard.total_contributions": "Total Server Contributed Crystals: "
 }
