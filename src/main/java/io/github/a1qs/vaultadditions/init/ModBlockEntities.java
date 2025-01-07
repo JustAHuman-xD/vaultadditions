@@ -32,4 +32,10 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<PlayerTraderBlockEntity>> PLAYER_TRADER_BLOCK_ENTITY = BLOCK_ENTITIES.register("player_trader_block_entity",
             () -> BlockEntityType.Builder.of(PlayerTraderBlockEntity::new, ModBlocks.PLAYER_TRADER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<EventConditionBlockEntity>> EVENT_CONDITION_BLOCK_ENTITY = BLOCK_ENTITIES.register("event_condition_block_entity",
+            () -> BlockEntityType.Builder.of(EventConditionBlockEntity::new, ModBlocks.EVENT_CONDITION_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<EventActiveBlockEntity>> EVENT_ACTIVE_BLOCK_ENTITY = BLOCK_ENTITIES.register("event_active_block_entity",
+            () -> BlockEntityType.Builder.of(EventActiveBlockEntity::new, ModBlocks.EVENT_ACTIVE_BLOCK.get()).build(null));
 }

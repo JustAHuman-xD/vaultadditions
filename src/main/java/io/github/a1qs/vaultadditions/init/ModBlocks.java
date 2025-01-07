@@ -65,6 +65,18 @@ public class ModBlocks {
             VaultAdditions.VAULT_ADDITIONS_TAB,
             true);
 
+    public static final RegistryObject<Block> EVENT_CONDITION_BLOCK = registerBlock("event_condition_block",
+            () -> new EventConditionBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(-1, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
+            VaultAdditions.VAULT_ADDITIONS_TAB,
+            true);
+
+    public static final RegistryObject<Block> EVENT_ACTIVE_BLOCK = registerBlock("event_active_block",
+            () -> new EventActiveBlock(BlockBehaviour.Properties.of(Material.STONE)
+                    .strength(-1, 3.6E8F).noOcclusion().requiresCorrectToolForDrops()),
+            VaultAdditions.VAULT_ADDITIONS_TAB,
+            true);
+
 
 
     public static final RegistryObject<Block> CUT_CALCITE_BRICKS = registerBlock("cut_calcite_bricks_mimic",

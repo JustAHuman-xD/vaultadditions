@@ -40,6 +40,9 @@
   "block.vaultadditions.loot_statue_arena": "Arena Loot Statue",
   "block.vaultadditions.statue_cauldron": "Statue Cauldron",
   "block.vaultadditions.event_block": "Event Block",
+  "block.vaultadditions.event_condition_block": "Event Condition Block",
+  "block.vaultadditions.event_active_block": "Event Active Block",
+
 
   "item.vaultadditions.power_crystal": "Power Crystal",
   "item.vaultadditions.power_orb": "Power Orb",
