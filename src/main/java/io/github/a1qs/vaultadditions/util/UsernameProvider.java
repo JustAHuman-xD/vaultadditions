@@ -36,6 +36,7 @@ public class UsernameProvider {
         }
 
         // Fallback: Attempt to resolve the profile using the session service
+        if(uuid == null) return "Unknown";
         GameProfile profile = minecraft.getMinecraftSessionService().fillProfileProperties(new GameProfile(uuid, null), false);
         if (profile != null && profile.getName() != null) {
             return profile.getName();
