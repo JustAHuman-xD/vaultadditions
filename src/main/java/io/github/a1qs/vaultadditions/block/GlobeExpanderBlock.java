@@ -13,6 +13,7 @@ import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import iskallia.vault.init.ModAttributes;
+import iskallia.vault.util.InventoryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -45,6 +46,7 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -74,7 +76,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         }
 
         // Handle non-crystal interactions
-        if (!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal)) {
+        if (!(pPlayer.getMainHandItem().getItem() instanceof PowerCrystal) && !pPlayer.isSecondaryUseActive()) {
             handleWorldBorderInfo(pPlayer);
             return InteractionResult.SUCCESS;
         }
@@ -104,9 +106,15 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
 
-            if(pPlayer.getMainHandItem().getItem() == ModItems.POWER_CRYSTAL.get()) {
+            boolean consumedCrystals = false;
+            if(pPlayer.isSecondaryUseActive()) {
+                consumedCrystals = useAllFoundCrystals(pPlayer, isActiveBorderEvent, data, validDimensions, expanderEntity);
+            }
+
+            if(pPlayer.getMainHandItem().getItem() == ModItems.POWER_CRYSTAL.get() && !pPlayer.isSecondaryUseActive()) {
                 int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
                 int handCount = pPlayer.getMainHandItem().getCount();
+                consumedCrystals = true;
 
 
                 if(!isActiveBorderEvent || (data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED) && data.getActiveEvent().isModifierActive())) {
@@ -149,8 +157,10 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                         return InteractionResult.PASS;
                     }
                 }
-                Objects.requireNonNull(expanderEntity.getLevel()).playSound(null, pPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 0.75F, 0.9F);
+            }
 
+            if(consumedCrystals) {
+                Objects.requireNonNull(expanderEntity.getLevel()).playSound(null, pPos, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 0.75F, 0.9F);
 
                 expanderEntity.resetSpinTime();
                 expanderEntity.setChanged();
@@ -218,6 +228,83 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
             }
         }
 
+    }
+
+    private boolean useAllFoundCrystals(Player pPlayer, boolean isActiveBorderEvent, EventData data, List<ServerLevel> validDimensions, GlobeExpanderBlockEntity expanderEntity) {
+        MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
+        int powerCrystalCount = 0;
+        int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
+
+        // Discover all power crystals in deep inventories and add them to a list for future removal.
+        List<InventoryUtil.ItemAccess> powerCrystalItems = new ArrayList<>();
+        for (InventoryUtil.ItemAccess item : InventoryUtil.findAllItems(pPlayer)) {
+            if(item.getStack().getItem() == ModItems.POWER_CRYSTAL.get()) {
+                powerCrystalCount += item.getStack().getCount();
+                powerCrystalItems.add(item);
+            }
+        }
+
+        if(powerCrystalItems.isEmpty()) return false;
+
+
+        if(!isActiveBorderEvent || (data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED) && data.getActiveEvent().isModifierActive())) {
+            for (ServerLevel dimension : validDimensions) {
+                WorldBorder dimensionBorder = dimension.getWorldBorder();
+
+                double blocksExpanded = calculateDimensionSpecificExpansion(dimension, powerCrystalIncrease, powerCrystalCount);
+                double newSize = dimensionBorder.getSize() + blocksExpanded;
+                if(newSize >= 5.9999968E7) {
+                    VaultAdditions.LOGGER.error("Cannot increase border in {}, size would be {} but the max allowed value is {}", dimension.dimension(), newSize, 5.9999968E7);
+                    pPlayer.displayClientMessage(new TextComponent("Please report this to a server admin, see logs for more information.").withStyle(ChatFormatting.RED), true);
+                    return false;
+                }
+                dimensionBorder.lerpSizeBetween(dimensionBorder.getSize(), newSize, 1000);
+            }
+
+            expanderEntity.setBroadcastMessage(pPlayer.getDisplayName().getString(), powerCrystalIncrease * powerCrystalCount);
+
+            if (!pPlayer.getAbilities().instabuild) {
+                for (InventoryUtil.ItemAccess item : powerCrystalItems) {
+                    item.setStack(ItemStack.EMPTY);
+                }
+            }
+
+            PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, powerCrystalCount);
+            addCrystalContributionGrowPlayer(pPlayer, powerCrystalCount);
+
+        } else if(!data.getActiveEvent().isModifierActive()) {
+            int crystalsNeeded = data.getActiveEvent().getRequiredCrystals() - data.getActiveEvent().getCrystalsSubmitted();
+            int crystalsToConsume = Math.min(powerCrystalCount, crystalsNeeded);
+
+            data.getActiveEvent().addCrystalsSubmitted(crystalsToConsume);
+
+
+            if(data.getActiveEvent().isModifierActive()) {
+                srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
+            }
+
+            PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, crystalsToConsume);
+            addCrystalContributionGrowPlayer(pPlayer, crystalsToConsume);
+
+            if (!pPlayer.getAbilities().instabuild) {
+                int remainingToConsume = crystalsToConsume;
+                for (InventoryUtil.ItemAccess item : powerCrystalItems) {
+                    ItemStack stack = item.getStack();
+                    int stackSize = stack.getCount();
+
+                    if (stackSize <= remainingToConsume) {
+                        item.setStack(ItemStack.EMPTY);
+                        remainingToConsume -= stackSize;
+                    } else {
+                        stack.shrink(remainingToConsume);
+                        item.setStack(stack);
+                        remainingToConsume = 0;
+                        break;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public static boolean isCurrentlyInUse() {
