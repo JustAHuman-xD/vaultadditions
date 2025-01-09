@@ -3,7 +3,6 @@ package io.github.a1qs.vaultadditions;
 import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.*;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
-import io.github.a1qs.vaultadditions.events.OnPlayerLogInEvent;
 import io.github.a1qs.vaultadditions.init.*;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;

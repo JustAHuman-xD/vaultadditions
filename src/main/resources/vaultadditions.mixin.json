@@ -19,6 +19,7 @@
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinStatueRecyclingConfig",
+    "MixinVaultChestBlock",
     "MixinVaultModifierTypeRegistry",
     "MixinVaultPortalBlock",
     "MixinVaultRegistry",
