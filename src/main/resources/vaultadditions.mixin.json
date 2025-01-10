@@ -16,6 +16,7 @@
     "MixinModConfigs",
     "MixinModDynamicModels$Armor",
     "MixinMultiJumpTrinket",
+    "MixinPlayerTabNameEvent",
     "MixinSkillAdapter",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
