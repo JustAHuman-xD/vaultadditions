@@ -6,7 +6,6 @@ import iskallia.vault.block.entity.VaultChestTileEntity;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.init.ModBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -19,9 +18,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 @Mixin(value = VaultChestBlock.class, remap = false)
@@ -31,47 +32,33 @@ public class MixinVaultChestBlock extends ChestBlock {
         super(p_51490_, p_51491_);
     }
 
-    /**
-     * @author a1qs
-     * @reason this will break with Wolds Vaults - Official Mod
-     */
-    @Overwrite
-    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
-        VaultChestBlock thisInstance = ((VaultChestBlock) (Object) this);
+    @Redirect(method = "playerDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"))
+    private boolean cancelDefaultBehaviour(ItemStack instance) {
+        return false;
+    }
 
+    @Inject(method = "playerDestroy", at = @At(value = "INVOKE", target = "Liskallia/vault/block/entity/VaultChestTileEntity;getItem(I)Lnet/minecraft/world/item/ItemStack;"))
+    private void injectBreachingBehaviour(Level world, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack, CallbackInfo ci) {
+        if (te instanceof VaultChestTileEntity chest) {
+            VaultGearData data = VaultGearData.read(player.getMainHandItem().copy());
+            boolean hasBreach = data.hasAttribute(ModGearAttributes.BREACHING);
 
+            for (int slot = 0; slot < chest.getContainerSize(); ++slot) {
+                ItemStack invStack = chest.getItem(slot);
+                if (!invStack.isEmpty()) {
+                    Block.popResource(world, pos, invStack);
+                    chest.setItem(slot, ItemStack.EMPTY);
 
-        if (!thisInstance.hasStepBreaking()) {
-            super.playerDestroy(world, player, pos, state, te, stack);
-        } else {
-            player.awardStat(Stats.BLOCK_MINED.get(thisInstance));
-            player.causeFoodExhaustion(0.005F);
-            if (te instanceof VaultChestTileEntity) {
-                if (te instanceof VaultChestTileEntity chest) {
-                    VaultGearData data = VaultGearData.read(player.getMainHandItem().copy());
-                    if (data == null) return;
-
-                    boolean hasBreach = data.hasAttribute(ModGearAttributes.BREACHING);
-
-                    for (int slot = 0; slot < chest.getContainerSize(); ++slot) {
-                        ItemStack invStack = chest.getItem(slot);
-                        if (!invStack.isEmpty()) {
-                            Block.popResource(world, pos, invStack);
-                            chest.setItem(slot, ItemStack.EMPTY);
-
-                            if (hasBreach) {
-                                world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-                            } else {
-                                break;
-                            }
-                        }
+                    if (hasBreach) {
+                        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+                    } else {
+                        break;
                     }
-
                 }
             }
         }
-
     }
+
 
     @Override
     public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pLevel, BlockPos pPos) {
