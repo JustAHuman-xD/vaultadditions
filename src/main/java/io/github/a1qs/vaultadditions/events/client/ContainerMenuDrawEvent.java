@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.events;
+package io.github.a1qs.vaultadditions.events.client;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;

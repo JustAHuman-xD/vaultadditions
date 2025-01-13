@@ -22,6 +22,9 @@ public class ModelUtil {
         return isWearingArmorSet(ModModels.Armor.HOKAGE_ROBES, player) || isWearingArmorSet(ModModels.Armor.HOKAGE_ROBES_MASKLESS, player);
     }
 
+    public static boolean isWearingJetpackPiece(Player player) {
+        return isWearingArmorPiece(ModModels.Armor.HOY_82, EquipmentSlot.CHEST, player) || isWearingArmorPiece(ModModels.Armor.HOY_82_GROGU, EquipmentSlot.CHEST, player);
+    }
 
 
     public static boolean isWearingArmorPiece(ArmorModel model, EquipmentSlot slot, Player player) {
