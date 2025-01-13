@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.events;
+package io.github.a1qs.vaultadditions.events.client;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.init.ModEntities;

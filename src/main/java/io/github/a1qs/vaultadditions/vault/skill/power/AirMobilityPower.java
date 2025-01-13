@@ -3,7 +3,7 @@ package io.github.a1qs.vaultadditions.vault.skill.power;
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.vault.ClientPowerData;
-import io.github.a1qs.vaultadditions.events.KeybindEvents;
+import io.github.a1qs.vaultadditions.events.client.KeybindEvents;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
