@@ -12,4 +12,16 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> BLADE_FRENZY = SOUNDS.register("blade_frenzy",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "blade_frenzy")));
+
+    public static final RegistryObject<SoundEvent> HOY_ACTIVATE_SMITE_ARCHON = SOUNDS.register("hoy_activate_smite_archon",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_activate_smite_archon")));
+
+    public static final RegistryObject<SoundEvent> HOY_ARCHON_BOLT = SOUNDS.register("hoy_archon_bolt",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_archon_bolt")));
+
+    public static final RegistryObject<SoundEvent> HOY_DASH = SOUNDS.register("hoy_dash",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_dash")));
+
+    public static final RegistryObject<SoundEvent> HOY_ENABLE_MANASHIELD = SOUNDS.register("hoy_enable_manashield",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_enable_manashield")));
 }

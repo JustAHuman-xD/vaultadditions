@@ -7,5 +7,41 @@
         "stream": true
       }
     ]
+  },
+  "hoy_activate_smite_archon": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:hoy_activate_smite_archon",
+        "stream": true
+      }
+    ]
+  },
+  "hoy_archon_bolt": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:hoy_archon_bolt",
+        "stream": true
+      }
+    ]
+  },
+  "hoy_dash": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:hoy_dash",
+        "stream": true
+      }
+    ]
+  },
+  "hoy_enable_manashield": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:hoy_enable_manashield",
+        "stream": true
+      }
+    ]
   }
 }
