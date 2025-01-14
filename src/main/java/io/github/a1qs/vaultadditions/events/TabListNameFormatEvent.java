@@ -63,7 +63,10 @@ public class TabListNameFormatEvent {
 
                 IN_VAULT.put(serverPlayer.getUUID(), time);
             } else {
-                IN_VAULT.remove(serverPlayer.getUUID());
+                var val = IN_VAULT.remove(serverPlayer.getUUID());
+                if(val != null) {
+                    serverPlayer.refreshTabListName();
+                }
             }
 
             if (IN_VAULT.containsKey(serverPlayer.getUUID())) {
