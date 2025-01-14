@@ -4,6 +4,7 @@
   "package": "io.github.a1qs.vaultadditions.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinAbstractSmiteAbility",
     "MixinAntiqueStampCollectorBook",
     "MixinAttributeSnapshotCalculator",
     "MixinAttributeSnapshotCalculator$AccessorAttributeSnapshot",
@@ -11,8 +12,10 @@
     "MixinAwardCrateObjective",
     "MixinBattlestaffs",
     "MixinClassicLootLogic",
+    "MixinDashAbility",
     "MixinGearModelRollRaritiesConfig",
     "MixinLootStatueBlock",
+    "MixinManaShieldAbility",
     "MixinModAbilityLabelBindings",
     "MixinModConfigs",
     "MixinModDynamicModels$Armor",
@@ -21,6 +24,7 @@
     "MixinSkillAdapter",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
+    "MixinSmiteArchonAbility",
     "MixinStatueRecyclingConfig",
     "MixinVaultChestBlock",
     "MixinVaultModifierTypeRegistry",
@@ -30,6 +34,7 @@
   ],
   "refmap": "vaultadditions.mixin-refmap.json",
   "client": [
+    "MixinElytraLayer",
     "MixinVaultBarOverlay"
   ]
 }

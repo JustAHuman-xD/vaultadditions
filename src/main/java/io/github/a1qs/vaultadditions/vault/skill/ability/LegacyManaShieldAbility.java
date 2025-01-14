@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions.vault.skill.ability;
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.init.ModEffects;
+import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.attribute.special.LegacyManaShieldAbsorptionModification;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
@@ -79,10 +80,16 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
     @Override
     protected void doToggleSound(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent(player -> {
-            if (this.isActive()) {
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
-                player.playNotifySound(ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
+            if(!this.isActive()) return;
+
+            if(ModelUtil.isWearingHoySet(player)) {
+                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ENABLE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ENABLE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                return;
             }
+
+            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
+            player.playNotifySound(ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
         });
     }
 
