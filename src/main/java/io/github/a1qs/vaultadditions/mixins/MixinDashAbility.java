@@ -22,6 +22,12 @@ public class MixinDashAbility {
                 player.playNotifySound(ModSounds.HOY_DASH.get(), SoundSource.PLAYERS, 0.2F, 1.0F);
                 ci.cancel();
             }
+
+            if(ModelUtil.isWearingHokageRobesSet(player)) {
+                player.level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.TIGER_DASH.get(), SoundSource.PLAYERS, 0.2F, 1.0F);
+                player.playNotifySound(ModSounds.TIGER_DASH.get(), SoundSource.PLAYERS, 0.2F, 1.0F);
+                ci.cancel();
+            }
         });
     }
 }

@@ -14,20 +14,24 @@ public class MixinSmiteArchonAbility extends AbstractSmiteAbility {
 
     @Override
     protected void doToggleSound(SkillContext context) {
+        System.out.println("HELLO");
         context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
             if (this.isActive()) {
                 if(ModelUtil.isWearingHoySet(player)) {
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.SMITE, SoundSource.PLAYERS, 0.5F, 1.0F);
-                    player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_SMITE_ARCHON.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_ARCHON.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+                    player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_ARCHON.get(), SoundSource.PLAYERS, 0.5F, 1.0F);
+                    return;
+                }
+
+                if(ModelUtil.isWearingHokageRobesSet(player)) {
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_ARCHON.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                    player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_ARCHON.get(), SoundSource.MASTER, 0.2F, 1.0F);
                     return;
                 }
 
                 player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.SMITE, SoundSource.PLAYERS, 0.5F, 1.0F);
                 player.playNotifySound(ModSounds.SMITE, SoundSource.PLAYERS, 0.5F, 1.0F);
             }
-
         });
-
-
     }
 }

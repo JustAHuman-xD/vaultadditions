@@ -3,16 +3,16 @@
     "category": "master",
     "sounds": [
       {
-        "name": "vaultadditions:blade_frenzy",
+        "name": "vaultadditions:abilities/blade_frenzy",
         "stream": true
       }
     ]
   },
-  "hoy_activate_smite_archon": {
+  "hoy_activate_archon": {
     "category": "master",
     "sounds": [
       {
-        "name": "vaultadditions:hoy_activate_smite_archon",
+        "name": "vaultadditions:abilities/hoy/activate_archon",
         "stream": true
       }
     ]
@@ -21,7 +21,7 @@
     "category": "master",
     "sounds": [
       {
-        "name": "vaultadditions:hoy_archon_bolt",
+        "name": "vaultadditions:abilities/hoy/archon_bolt",
         "stream": true
       }
     ]
@@ -30,16 +30,52 @@
     "category": "master",
     "sounds": [
       {
-        "name": "vaultadditions:hoy_dash",
+        "name": "vaultadditions:abilities/hoy/dash",
         "stream": true
       }
     ]
   },
-  "hoy_enable_manashield": {
+  "hoy_activate_manashield": {
     "category": "master",
     "sounds": [
       {
-        "name": "vaultadditions:hoy_enable_manashield",
+        "name": "vaultadditions:abilities/hoy/activate_manashield",
+        "stream": true
+      }
+    ]
+  },
+  "tiger_activate_archon": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/tiger/activate_archon",
+        "stream": true
+      }
+    ]
+  },
+  "tiger_archon_bolt": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/tiger/archon_bolt",
+        "stream": true
+      }
+    ]
+  },
+  "tiger_dash": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/tiger/dash",
+        "stream": true
+      }
+    ]
+  },
+  "tiger_activate_manashield": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/hoy/activate_manashield",
         "stream": true
       }
     ]

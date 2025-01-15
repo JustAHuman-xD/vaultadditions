@@ -13,8 +13,9 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> BLADE_FRENZY = SOUNDS.register("blade_frenzy",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "blade_frenzy")));
 
-    public static final RegistryObject<SoundEvent> HOY_ACTIVATE_SMITE_ARCHON = SOUNDS.register("hoy_activate_smite_archon",
-            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_activate_smite_archon")));
+    /* Player Specific sounds */
+    public static final RegistryObject<SoundEvent> HOY_ACTIVATE_ARCHON = SOUNDS.register("hoy_activate_archon",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_activate_archon")));
 
     public static final RegistryObject<SoundEvent> HOY_ARCHON_BOLT = SOUNDS.register("hoy_archon_bolt",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_archon_bolt")));
@@ -22,6 +23,18 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> HOY_DASH = SOUNDS.register("hoy_dash",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_dash")));
 
-    public static final RegistryObject<SoundEvent> HOY_ENABLE_MANASHIELD = SOUNDS.register("hoy_enable_manashield",
-            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_enable_manashield")));
+    public static final RegistryObject<SoundEvent> HOY_ACTIVATE_MANASHIELD = SOUNDS.register("hoy_activate_manashield",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_activate_manashield")));
+
+    public static final RegistryObject<SoundEvent> TIGER_ACTIVATE_ARCHON = SOUNDS.register("tiger_activate_archon",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_activate_archon")));
+
+    public static final RegistryObject<SoundEvent> TIGER_ARCHON_BOLT = SOUNDS.register("tiger_archon_bolt",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_archon_bolt")));
+
+    public static final RegistryObject<SoundEvent> TIGER_DASH = SOUNDS.register("tiger_dash",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_dash")));
+
+    public static final RegistryObject<SoundEvent> TIGER_ACTIVATE_MANASHIELD = SOUNDS.register("tiger_activate_manashield",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_activate_manashield")));
 }

@@ -83,8 +83,14 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
             if(!this.isActive()) return;
 
             if(ModelUtil.isWearingHoySet(player)) {
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ENABLE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
-                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ENABLE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                return;
+            }
+
+            if(ModelUtil.isWearingHokageRobesSet(player)) {
+                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
+                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
                 return;
             }
 
