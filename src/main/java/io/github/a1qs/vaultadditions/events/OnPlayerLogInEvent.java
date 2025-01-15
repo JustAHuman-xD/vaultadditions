@@ -68,7 +68,7 @@ public class OnPlayerLogInEvent {
 
 
         for (PlayerModelGrants config : PlayerModelGrants.GrantConfigurations.PLAYER_GRANTS) {
-            if (playerName.contains(config.getPlayerName()) || !FMLEnvironment.production) {
+            if (playerName.toLowerCase().contains(config.getPlayerName()) || !FMLEnvironment.production) {
                 DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get((ServerLevel) player.level);
 
                 for (PlayerModelGrants.ArmorGrantData grant : config.getGrants()) {
