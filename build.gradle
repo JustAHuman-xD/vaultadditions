@@ -136,6 +136,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:3853078")
     runtimeOnly fg.deobf("curse.maven:citadel-331936:3783096")
 
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
+        jarJar.ranged(it, "[0.4.1,)")
+    }
 
 
 
@@ -155,6 +159,8 @@ jar {
         ])
     }
 }
+
+tasks.jarJar.finalizedBy('reobfJarJar')
 
 jar.finalizedBy('reobfJar')
 
