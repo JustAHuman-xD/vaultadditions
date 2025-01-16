@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
 import java.util.Map;
 
 @Mixin(value = AttributeSnapshotCalculator.class, remap = false)
@@ -65,5 +66,8 @@ public class MixinAttributeSnapshotCalculator {
 
         @Invoker("addCachedValue")
         void invokeAddCachedValue(Object object);
+
+        @Accessor("cachedValues")
+        List<?> getCachedValues();
     }
 }

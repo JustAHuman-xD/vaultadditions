@@ -26,6 +26,7 @@
     "MixinSkillTabContainerElement",
     "MixinSmiteArchonAbility",
     "MixinStatueRecyclingConfig",
+    "MixinTransmogTableBlock",
     "MixinVaultChestBlock",
     "MixinVaultModifierTypeRegistry",
     "MixinVaultPortalBlock",
