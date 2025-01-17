@@ -25,6 +25,7 @@
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinSmiteArchonAbility",
+    "MixinStatueLootConfig",
     "MixinStatueRecyclingConfig",
     "MixinTransmogTableBlock",
     "MixinVaultChestBlock",
