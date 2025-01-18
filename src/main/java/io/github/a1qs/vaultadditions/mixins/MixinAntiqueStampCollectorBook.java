@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.antique.Antique;
 import iskallia.vault.container.inventory.AntiqueCollectorBookContainer;
 import iskallia.vault.init.ModItems;
@@ -17,21 +18,29 @@ import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
 
-@Mixin(value = AntiqueStampCollectorBook.class, remap = false)
+@Mixin(value = AntiqueStampCollectorBook.class)
 public class MixinAntiqueStampCollectorBook {
 
 
-    @Inject(method = "interceptPlayerInventoryItemAddition", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "interceptPlayerInventoryItemAddition", at = @At("HEAD"), cancellable = true, remap = false)
     private static void curioSupport(Inventory playerInventory, ItemStack toAdd, CallbackInfoReturnable<Boolean> cir) {
 
-        if (!toAdd.is(ModItems.ANTIQUE)) cir.setReturnValue(false);
+        if (!toAdd.is(ModItems.ANTIQUE)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
 
         Antique antique = AntiqueItem.getAntique(toAdd);
-        if (antique == null) cir.setReturnValue(false);
+        if (antique == null) {
+            cir.setReturnValue(false);
+            return;
+        }
 
         Player player = playerInventory.player;
         if (player.containerMenu instanceof AntiqueCollectorBookContainer) {
             cir.setReturnValue(false);
+            return;
         }
 
         ItemStack antiqueBook = ItemStack.EMPTY;
@@ -49,6 +58,7 @@ public class MixinAntiqueStampCollectorBook {
             toAdd.setCount(toAdd.getCount() - added);
             AntiqueStampCollectorBook.setStoredAntiques(antiqueBook, antiques);
             cir.setReturnValue(true);
+            return; // not neccessary but idc
         }
     }
 }
