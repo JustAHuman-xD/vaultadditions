@@ -33,7 +33,7 @@ public class ClientElytraFlyingEvent {
 
             if(Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
                 exhaustOffsetVertical -= 0.3;
-                depthOffset -= 1.0;
+                depthOffset -= 2.5;
             }
 
             double yawRad = Math.toRadians(yaw);
