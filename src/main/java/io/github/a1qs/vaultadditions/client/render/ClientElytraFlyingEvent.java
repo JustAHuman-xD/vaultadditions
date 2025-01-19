@@ -1,16 +1,11 @@
-package io.github.a1qs.vaultadditions.events.client;
+package io.github.a1qs.vaultadditions.client.render;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.init.ModModels;
-import io.github.a1qs.vaultadditions.init.ModParticles;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
