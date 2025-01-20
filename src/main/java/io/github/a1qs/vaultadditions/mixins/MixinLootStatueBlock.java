@@ -44,7 +44,7 @@ public class MixinLootStatueBlock {
         pLevel.setBlock(blockpos.above(), ModBlocks.LOOT_STATUE_UPPER.defaultBlockState().setValue(LootStatueUpperBlock.HALF, Half.TOP), 3);
         if (pPlacer instanceof ServerPlayer player) {
             BlockEntity var9 = pLevel.getBlockEntity(pos);
-            if (var9 instanceof LootStatueTileEntity) {
+            if (var9 instanceof LootStatueTileEntity be) {
                 if(stack.getTag() != null) {
                     if(!stack.getTag().getCompound("BlockEntityTag").contains("LootItem")) {
                         final CompoundTag data = new CompoundTag();
@@ -67,11 +67,16 @@ public class MixinLootStatueBlock {
                             }
                         }, (buffer) -> buffer.writeNbt(data));
                     }
+                    if (stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem") && be.getLootItem().getTag() != null) {
+                        if (be.getLootItem().getTag().contains("Charged")) {
+                            be.getLootItem().getTag().remove("Charged");
+                            if(be.getLootItem().getTag().isEmpty()) {
+                                be.getLootItem().setTag(null);
+                            }
+                        }
+                    }
                 }
-
-
             }
-
         }
     }
 }

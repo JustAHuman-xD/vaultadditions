@@ -158,14 +158,17 @@ public class LootStatueBlock extends BaseEntityBlock {
             BlockEntity var9 = pLevel.getBlockEntity(pos);
             if (var9 instanceof LootStatueBlockEntity be) {
 
-                if(!stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem")) {
+                if (!stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem")) {
                     final CompoundTag data = new CompoundTag();
                     ListTag itemList = new ListTag();
                     List<ItemStack> options;
-                    switch(pState.getBlock().getRegistryName().toString()) {
-                        case "vaultadditions:loot_statue_gift" -> options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
-                        case "vaultadditions:loot_statue_gift_mega" -> options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
-                        case "vaultadditions:loot_statue_arena" -> options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
+                    switch (pState.getBlock().getRegistryName().toString()) {
+                        case "vaultadditions:loot_statue_gift" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_gift_mega" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_arena" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
                         default -> options = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getOptions();
                     }
 
@@ -175,7 +178,8 @@ public class LootStatueBlock extends BaseEntityBlock {
 
                     data.put("Items", itemList);
                     data.put("Position", NbtUtils.writeBlockPos(pos));
-                    if(!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname")) be.getSkin().updateSkin(UsernameProvider.getRandomUsername());
+                    if (!stack.getTag().getCompound("BlockEntityTag").contains("PlayerNickname"))
+                        be.getSkin().updateSkin(UsernameProvider.getRandomUsername());
                     NetworkHooks.openGui(player, new MenuProvider() {
                         public @NotNull Component getDisplayName() {
                             return new TextComponent("Loot Statue Options");
@@ -185,6 +189,14 @@ public class LootStatueBlock extends BaseEntityBlock {
                             return new LootStatueContainer(windowId, data);
                         }
                     }, (buffer) -> buffer.writeNbt(data));
+                }
+                if (stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem") && be.getLootItem().getTag() != null) {
+                    if (be.getLootItem().getTag().contains("Charged")) {
+                        be.getLootItem().getTag().remove("Charged");
+                        if(be.getLootItem().getTag().isEmpty()) {
+                            be.getLootItem().setTag(null);
+                        }
+                    }
                 }
             }
         }
