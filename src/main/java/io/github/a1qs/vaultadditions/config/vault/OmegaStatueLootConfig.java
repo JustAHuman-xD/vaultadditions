@@ -13,7 +13,7 @@ public class OmegaStatueLootConfig extends AbstractStatueLootConfig {
     private HashMap<Integer, Integer> INTERVAL_DECREASE_PER_CHIP = new HashMap<>();
 
     public String getName() {
-        return "vaultadditions_omega_statue";
+        return "vaultadditions_statue_omega";
     }
 
     protected void reset() {
