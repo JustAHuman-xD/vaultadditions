@@ -5,6 +5,7 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.VaultMod;
 import iskallia.vault.config.Config;
 import iskallia.vault.config.entry.SingleItemEntry;
+import iskallia.vault.config.entry.vending.ProductEntry;
 import iskallia.vault.util.data.WeightedList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -19,108 +20,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class ArenaGiftStatueLootConfig extends Config {
-    @Expose
-    private WeightedList<SingleItemEntry> LOOT = new WeightedList<>();
-    @Expose
-    private int INTERVAL;
-    @Expose
-    private int MIN_ITEM_GENERATED;
-    @Expose
-    private int MAX_ITEM_GENERATED;
+public class ArenaGiftStatueLootConfig extends AbstractStatueLootConfig {
+
 
     public String getName() {
         return "vaultadditions_statue_arena";
     }
 
     protected void reset() {
-        this.LOOT = new WeightedList<>();
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.WOODEN_SWORD.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.STONE_SWORD.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.GOLDEN_SWORD.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.IRON_SWORD.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.DIAMOND_SWORD.getDefaultInstance()), 1));
-        this.LOOT.add(new WeightedList.Entry<>(new SingleItemEntry(Items.NETHERITE_SWORD.getDefaultInstance()), 1));
-
-        this.INTERVAL = 2500;
-        this.MIN_ITEM_GENERATED = 1;
-        this.MAX_ITEM_GENERATED = 10;
-    }
-
-    public ItemStack randomLoot() {
-        return this.getItem(this.LOOT.getRandom(new Random()));
-    }
-
-    public int getInterval() {
-        return this.INTERVAL;
-    }
-
-    public int getRandomItemCount() {
-        Random random = new Random();
-        sanityCheck();
-        return random.nextInt(MAX_ITEM_GENERATED - MIN_ITEM_GENERATED + 1) + MIN_ITEM_GENERATED;
-    }
+        this.DROPS.add(new ProductEntry(Items.DIORITE, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.EGG, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.HANGING_ROOTS, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.RABBIT_FOOT, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.LOOM, 1, null), 3);
 
 
-    private ItemStack getItem(SingleItemEntry entry) {
-        ItemStack stack = ItemStack.EMPTY;
-
-        try {
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entry.ITEM));
-            stack = new ItemStack(item);
-            if (entry.NBT != null) {
-                if(!entry.NBT.equals("{}")) {
-                    CompoundTag nbt = TagParser.parseTag(entry.NBT);
-                    stack.setTag(nbt);
-                }
-            }
-        } catch (Exception var5) {
-            Exception e = var5;
-            e.printStackTrace();
-        }
-
-        return stack;
-    }
-
-    private void sanityCheck() {
-        if (MIN_ITEM_GENERATED > MAX_ITEM_GENERATED) {
-            VaultAdditions.LOGGER.warn("Min value is greater than Max value. Swapping values.");
-            int temp = this.MIN_ITEM_GENERATED;
-            this.MIN_ITEM_GENERATED = MAX_ITEM_GENERATED;
-            this.MAX_ITEM_GENERATED = temp;
-        }
-    }
-
-    public List<ItemStack> getOptions() {
-        List<ItemStack> options = new ArrayList<>();
-        WeightedList<SingleItemEntry> entries = this.LOOT;
-        if (entries.size() < 5) {
-            VaultMod.LOGGER.error("Invalid config: statue weighted list should have more than 5 entries");
-            return List.of(Items.DIORITE.getDefaultInstance());
-        } else {
-            while(true) {
-                label27:
-                while(options.size() < 5) {
-                    SingleItemEntry entry = entries.getRandom(new Random());
-                    ItemStack item = this.getItem(entry);
-                    if (item.isEmpty()) {
-                        entries.remove(entry);
-                    } else {
-                        Iterator var5 = options.iterator();
-
-                        while(var5.hasNext()) {
-                            ItemStack i = (ItemStack)var5.next();
-                            if (i.getItem() == item.getItem()) {
-                                continue label27;
-                            }
-                        }
-
-                        options.add(item);
-                    }
-                }
-
-                return options;
-            }
-        }
+        this.INTERVAL = 500;
+        this.MIN_ITEM_GENERATED = 100;
+        this.MAX_ITEM_GENERATED = 200;
     }
 }
