@@ -1,11 +1,11 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
 import iskallia.vault.block.LootStatueBlock;
 import iskallia.vault.block.LootStatueUpperBlock;
 import iskallia.vault.block.entity.LootStatueTileEntity;
 import iskallia.vault.container.LootStatueContainer;
 import iskallia.vault.init.ModBlocks;
-import iskallia.vault.init.ModConfigs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -49,7 +49,7 @@ public class MixinLootStatueBlock {
                     if(!stack.getTag().getCompound("BlockEntityTag").contains("LootItem")) {
                         final CompoundTag data = new CompoundTag();
                         ListTag itemList = new ListTag();
-                        List<ItemStack> options = ModConfigs.STATUE_LOOT.getOptions();
+                        List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getOptions();
 
                         for (ItemStack option : options) {
                             itemList.add(option.serializeNBT());

@@ -9,6 +9,7 @@ public class CustomVaultConfigRegistry {
     public static GiftStatueLootConfig STATUE_LOOT_GIFT;
     public static MegaGiftStatueLootConfig STATUE_LOOT_MEGA_GIFT;
     public static ArenaGiftStatueLootConfig STATUE_LOOT_ARENA;
+    public static OmegaStatueLootConfig STATUE_LOOT_OMEGA;
     public static EventConfig EVENT_CONFIG;
     public static NameProviderConfig NAME_PROVIDER_CONFIG;
     public static ExtraVaultChestMeta EXTRA_VAULT_CHEST_META;
@@ -21,6 +22,7 @@ public class CustomVaultConfigRegistry {
         STATUE_LOOT_GIFT = new GiftStatueLootConfig().readConfig();
         STATUE_LOOT_MEGA_GIFT = new MegaGiftStatueLootConfig().readConfig();
         STATUE_LOOT_ARENA = new ArenaGiftStatueLootConfig().readConfig();
+        STATUE_LOOT_OMEGA = new OmegaStatueLootConfig().readConfig();
         NAME_PROVIDER_CONFIG = new NameProviderConfig().readConfig();
         EVENT_CONFIG = new EventConfig().readConfig();
         EXTRA_VAULT_CHEST_META = new ExtraVaultChestMeta().readConfig();

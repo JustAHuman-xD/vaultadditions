@@ -75,4 +75,8 @@ public abstract class AbstractStatueLootConfig extends Config {
             }
         }
     }
+
+    public ItemStack randomLoot() {
+        return this.DROPS.getRandom(new Random()).generateItemStack();
+    }
 }

@@ -45,8 +45,4 @@ public class VaultStatueLootConfig extends AbstractStatueLootConfig {
         this.MIN_ITEM_GENERATED = 100;
         this.MAX_ITEM_GENERATED = 200;
     }
-
-    public ItemStack randomLoot() {
-        return this.DROPS.getRandom(new Random()).generateItemStack();
-    }
 }
