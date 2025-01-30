@@ -12,16 +12,33 @@ public class GiftStatueLootConfig extends AbstractStatueLootConfig {
     }
 
     protected void reset() {
-        this.DROPS.add(new ProductEntry(Items.ACACIA_BOAT, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ACACIA_BUTTON, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ACACIA_DOOR, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ACACIA_FENCE, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ACACIA_FENCE_GATE, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.DEEPSLATE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.TUFF, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.CRIMSON_NYLIUM, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.WARPED_NYLIUM, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.COAL_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.IRON_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.COPPER_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.LAPIS_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.JUNGLE_LOG, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.ACACIA_LOG, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.DARK_OAK_LOG, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SPRUCE_LOG, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.JUNGLE_LEAVES, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.FLOWERING_AZALEA_LEAVES, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SEA_PICKLE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.DEAD_BUSH, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.MYCELIUM, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.MOSSY_STONE_BRICKS, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SNOW_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SOUL_SAND, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.WHITE_CONCRETE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.END_STONE, 1, null), 1);
 
 
-        this.INTERVAL = 500;
-        this.MIN_ITEM_GENERATED = 100;
-        this.MAX_ITEM_GENERATED = 200;
+        this.INTERVAL = 400;
+        this.MIN_ITEM_GENERATED = 64;
+        this.MAX_ITEM_GENERATED = 192;
     }
 
 

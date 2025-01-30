@@ -10,15 +10,31 @@ public class MegaGiftStatueLootConfig extends AbstractStatueLootConfig {
     }
 
     protected void reset() {
-        this.DROPS.add(new ProductEntry(Items.IRON_INGOT, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.IRON_HORSE_ARMOR, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.IRON_DOOR, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.IRON_BLOCK, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.IRON_AXE, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.AMETHYST_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.NETHER_GOLD_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.NETHER_QUARTZ_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.COAL_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.CRIMSON_STEM, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.WARPED_STEM, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SPONGE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GLASS, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.WHITE_WOOL, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.PURPUR_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.ICE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.OBSIDIAN, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.COBWEB, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.RAW_COPPER_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GLOWSTONE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.HAY_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SEA_LANTERN, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.BONE_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.DEAD_TUBE_CORAL_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.MAGMA_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.CHORUS_FLOWER, 1, null), 1);
 
 
-        this.INTERVAL = 500;
-        this.MIN_ITEM_GENERATED = 100;
-        this.MAX_ITEM_GENERATED = 200;
+        this.INTERVAL = 750;
+        this.MIN_ITEM_GENERATED = 128;
+        this.MAX_ITEM_GENERATED = 256;
     }
 }

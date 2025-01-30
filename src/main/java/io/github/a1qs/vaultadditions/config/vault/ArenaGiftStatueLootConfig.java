@@ -11,15 +11,17 @@ public class ArenaGiftStatueLootConfig extends AbstractStatueLootConfig {
     }
 
     protected void reset() {
-        this.DROPS.add(new ProductEntry(Items.DIORITE, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.EGG, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.HANGING_ROOTS, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.RABBIT_FOOT, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.LOOM, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.DIAMOND_ORE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.ANCIENT_DEBRIS, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.RAW_IRON_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GILDED_BLACKSTONE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.RAW_GOLD_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.CRYING_OBSIDIAN, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.REDSTONE_BLOCK, 1, null), 1);
 
 
-        this.INTERVAL = 500;
-        this.MIN_ITEM_GENERATED = 100;
-        this.MAX_ITEM_GENERATED = 200;
+        this.INTERVAL = 2500;
+        this.MIN_ITEM_GENERATED = 32;
+        this.MAX_ITEM_GENERATED = 64;
     }
 }

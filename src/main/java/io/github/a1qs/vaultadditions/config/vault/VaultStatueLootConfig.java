@@ -1,28 +1,7 @@
 package io.github.a1qs.vaultadditions.config.vault;
 
-import com.google.gson.annotations.Expose;
-import io.github.a1qs.vaultadditions.VaultAdditions;
-import iskallia.vault.VaultMod;
-import iskallia.vault.config.Config;
-import iskallia.vault.config.entry.SingleItemEntry;
 import iskallia.vault.config.entry.vending.ProductEntry;
-import iskallia.vault.init.ModItems;
-import iskallia.vault.util.data.WeightedList;
-import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TagParser;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 public class VaultStatueLootConfig extends AbstractStatueLootConfig {
 
@@ -34,15 +13,29 @@ public class VaultStatueLootConfig extends AbstractStatueLootConfig {
     }
 
     protected void reset() {
-        this.DROPS.add(new ProductEntry(Items.APPLE, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.GLOW_ITEM_FRAME, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ITEM_FRAME, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.ICE, 1, null), 3);
-        this.DROPS.add(new ProductEntry(Items.DIORITE, 1, null), 3);
+        this.DROPS.add(new ProductEntry(Items.STONE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GRANITE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.DIORITE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.DIRT, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GRASS_BLOCK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.GRAVEL, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SAND, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.COBBLESTONE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.OAK_LOG, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.OAK_LEAVES, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.SPRUCE_LEAVES, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.BIRCH_LEAVES, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.NETHERRACK, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.BASALT, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.MOSSY_COBBLESTONE, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.CLAY, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.TERRACOTTA, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.PUMPKIN, 1, null), 1);
+        this.DROPS.add(new ProductEntry(Items.MELON, 1, null), 1);
 
 
         this.INTERVAL = 500;
-        this.MIN_ITEM_GENERATED = 100;
-        this.MAX_ITEM_GENERATED = 200;
+        this.MIN_ITEM_GENERATED = 48;
+        this.MAX_ITEM_GENERATED = 128;
     }
 }
