@@ -99,6 +99,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
                 if(blockState.getValue(StatueCauldronBlock.LEVEL) == 3) {
                     List<ItemEntity> statues = level.getEntitiesOfClass(ItemEntity.class, (new AABB(blockPos)).inflate(1.0, 1.0, 1.0), itemPredicate);
                     for(ItemEntity itemEntity : statues) {
+                        if (be.getStatueCount() >= be.getRequiredAmount()) break;
                         ItemStack stack = itemEntity.getItem();
 
                         int d = ModConfigs.STATUE_RECYCLING.getItemValue(stack.getItem().getRegistryName().toString());
