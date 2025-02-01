@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
-public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
+public class StatueCauldronBlock extends Block implements EntityBlock  {
     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL_CAULDRON;
 
     public StatueCauldronBlock(Properties properties) {
@@ -169,10 +169,5 @@ public class StatueCauldronBlock extends CauldronBlock implements EntityBlock  {
     @Override
     public void handlePrecipitation(BlockState pState, Level pLevel, BlockPos pPos, Biome.Precipitation pPrecipitation) {
 
-    }
-
-    @Override
-    protected boolean canReceiveStalactiteDrip(Fluid pFluid) {
-        return false;
     }
 }
