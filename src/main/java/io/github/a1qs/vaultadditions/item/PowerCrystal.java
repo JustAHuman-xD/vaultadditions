@@ -47,9 +47,8 @@ public class PowerCrystal extends Item {
         int increase = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
         String append = Math.abs(ServerConfigs.POWER_CRYSTAL_INCREASE.get()) == 1 ? "" : "s";
         if(ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) { // The time for expanding the border is limited to events & the specified timespan
-            if(!TimeUtil.pastDate() || ClientEventData.isGlobeExpanderRequired()) {
-                String isTemp = ClientEventData.isGlobeExpanderRequired() ? "Temporarily " : "";
-                pTooltipComponents.add(new TextComponent(isTemp + "Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+            if(ClientEventData.isGlobeExpanderRequired()) {
+                pTooltipComponents.add(new TextComponent("Temporarily Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
                 if(VaultBarOverlay.vaultLevel >= 100) {
                     pTooltipComponents.add(
                             new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
@@ -57,6 +56,21 @@ public class PowerCrystal extends Item {
                                     .append(new TextComponent(" upon use with the Globe Expander").withStyle(ChatFormatting.YELLOW))
                     );
                 }
+            } else if(!TimeUtil.pastDate()) {
+                pTooltipComponents.add(new TextComponent( "Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
+                if(VaultBarOverlay.vaultLevel >= 100) {
+                    pTooltipComponents.add(
+                            new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                                    .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                                    .append(new TextComponent(" upon use with the Globe Expander").withStyle(ChatFormatting.YELLOW))
+                    );
+                }
+            } else if (VaultBarOverlay.vaultLevel >= 100) {
+                pTooltipComponents.add(
+                        new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+                                .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
+                                .append(new TextComponent(" upon use").withStyle(ChatFormatting.YELLOW))
+                );
             }
         } else {
             pTooltipComponents.add(new TextComponent("Increases the World Border by ").append(increase + append).withStyle(ChatFormatting.YELLOW).append(" Blocks!"));
@@ -76,48 +90,40 @@ public class PowerCrystal extends Item {
     }
 
     @Nonnull
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, @Nonnull InteractionHand hand) {
+        if (level.isClientSide()) return InteractionResultHolder.fail(player.getItemInHand(hand));
+        if (isUsingInvalidBlock(level, player)) return InteractionResultHolder.fail(player.getItemInHand(hand));
+        if (GlobeExpanderBlock.isCurrentlyInUse())  return InteractionResultHolder.fail(player.getItemInHand(hand));
+
         ItemStack heldItemStack = player.getItemInHand(hand);
+        ServerLevel serverLevel = (ServerLevel) level;
+        PlayerVaultStatsData statsData = PlayerVaultStatsData.get(serverLevel);
 
-        if (!world.isClientSide) {
-            BlockHitResult blockHitResult = getPlayerPOVHitResult(world, player, ClipContext.Fluid.ANY);
-            if (blockHitResult.getType() == HitResult.Type.BLOCK) {
-                BlockPos blockPos = blockHitResult.getBlockPos();
-                BlockState blockState = world.getBlockState(blockPos);
-
-                if (blockState.is(ModBlocks.GLOBE_EXPANDER.get())) {
-                    return InteractionResultHolder.fail(heldItemStack);
-                }
-            }
+        if (statsData.getVaultStats(player).getVaultLevel() < 100) {
+            return InteractionResultHolder.fail(heldItemStack);
         }
 
-        if(GlobeExpanderBlock.isCurrentlyInUse()) InteractionResultHolder.fail(heldItemStack);
+        PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) level);
+        int consumeAmount = player.isCrouching() ? heldItemStack.getCount() : 1;
 
-
-        if (!world.isClientSide) {
-            PlayerVaultStatsData statsData = PlayerVaultStatsData.get((ServerLevel) world);
-            if(statsData.getVaultStats(player).getVaultLevel() < 100) return InteractionResultHolder.fail(heldItemStack);
-
-            PlayerAdditionalVaultStatData additionalStatsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
-
-
-            if(player.isCrouching()) {
-                int itemStackCount = heldItemStack.getCount();
-                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
-
-                additionalStatsData.addPowerPoints((ServerPlayer) player, itemStackCount);
-                player.awardStat(Stats.ITEM_USED.get(this));
-                return InteractionResultHolder.success(heldItemStack);
-            }
-
-            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
-            additionalStatsData.addPowerPoints((ServerPlayer) player, 1);
-            player.awardStat(Stats.ITEM_USED.get(this));
-            return InteractionResultHolder.success(heldItemStack);
+        if (!player.getAbilities().instabuild) {
+            heldItemStack.shrink(consumeAmount);
         }
-        return InteractionResultHolder.fail(heldItemStack);
+
+        additionalStatsData.addPowerPoints((ServerPlayer) player, consumeAmount);
+        player.awardStat(Stats.ITEM_USED.get(this));
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (level.random.nextFloat() * 0.4F + 0.8F));
+
+        return InteractionResultHolder.success(heldItemStack);
     }
 
+    private boolean isUsingInvalidBlock(Level world, Player player) {
+        BlockHitResult blockHitResult = getPlayerPOVHitResult(world, player, ClipContext.Fluid.ANY);
+        if (blockHitResult.getType() != HitResult.Type.BLOCK) {
+            return false;
+        }
 
+        BlockState blockState = world.getBlockState(blockHitResult.getBlockPos());
+        return blockState.is(ModBlocks.GLOBE_EXPANDER.get());
+    }
 }
