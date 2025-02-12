@@ -44,6 +44,15 @@
       }
     ]
   },
+  "hoy_elytra_glide": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/hoy/elytra_glide",
+        "stream": true
+      }
+    ]
+  },
   "tiger_activate_archon": {
     "category": "master",
     "sounds": [

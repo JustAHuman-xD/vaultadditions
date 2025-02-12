@@ -37,4 +37,7 @@ public class ModSounds {
 
     public static final RegistryObject<SoundEvent> TIGER_ACTIVATE_MANASHIELD = SOUNDS.register("tiger_activate_manashield",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_activate_manashield")));
+
+    public static final RegistryObject<SoundEvent> HOY_ELYTRA_GLIDE = SOUNDS.register("hoy_elytra_glide",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_elytra_glide")));
 }
