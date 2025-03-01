@@ -1,12 +1,8 @@
 package io.github.a1qs.vaultadditions.network;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.client.ClientMessageHandler;
-import io.github.a1qs.vaultadditions.client.menu.LeaderboardMenu;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -18,13 +14,15 @@ import java.util.function.Supplier;
 public class LeaderboardDataMessage {
     public final Map<UUID, Integer> leaderboard;
     public final String nextScheduledEvent;
+    public final String serverTimeZone;
     public final VaultAdditionsEvent optionalEvent;
     public final long optionalEventDuration;
     public final int totalContributions;
 
-    public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration, int totalContributions) {
+    public LeaderboardDataMessage(Map<UUID, Integer> leaderboard, String nextScheduledEvent, String serverTimeZone, VaultAdditionsEvent optionalEvent, long optionalEventDuration, int totalContributions) {
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
+        this.serverTimeZone = serverTimeZone;
         this.optionalEvent = optionalEvent;
         this.optionalEventDuration = optionalEventDuration;
         this.totalContributions = totalContributions;
@@ -38,6 +36,7 @@ public class LeaderboardDataMessage {
         });
 
         buffer.writeUtf(msg.nextScheduledEvent);
+        buffer.writeUtf(msg.serverTimeZone);
 
         if (msg.optionalEvent != null) {
             buffer.writeBoolean(true); // Flag to indicate presence
@@ -60,7 +59,8 @@ public class LeaderboardDataMessage {
             leaderboard.put(uuid, score);
         }
 
-        String nextEvent = buffer.readUtf();
+        String nextScheduledEvent = buffer.readUtf();
+        String serverTimeZone = buffer.readUtf();
         long eventDuration = -1L;
         VaultAdditionsEvent optionalEvent = null;
         if (buffer.readBoolean()) { // Check if event is present
@@ -72,7 +72,7 @@ public class LeaderboardDataMessage {
         }
         int totalContributions = buffer.readInt();
 
-        return new LeaderboardDataMessage(leaderboard, nextEvent, optionalEvent, eventDuration, totalContributions);
+        return new LeaderboardDataMessage(leaderboard, nextScheduledEvent, serverTimeZone, optionalEvent, eventDuration, totalContributions);
     }
 
     public static void handle(LeaderboardDataMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {

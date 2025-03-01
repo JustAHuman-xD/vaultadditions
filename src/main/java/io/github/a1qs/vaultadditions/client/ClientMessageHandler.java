@@ -14,6 +14,7 @@ public class ClientMessageHandler {
                             new TranslatableComponent("screen." + VaultAdditions.MOD_ID + ".leaderboard"),
                             msg.leaderboard,
                             msg.nextScheduledEvent,
+                            msg.serverTimeZone,
                             msg.optionalEvent,
                             msg.optionalEventDuration,
                             msg.totalContributions

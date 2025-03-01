@@ -7,6 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.time.ZoneId;
 import java.util.function.Supplier;
 
 public class LeaderboardRequestMessage {
@@ -23,7 +24,14 @@ public class LeaderboardRequestMessage {
         if (player != null) {
             PowerCrystalData powerData = PowerCrystalData.getServer();
             EventData eventData = EventData.getServer();
-            ModNetwork.sendToClient(new LeaderboardDataMessage(powerData.getPlayerContributionsMap(), eventData.getNextScheduledEvent(), eventData.getActiveEvent(), eventData.getEventDuration(), powerData.getTotalContributedCrystals()), player);
+            ModNetwork.sendToClient(new LeaderboardDataMessage(
+                    powerData.getPlayerContributionsMap(),
+                    eventData.getNextScheduledEvent(),
+                    ZoneId.systemDefault().toString(),
+                    eventData.getActiveEvent(),
+                    eventData.getEventDuration(),
+                    powerData.getTotalContributedCrystals()),
+                    player);
         }
         contextSupplier.get().setPacketHandled(true);
     }

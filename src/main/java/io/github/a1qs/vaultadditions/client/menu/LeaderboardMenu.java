@@ -21,15 +21,17 @@ import java.util.*;
 public class LeaderboardMenu extends Screen {
     private final Map<UUID, Integer> leaderboard;
     private final String nextScheduledEvent;
+    private String serverTimeZone;
     private final VaultAdditionsEvent optionalEvent;
     private final long optionalEventDuration;
     private final int totalContributions;
 
 
-    public LeaderboardMenu(Component title, Map<UUID, Integer> leaderboard, String nextScheduledEvent, VaultAdditionsEvent optionalEvent, long optionalEventDuration, int totalContributions) {
+    public LeaderboardMenu(Component title, Map<UUID, Integer> leaderboard, String nextScheduledEvent, String serverTimeZone, VaultAdditionsEvent optionalEvent, long optionalEventDuration, int totalContributions) {
         super(title);
         this.leaderboard = leaderboard;
         this.nextScheduledEvent = nextScheduledEvent;
+        this.serverTimeZone = serverTimeZone;
         this.optionalEvent = optionalEvent;
         this.optionalEventDuration = optionalEventDuration;
         this.totalContributions = totalContributions;
@@ -148,7 +150,6 @@ public class LeaderboardMenu extends Screen {
         Minecraft.getInstance().font.drawShadow(pPoseStack, splitter, adjustedX - this.font.width(splitter) / 2.0f, y, 0xFFFFFF);
 
 
-
         if(this.optionalEvent != null) {
             MutableComponent textComponent = new TranslatableComponent("text.leaderboard.event_id", optionalEvent.getEventId());
             adjustedX = adjustXToFit(textComponent.getString(), x);
@@ -167,8 +168,9 @@ public class LeaderboardMenu extends Screen {
             MutableComponent textComponent;
             textComponent = new TranslatableComponent("text.leaderboard.no_event_scheduled");
 
-            if (TimeUtil.untilTimestamp(nextScheduledEvent) != null) {
-                long[] time = TimeUtil.untilTimestamp(nextScheduledEvent);
+            if (TimeUtil.untilTimestamp(nextScheduledEvent, serverTimeZone) != null) {
+                long[] time = TimeUtil.untilTimestamp(nextScheduledEvent, serverTimeZone);
+
                 String timeString = String.format("%dd %dh %dm %ds", time[3], time[2], time[1], time[0]);
                 textComponent = new TranslatableComponent("text.leaderboard.scheduled_event", timeString);
             }
@@ -177,8 +179,6 @@ public class LeaderboardMenu extends Screen {
 
         }
     }
-
-
 
     private void renderBackgroundAndTitle(PoseStack pPoseStack) {
         this.renderBackground(pPoseStack);
@@ -216,12 +216,4 @@ public class LeaderboardMenu extends Screen {
             return centerX; // No adjustment needed
         }
     }
-
-
-
-
-
-
-
-
 }

@@ -6,12 +6,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 import java.util.Random;
 
 public class TimeUtil {
@@ -96,6 +94,36 @@ public class TimeUtil {
         long targetTime = TimeUtil.convertToEpochMillis(timestamp);
         long currentTime = System.currentTimeMillis();
         long remainingTime = targetTime - currentTime;
+
+        long seconds = (remainingTime / 1000) % 60;
+        long minutes = (remainingTime / (1000 * 60)) % 60;
+        long hours = (remainingTime / (1000 * 60 * 60)) % 24;
+        long days = remainingTime / (1000 * 60 * 60 * 24);
+
+        return new long[]{seconds, minutes, hours, days};
+    }
+
+    /**
+     * Calculates the time remaining until a given timestamp in a specific timezone.
+     *
+     * @param timestamp The given timestamp in "dd/MM/yyyy HH:mm:ss" format.
+     * @param timezone  The timezone in which the timestamp is set (e.g., "America/New_York", "UTC").
+     * @return A long array containing time remaining in seconds, minutes, hours, and days.
+     */
+    public static long[] untilTimestamp(String timestamp, String timezone) {
+        if (timestamp.equals("No upcoming events!")) return null;
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH);
+        ZonedDateTime targetTime = LocalDateTime.parse(timestamp, formatter)
+                .atZone(ZoneId.of(timezone));
+
+        Instant targetInstant = targetTime.toInstant();
+        Instant currentInstant = Instant.now();
+        long remainingTime = Duration.between(currentInstant, targetInstant).toMillis();
+
+        if (remainingTime < 0) {
+            return new long[]{0, 0, 0, 0};
+        }
 
         long seconds = (remainingTime / 1000) % 60;
         long minutes = (remainingTime / (1000 * 60)) % 60;
