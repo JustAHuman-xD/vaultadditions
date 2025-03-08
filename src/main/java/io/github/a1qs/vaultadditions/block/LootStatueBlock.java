@@ -26,6 +26,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -188,7 +189,9 @@ public class LootStatueBlock extends BaseEntityBlock {
                         public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
                             return new LootStatueContainer(windowId, data);
                         }
-                    }, (buffer) -> buffer.writeNbt(data));
+                    }, (buffer) -> {
+                        buffer.writeNbt(data);
+                    });
                 }
                 if (stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem") && be.getLootItem().getTag() != null) {
                     if (be.getLootItem().getTag().contains("Charged")) {
@@ -197,6 +200,19 @@ public class LootStatueBlock extends BaseEntityBlock {
                             be.getLootItem().setTag(null);
                         }
                     }
+                }
+                if (be.getLootItem().is(Items.AIR)) {
+                    List<ItemStack> options;
+                    switch (pState.getBlock().getRegistryName().toString()) {
+                        case "vaultadditions:loot_statue_gift" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_gift_mega" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
+                        case "vaultadditions:loot_statue_arena" ->
+                                options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
+                        default -> options = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getOptions();
+                    }
+                    be.setLootItem(options.get(pLevel.random.nextInt(options.size())));
                 }
             }
         }
