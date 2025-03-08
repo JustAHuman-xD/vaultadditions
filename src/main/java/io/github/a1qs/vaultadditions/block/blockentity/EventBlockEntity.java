@@ -24,12 +24,15 @@ import java.util.List;
 
 public class EventBlockEntity extends BlockEntity {
     @Nonnull
-    protected List<String> lines = new LinkedList();
+    protected List<String> lines = new LinkedList<>();
     private int tickCounter = 0;
 
     public EventBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.EVENT_BLOCK_ENTITY.get(), pos, state);
-        this.updateLines();
+
+        if(this.level != null && !this.level.isClientSide()) {
+            this.updateLines();
+        }
     }
 
     @Nonnull
