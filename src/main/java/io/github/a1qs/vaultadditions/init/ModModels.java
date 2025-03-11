@@ -1,13 +1,12 @@
 package io.github.a1qs.vaultadditions.init;
 
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HokageRobesArmorLayers;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HokageRobesMasklessArmorLayers;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HoyArmorLayers;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.HoyGroguArmorLayers;
+import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.*;
 import iskallia.vault.VaultMod;
 import iskallia.vault.dynamodel.DynamicModelProperties;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.dynamodel.model.item.HandHeldModel;
+import iskallia.vault.dynamodel.model.item.PlainItemModel;
+import iskallia.vault.dynamodel.model.item.shield.ShieldModel;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class ModModels {
@@ -45,10 +44,54 @@ public class ModModels {
                 .addSlot(EquipmentSlot.CHEST)
                 .addSlot(EquipmentSlot.LEGS)
                 .addSlot(EquipmentSlot.FEET);
+
+        public static final ArmorModel CELESTIAL = new ArmorModel(VaultMod.id("gear/armor/celestial"), "Celestial")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new CelestialArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
+
+        public static final ArmorModel VIKING = new ArmorModel(VaultMod.id("gear/armor/viking"), "Viking")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new VikingArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
+
+        public static final ArmorModel BOKATAN = new ArmorModel(VaultMod.id("gear/armor/bokatan"), "Bokatan")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new BokatanArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
+
+        public static final ArmorModel SPACE_MARINE = new ArmorModel(VaultMod.id("gear/armor/spacemarine"), "Space Marine")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new SpaceMarineArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
     }
 
     public static class WoldsBattleStaffs {
         public static final HandHeldModel DARKSABER =
                 new HandHeldModel(VaultMod.id("gear/battlestaff/darksaber"), "The Darksaber").properties(STANDARD_PROPERTIES);
+    }
+
+    public static class Wands {
+        public static final PlainItemModel SIDEARM =
+                new PlainItemModel(VaultMod.id("gear/wand/sidearm"), "Sidearm");
+
+    }
+
+    public static class Shields {
+        public static final ShieldModel RELIC_SHIELD =
+                new ShieldModel(VaultMod.id("gear/shield/relicshield"), "Relic Shield");
+
     }
 }

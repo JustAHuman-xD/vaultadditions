@@ -21,6 +21,8 @@
     "MixinModAbilityLabelBindings",
     "MixinModConfigs",
     "MixinModDynamicModels$Armor",
+    "MixinModDynamicModels$Shields",
+    "MixinModDynamicModels$Wands",
     "MixinMultiJumpTrinket",
     "MixinPlayerTabNameEvent",
     "MixinSkillAdapter",

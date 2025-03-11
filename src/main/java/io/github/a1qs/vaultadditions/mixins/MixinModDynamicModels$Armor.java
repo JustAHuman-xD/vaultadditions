@@ -20,5 +20,9 @@ public class MixinModDynamicModels$Armor {
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOY_82_GROGU);
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES);
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES_MASKLESS);
+        PIECE_REGISTRY.registerAll(ModModels.Armor.CELESTIAL);
+        PIECE_REGISTRY.registerAll(ModModels.Armor.VIKING);
+        PIECE_REGISTRY.registerAll(ModModels.Armor.BOKATAN);
+        PIECE_REGISTRY.registerAll(ModModels.Armor.SPACE_MARINE);
     }
 }
