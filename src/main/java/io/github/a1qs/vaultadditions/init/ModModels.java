@@ -85,13 +85,18 @@ public class ModModels {
 
     public static class Wands {
         public static final PlainItemModel SIDEARM =
-                new PlainItemModel(VaultMod.id("gear/wand/sidearm"), "Sidearm");
+                new PlainItemModel(VaultMod.id("gear/wand/sidearm"), "Sidearm").properties(STANDARD_PROPERTIES);
 
     }
 
     public static class Shields {
         public static final ShieldModel RELIC_SHIELD =
-                new ShieldModel(VaultMod.id("gear/shield/relicshield"), "Relic Shield");
+                new ShieldModel(VaultMod.id("gear/shield/relicshield"), "Relic Shield").properties(STANDARD_PROPERTIES);
 
+    }
+
+    public static class Swords {
+        public static final HandHeldModel CHAIN_SWORD =
+                new HandHeldModel(VaultMod.id("gear/sword/chain_sword"), "Chain-Sword").properties(STANDARD_PROPERTIES);
     }
 }

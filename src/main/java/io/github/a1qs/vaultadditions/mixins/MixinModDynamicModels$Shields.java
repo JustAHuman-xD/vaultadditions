@@ -21,7 +21,6 @@ public class MixinModDynamicModels$Shields {
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectShieldModels(CallbackInfo ci) {
-        REGISTRY.register(ModModels.Shields.RELIC_SHIELD)
-                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll());
+        REGISTRY.register(ModModels.Shields.RELIC_SHIELD);
     }
 }
