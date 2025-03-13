@@ -2,7 +2,12 @@ package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorEffectRegistry;
+import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorSetEffect;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
+import iskallia.vault.dynamodel.model.armor.ArmorModel;
+import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.talent.GearAttributeSkill;
@@ -25,6 +30,7 @@ public class MixinAttributeSnapshotCalculator {
     @Inject(method = "computeSnapshot", at = @At(value = "INVOKE", target = "Liskallia/vault/snapshot/AttributeSnapshotCalculator;addExpertiseInformationToSnapshot(Lnet/minecraft/server/level/ServerPlayer;Liskallia/vault/snapshot/AttributeSnapshot;)V"))
     private static void injectPowerCompute(ServerPlayer player, AttributeSnapshot snapshot, CallbackInfo ci) {
         vaultadditions$addPowerInformationToSnapshot(player, snapshot);
+        vaultadditions$addArmorSetEffects(player, snapshot);
     }
 
     @Unique
@@ -48,6 +54,46 @@ public class MixinAttributeSnapshotCalculator {
             }
 
         });
+    }
+
+    @Unique
+    private static void vaultadditions$addArmorSetEffects(ServerPlayer player, AttributeSnapshot snapshot) {
+//        ArmorPieceModel model = ModelUtil.getWornSet(player);
+//        if(model != null) {
+//            List<ArmorSetEffect> effectList = ArmorEffectRegistry.getEffectsForArmor(model.getArmorModel());
+//            for(ArmorSetEffect effect : effectList) {
+//                Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
+//                VaultGearAttribute<?> attribute = effect.getVaultGearAttributeInstance().getAttribute();
+//
+//                AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
+//                        attribute,
+//                        (attr) -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
+//                );
+//                InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
+//                snapshotInvoker.invokeAddCachedValue(effect.getVaultGearAttributeInstance().getValue());
+//            }
+//        }
+
+        for(Map.Entry<ArmorModel, List<ArmorSetEffect>> obj : ArmorEffectRegistry.getArmorEffects().entrySet()) {
+            if(!ModelUtil.isWearingArmorSet(obj.getKey(), player)) return;
+
+            if(ArmorEffectRegistry.getEffectsForArmor(obj.getKey()) != null) {
+                List<ArmorSetEffect> effectList = ArmorEffectRegistry.getEffectsForArmor(obj.getKey());
+
+                for(ArmorSetEffect effect : effectList) {
+                    Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
+                    VaultGearAttribute<?> attribute = effect.getVaultGearAttributeInstance().getAttribute();
+
+                    AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
+                            attribute,
+                            (attr) -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
+                    );
+                    InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
+                    snapshotInvoker.invokeAddCachedValue(effect.getVaultGearAttributeInstance().getValue());
+                }
+            }
+        }
+
     }
 
     @Mixin(value = AttributeSnapshot.class, remap = false)

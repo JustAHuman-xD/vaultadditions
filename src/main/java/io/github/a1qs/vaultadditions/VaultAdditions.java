@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.*;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
+import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorEffectRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -35,6 +36,8 @@ public class VaultAdditions {
         ModBlockEntities.BLOCK_ENTITIES.register(eventBus);
         ModParticles.PARTICLE_TYPES.register(eventBus);
         ModSounds.SOUNDS.register(eventBus);
+
+        ArmorEffectRegistry.registerArmorSetEffects();
 
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
