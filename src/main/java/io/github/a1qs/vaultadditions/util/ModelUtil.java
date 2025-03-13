@@ -60,6 +60,35 @@ public class ModelUtil {
         });
     }
 
+    // Fuck. You.
+//    @Nullable
+//    public static ArmorPieceModel getWornSet(Player player) {
+//        ArmorPieceModel firstModel = null;
+//
+//        for(EquipmentSlot slot : EquipmentSlot.values()) {
+//            if(slot.equals(EquipmentSlot.MAINHAND) || slot.equals(EquipmentSlot.OFFHAND)) continue;
+//
+//            ItemStack equipmentStack = player.getInventory().armor.get(equipmentSlotToInventoryIndex(slot));
+//            if (!(equipmentStack.getItem() instanceof VaultArmorItem)) return null;
+//
+//            VaultGearData gearData = VaultGearData.read(equipmentStack);
+//            ResourceLocation modelId = gearData.getFirstValue(ModGearAttributes.GEAR_MODEL).orElse(null);
+//            if (modelId == null) return null;
+//
+//            ArmorPieceModel currentModel = ModDynamicModels.Armor.PIECE_REGISTRY.get(modelId).orElse(null);
+//            if (currentModel == null) return null;
+//
+//            if (firstModel == null) {
+//                firstModel = currentModel;
+//            } else if (!firstModel.equals(currentModel)) {
+//                return null; // If any piece doesn't match, return null
+//            }
+//        }
+//
+//
+//        return firstModel;
+//    }
+
     private static int equipmentSlotToInventoryIndex(EquipmentSlot equipmentSlot) {
         return switch (equipmentSlot) {
             case HEAD -> 3;
