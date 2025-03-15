@@ -46,7 +46,7 @@ public class TooltipEvent {
                     toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
                 }
                 for(ArmorSetEffect effect : c) {
-                    toolTip.add(new TextComponent("+").append(effect.getTooltipComponent()));
+                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltipComponent()));
                 }
             }
         }
