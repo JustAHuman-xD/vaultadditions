@@ -24,6 +24,7 @@
     "MixinModDynamicModels$Shields",
     "MixinModDynamicModels$Swords",
     "MixinModDynamicModels$Wands",
+    "MixinModGearAttributes",
     "MixinMultiJumpTrinket",
     "MixinPlayerTabNameEvent",
     "MixinSkillAdapter",
