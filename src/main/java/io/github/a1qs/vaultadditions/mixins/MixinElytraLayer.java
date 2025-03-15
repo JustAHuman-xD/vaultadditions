@@ -29,8 +29,9 @@ public abstract class MixinElytraLayer<T extends LivingEntity, M extends EntityM
                     ModelUtil.isWearingArmorPiece(ModModels.Armor.HOY_82, EquipmentSlot.CHEST, player) ||
                     ModelUtil.isWearingArmorPiece(ModModels.Armor.HOY_82_GROGU, EquipmentSlot.CHEST, player) ||
                     ModelUtil.isWearingArmorPiece(ModModels.Armor.HOKAGE_ROBES, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOKAGE_ROBES_MASKLESS, EquipmentSlot.CHEST, player)
-
+                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOKAGE_ROBES_MASKLESS, EquipmentSlot.CHEST, player) ||
+                    ModelUtil.isWearingArmorPiece(ModModels.Armor.SPACE_MARINE, EquipmentSlot.CHEST, player) ||
+                    ModelUtil.isWearingArmorPiece(ModModels.Armor.BOKATAN, EquipmentSlot.CHEST, player)
             ) {
                 cir.setReturnValue(false);
             }
