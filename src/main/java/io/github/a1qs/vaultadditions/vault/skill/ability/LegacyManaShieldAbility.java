@@ -145,7 +145,12 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
                     float mana = Mana.decrease(player, ManaAction.PLAYER_ACTION, manaUsed);
                     ability.onDamageAbsorbed(player, damageAbsorbed);
                     float pitch = 1.25F + -0.5F * (mana / Mana.getMax(player));
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD_HIT, SoundSource.PLAYERS, 0.03F, pitch);
+
+                    if(ModelUtil.isWearingHoySet(player)) {
+                        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_MANASHIELD_HIT.get(), SoundSource.PLAYERS, 0.1F, pitch);
+                        return;
+                    }
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD_HIT, SoundSource.PLAYERS, 0.1F, pitch);
                 }
             }
         }
