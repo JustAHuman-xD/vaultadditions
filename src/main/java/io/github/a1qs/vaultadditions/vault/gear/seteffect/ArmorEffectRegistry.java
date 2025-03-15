@@ -47,12 +47,11 @@ public class ArmorEffectRegistry {
                 new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
         );
 
-        //TODO add new hoy set
-//        ArmorEffectRegistry.registerArmorSet(
-//                ModModels.Armor.HOY_82,
-//                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
-//                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
-//        );
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.DINDJARIN,
+                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
+        );
 
         ArmorEffectRegistry.registerArmorSet(
                 ModModels.Armor.BOKATAN,
