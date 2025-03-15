@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect;
 
-import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
 import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorSetEffect;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
@@ -22,7 +21,7 @@ public class VaultAttributeArmorEffect<T extends Number> extends ArmorSetEffect 
 
     // yummy unchecked assignment !!!!!
     @Override
-    protected MutableComponent getTooltipComponent() {
-        return this.getVaultGearAttributeInstance().getAttribute().getReader().getDisplay((VaultGearAttributeInstance) this.getVaultGearAttributeInstance(), VaultGearModifier.AffixType.IMPLICIT);
+    public MutableComponent getTooltipComponent() {
+        return this.getVaultGearAttributeInstance().getAttribute().getReader().getDisplay((VaultGearAttributeInstance) this.getVaultGearAttributeInstance(), VaultGearModifier.AffixType.PREFIX);
     }
 }
