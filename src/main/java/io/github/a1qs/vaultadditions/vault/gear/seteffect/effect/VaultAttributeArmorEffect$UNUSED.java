@@ -1,6 +1,5 @@
-package io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect;
+package io.github.a1qs.vaultadditions.vault.gear.seteffect.effect;
 
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorSetEffect;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
 import iskallia.vault.gear.attribute.VaultGearAttributeRegistry;

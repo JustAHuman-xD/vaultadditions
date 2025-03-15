@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.*;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorEffectRegistry;
+import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;

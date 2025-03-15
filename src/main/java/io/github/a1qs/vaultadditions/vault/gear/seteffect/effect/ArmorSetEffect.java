@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.gear.armorseteffects;
+package io.github.a1qs.vaultadditions.vault.gear.seteffect.effect;
 
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
 import net.minecraft.network.chat.MutableComponent;

@@ -1,22 +1,22 @@
-package io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect;
+package io.github.a1qs.vaultadditions.vault.gear.seteffect.effect;
 
 import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorSetEffect;
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
 import iskallia.vault.gear.attribute.VaultGearModifier;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.effect.MobEffect;
 
-public class AbilityAttributeArmorEffect extends ArmorSetEffect {
-    private final String abilityName;
-    private final int abilityLevel;
+public class EffectAttributeArmorEffect extends ArmorSetEffect {
+    private final MobEffect effect;
+    private final int amplifier;
 
-    public AbilityAttributeArmorEffect(String abilityName, int abilityLevel) {
-        this.abilityName = abilityName;
-        this.abilityLevel = abilityLevel;
+    public EffectAttributeArmorEffect(MobEffect effect, int amplifier) {
+        this.effect = effect;
+        this.amplifier = amplifier;
     }
     @Override
     public VaultGearAttributeInstance<?> getVaultGearAttributeInstance() {
-        return VaultGearAttributeHelper.abilityLevelAttributeInstance(this.abilityName, this.abilityLevel);
+        return VaultGearAttributeHelper.potionEffectVaultAttributeInstance(this.effect, this.amplifier);
     }
 
     // yummy unchecked assignment !!!!!

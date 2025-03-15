@@ -1,19 +1,16 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorEffectRegistry;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.ArmorSetEffect;
+import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
+import io.github.a1qs.vaultadditions.vault.gear.seteffect.effect.ArmorSetEffect;
 import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
-import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
-import iskallia.vault.init.ModConfigs;
 import iskallia.vault.init.ModDynamicModels;
 import iskallia.vault.init.ModGearAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
