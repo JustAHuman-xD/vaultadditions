@@ -1,15 +1,14 @@
 package io.github.a1qs.vaultadditions.vault.gear.armorseteffects;
 
 import io.github.a1qs.vaultadditions.init.ModModels;
-import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect.AbilityAttributeArmorEffect;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect.EffectAttributeArmorEffect;
-import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect.VaultAttributeArmorEffect;
+import io.github.a1qs.vaultadditions.vault.gear.armorseteffects.effect.*;
+import iskallia.vault.VaultMod;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
-import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
+import iskallia.vault.init.ModAttributes;
 import iskallia.vault.init.ModGearAttributes;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
 import java.util.*;
 
@@ -26,11 +25,61 @@ public class ArmorEffectRegistry {
 
     public static void registerArmorSetEffects() {
         ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.HOKAGE_ROBES,
+                new AbilityModificationAttributeArmorEffect("Empower", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new VanillaAttributeArmorEffect(Attributes.MOVEMENT_SPEED, 0.1F, AttributeModifier.Operation.MULTIPLY_BASE)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.HOKAGE_ROBES_MASKLESS,
+                new AbilityModificationAttributeArmorEffect("Empower", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new VanillaAttributeArmorEffect(Attributes.MOVEMENT_SPEED, 0.1F, AttributeModifier.Operation.MULTIPLY_BASE)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.HOY_82,
+                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.HOY_82_GROGU,
+                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
+        );
+
+        //TODO add new hoy set
+//        ArmorEffectRegistry.registerArmorSet(
+//                ModModels.Armor.HOY_82,
+//                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+//                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
+//        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.BOKATAN,
+                new AbilityModificationAttributeArmorEffect("Mana_Shield_Legacy", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new AbilityModificationAttributeArmorEffect("Smite_Archon", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.VIKING,
+                new EffectAttributeArmorEffect(MobEffects.DAMAGE_BOOST, 10),
+                new AbilityAttributeArmorEffect("Rampage", 2)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
+                ModModels.Armor.CELESTIAL,
+                new AbilityModificationAttributeArmorEffect("Empower", -0.25F, AbilityModificationAttributeArmorEffect.AbilityModification.MANA_COST_REDUCTION_PERCENTAGE),
+                new AbilityModificationAttributeArmorEffect("Ghost_Walk", -0.5F, AbilityModificationAttributeArmorEffect.AbilityModification.COOLDOWN_REDUCTION_PERCENTAGE),
+                new VanillaAttributeArmorEffect(Attributes.MOVEMENT_SPEED, 0.1F, AttributeModifier.Operation.MULTIPLY_BASE)
+        );
+
+        ArmorEffectRegistry.registerArmorSet(
                 ModModels.Armor.SPACE_MARINE,
-                new AbilityAttributeArmorEffect("Dash", 1)
-                //new EffectAttributeArmorEffect(MobEffects.DAMAGE_BOOST, 9),
-                //new VaultAttributeArmorEffect<>(ModGearAttributes.KNOCKBACK_RESISTANCE, 0.1F),
-                //new VaultAttributeArmorEffect<>(ModGearAttributes.RESISTANCE, 0.1F)
+                new AbilityAttributeArmorEffect("Dash", 1),
+                new EffectAttributeArmorEffect(MobEffects.DAMAGE_BOOST, 10),
+                new VaultAttributeArmorEffect<>(ModGearAttributes.RESISTANCE, 0.1F),
+                new VanillaAttributeArmorEffect(ModAttributes.SIZE_SCALE, 0.25F, AttributeModifier.Operation.MULTIPLY_TOTAL)
         );
     }
 
