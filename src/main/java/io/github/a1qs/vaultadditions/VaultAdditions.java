@@ -37,7 +37,7 @@ public class VaultAdditions {
         ModParticles.PARTICLE_TYPES.register(eventBus);
         ModSounds.SOUNDS.register(eventBus);
 
-        ArmorEffectRegistry.registerArmorSetEffects();
+
 
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
@@ -54,6 +54,7 @@ public class VaultAdditions {
 
     public void commonSetup(final FMLCommonSetupEvent event) {
         ModNetwork.initialize();
+        ArmorEffectRegistry.registerArmorSetEffects();
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
