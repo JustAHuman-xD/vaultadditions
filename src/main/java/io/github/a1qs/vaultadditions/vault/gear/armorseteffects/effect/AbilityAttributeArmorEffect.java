@@ -21,7 +21,7 @@ public class AbilityAttributeArmorEffect extends ArmorSetEffect {
 
     // yummy unchecked assignment !!!!!
     @Override
-    protected MutableComponent getTooltipComponent() {
-        return this.getVaultGearAttributeInstance().getAttribute().getReader().getDisplay((VaultGearAttributeInstance) this.getVaultGearAttributeInstance(), VaultGearModifier.AffixType.IMPLICIT);
+    public MutableComponent getTooltipComponent() {
+        return this.getVaultGearAttributeInstance().getAttribute().getReader().getDisplay((VaultGearAttributeInstance) this.getVaultGearAttributeInstance(), VaultGearModifier.AffixType.PREFIX);
     }
 }
