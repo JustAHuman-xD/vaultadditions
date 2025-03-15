@@ -25,19 +25,23 @@ public class ModGearAttributes {
             VaultGearAttributeComparator.booleanComparator()
     );
 
+    public static final VaultGearAttribute<Float> SIZE_SCALE = attr("size_scale",
+            VaultGearAttributeType.floatType(),
+            ModGearAttributeGenerators.floatRange(),
+            ModGearAttributeReaders.percentageReader("Size Scale", 0xb891c4),
+            VaultGearAttributeComparator.floatComparator()
+    );
+
+
     @SubscribeEvent
     public static void init(RegistryEvent.Register<VaultGearAttribute<?>> event) {
         IForgeRegistry<VaultGearAttribute<?>> registry = event.getRegistry();
 
         registry.register(BREACHING);
-
+        registry.register(SIZE_SCALE);
     }
 
-    private static <T> VaultGearAttribute<T> attr(String name,
-                                                  VaultGearAttributeType<T> type,
-                                                  ConfigurableAttributeGenerator<T, ?> generator,
-                                                  VaultGearModifierReader<T> reader,
-                                                  @Nullable VaultGearAttributeComparator<T> comparator) {
+    private static <T> VaultGearAttribute<T> attr(String name, VaultGearAttributeType<T> type, ConfigurableAttributeGenerator<T, ?> generator, VaultGearModifierReader<T> reader, @Nullable VaultGearAttributeComparator<T> comparator) {
         return new VaultGearAttribute<>(VaultMod.id(name), type, generator, reader, comparator);
     }
 
