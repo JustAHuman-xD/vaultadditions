@@ -15,7 +15,9 @@ import net.minecraft.world.item.ItemStack;
 public class ModelUtil {
 
     public static boolean isWearingHoySet(Player player) {
-        return isWearingArmorSet(ModModels.Armor.HOY_82, player) || isWearingArmorSet(ModModels.Armor.HOY_82_GROGU, player);
+        return isWearingArmorSet(ModModels.Armor.HOY_82, player)
+                || isWearingArmorSet(ModModels.Armor.HOY_82_GROGU, player)
+                || isWearingArmorSet(ModModels.Armor.BOKATAN, player);
     }
 
     public static boolean isWearingHokageRobesSet(Player player) {
@@ -23,7 +25,9 @@ public class ModelUtil {
     }
 
     public static boolean isWearingJetpackPiece(Player player) {
-        return isWearingArmorPiece(ModModels.Armor.HOY_82, EquipmentSlot.CHEST, player) || isWearingArmorPiece(ModModels.Armor.HOY_82_GROGU, EquipmentSlot.CHEST, player);
+        return isWearingArmorPiece(ModModels.Armor.HOY_82, EquipmentSlot.CHEST, player) ||
+               isWearingArmorPiece(ModModels.Armor.HOY_82_GROGU, EquipmentSlot.CHEST, player) ||
+               isWearingArmorPiece(ModModels.Armor.DINDJARIN, EquipmentSlot.CHEST, player);
     }
 
 

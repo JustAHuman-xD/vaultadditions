@@ -18,6 +18,7 @@ public class MixinModDynamicModels$Armor {
     private static void injectArmorModels(CallbackInfo ci) {
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOY_82);
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOY_82_GROGU);
+        PIECE_REGISTRY.registerAll(ModModels.Armor.DINDJARIN);
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES);
         PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES_MASKLESS);
         PIECE_REGISTRY.registerAll(ModModels.Armor.CELESTIAL);
