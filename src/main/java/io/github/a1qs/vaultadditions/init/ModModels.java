@@ -29,6 +29,14 @@ public class ModModels {
                 .addSlot(EquipmentSlot.LEGS)
                 .addSlot(EquipmentSlot.FEET);
 
+        public static final ArmorModel DINDJARIN = new ArmorModel(VaultMod.id("gear/armor/dindjarin"), "DinDjarin")
+                .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
+                .usingLayers(new DindjarinArmorLayers())
+                .addSlot(EquipmentSlot.HEAD)
+                .addSlot(EquipmentSlot.CHEST)
+                .addSlot(EquipmentSlot.LEGS)
+                .addSlot(EquipmentSlot.FEET);
+
         public static final ArmorModel HOKAGE_ROBES = new ArmorModel(VaultMod.id("gear/armor/hokage_robes"), "Hokage Robes")
                 .properties(new DynamicModelProperties().allowTransmogrification().discoverOnRoll())
                 .usingLayers(new HokageRobesArmorLayers())
