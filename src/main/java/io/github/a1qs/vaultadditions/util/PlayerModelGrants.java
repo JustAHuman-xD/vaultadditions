@@ -34,6 +34,7 @@ public class PlayerModelGrants {
                 new PlayerModelGrants("hoy_82", Stream.of(
                         new ArmorGrantData(ModModels.Armor.HOY_82, "You have been granted the Beskar armor set!"),
                         new ArmorGrantData(ModModels.Armor.HOY_82_GROGU, "You have been granted the Beskar & Grogu armor set!"),
+                        new ArmorGrantData(ModModels.Armor.DINDJARIN, "You have been granted the DinDjarin armor set!"),
                         ModList.get().isLoaded("woldsvaults")
                                 ? new ArmorGrantData(ModModels.WoldsBattleStaffs.DARKSABER, "You have been granted the Darksaber Battlestaff Transmog!", ModItems.BATTLESTAFF.asItem())
                                 : null
