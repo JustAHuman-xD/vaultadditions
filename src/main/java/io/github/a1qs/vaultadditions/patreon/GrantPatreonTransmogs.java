@@ -25,7 +25,7 @@ public class GrantPatreonTransmogs {
     public static void on(PlayerEvent.PlayerLoggedInEvent event) {
         if(event.getPlayer().level.isClientSide()) return;
 
-        String url = "https://raw.githubusercontent.com/a1qs/dev_01/refs/heads/main/patreon_transmogs.json"; //TODO:
+        String url = "https://raw.githubusercontent.com/HoYin1600p/uuidlink/refs/heads/master/patreon_transmogs.json";
         PatreonConfig cfg = PatreonTransmogReader.fetchPatreonTransmogs(url);
 
 
