@@ -53,6 +53,15 @@
       }
     ]
   },
+  "hoy_manashield_hit": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "vaultadditions:abilities/hoy/hit_manashield",
+        "stream": true
+      }
+    ]
+  },
   "tiger_activate_archon": {
     "category": "master",
     "sounds": [

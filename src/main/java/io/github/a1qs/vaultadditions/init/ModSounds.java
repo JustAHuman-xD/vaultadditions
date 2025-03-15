@@ -26,6 +26,9 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> HOY_ACTIVATE_MANASHIELD = SOUNDS.register("hoy_activate_manashield",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_activate_manashield")));
 
+    public static final RegistryObject<SoundEvent> HOY_MANASHIELD_HIT = SOUNDS.register("hoy_manashield_hit",
+            () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "hoy_manashield_hit")));
+
     public static final RegistryObject<SoundEvent> TIGER_ACTIVATE_ARCHON = SOUNDS.register("tiger_activate_archon",
             () -> new SoundEvent(new ResourceLocation(VaultAdditions.MOD_ID, "tiger_activate_archon")));
 
