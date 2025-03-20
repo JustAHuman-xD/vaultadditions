@@ -17,6 +17,7 @@
     "MixinLootStatueBlock",
     "MixinLootStatueBlockItem",
     "MixinLootStatueTileEntity",
+    "MixinLootStatueUpperBlock",
     "MixinManaShieldAbility",
     "MixinModAbilityLabelBindings",
     "MixinModConfigs",
