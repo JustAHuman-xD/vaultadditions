@@ -5,6 +5,8 @@ import io.github.a1qs.vaultadditions.config.vault.ExtraVaultTimeContributionsCon
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.vault.core.time.modifier.PowerCrystalExtension;
 import iskallia.vault.core.vault.Vault;
+import iskallia.vault.core.vault.objective.HeraldObjective;
+import iskallia.vault.core.vault.objective.Objectives;
 import iskallia.vault.core.vault.time.TickClock;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,27 +18,35 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class VaultJoinEvent {
 
+    //TODO: Change so it doesnt affect herald
     @SubscribeEvent
     public static void onPlayerVaultEnter(iskallia.vault.event.event.VaultJoinEvent event) {
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
 
         Vault vault = event.getVault();
-        boolean alreadyApplied = vault.get(Vault.CLOCK)
-                .get(TickClock.MODIFIERS)
+
+        boolean isHerald = event.getVault().get(Vault.OBJECTIVES).get(Objectives.LIST)
                 .stream()
-                .anyMatch(modifier -> modifier instanceof PowerCrystalExtension);
+                .anyMatch(obj -> obj instanceof HeraldObjective);
 
-        if (alreadyApplied) return;
+        if(!isHerald) {
+            boolean alreadyApplied = vault.get(Vault.CLOCK)
+                    .get(TickClock.MODIFIERS)
+                    .stream()
+                    .anyMatch(modifier -> modifier instanceof PowerCrystalExtension);
+
+            if (alreadyApplied) return;
 
 
-        UUID ownerID = vault.get(Vault.OWNER);
-        PowerCrystalData powerCrystalData = PowerCrystalData.get(srv);
+            UUID ownerID = vault.get(Vault.OWNER);
+            PowerCrystalData powerCrystalData = PowerCrystalData.get(srv);
 
-        int extraTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedTicks(powerCrystalData.getPlayerContributedCrystals(ownerID));
-        int extraTotalTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedTicks(powerCrystalData.getTotalContributedCrystals());
+            int extraTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedTicks(powerCrystalData.getPlayerContributedCrystals(ownerID));
+            int extraTotalTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedTicks(powerCrystalData.getTotalContributedCrystals());
 
-        int totalTicks = extraTicks + extraTotalTicks;
-        vault.get(Vault.CLOCK).addModifier(new PowerCrystalExtension(vault.get(Vault.ID), totalTicks));
+            int totalTicks = extraTicks + extraTotalTicks;
+            vault.get(Vault.CLOCK).addModifier(new PowerCrystalExtension(vault.get(Vault.ID), totalTicks));
+        }
     }
 
 
