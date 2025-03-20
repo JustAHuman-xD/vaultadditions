@@ -18,7 +18,6 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class VaultJoinEvent {
 
-    //TODO: Change so it doesnt affect herald
     @SubscribeEvent
     public static void onPlayerVaultEnter(iskallia.vault.event.event.VaultJoinEvent event) {
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
