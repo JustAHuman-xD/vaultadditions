@@ -94,21 +94,17 @@ public class ColoredVelvetBedRenderer implements BlockEntityRenderer<ColoredVelv
                 this.renderPiece(pPoseStack, pBufferSource, blockstate.getValue(BedBlock.PART) == BedPart.HEAD ? this.headRoot : this.footRoot, blockstate.getValue(BedBlock.FACING), material, i, pPackedOverlay, false);
             }
         } else {
-            // Default rendering with white bed in case level is null
-            ResourceLocation defaultTexture = VaultAdditions.id("entity/bed/velvet_bed_white");
-            Material defaultMaterial = new Material(TextureAtlas.LOCATION_BLOCKS, defaultTexture);
+            DyeColor color = pBlockEntity.getColor();
 
-            this.renderPiece(pPoseStack, pBufferSource, this.headRoot, Direction.SOUTH, defaultMaterial, pPackedLight, pPackedOverlay, false);
-            this.renderPiece(pPoseStack, pBufferSource, this.footRoot, Direction.SOUTH, defaultMaterial, pPackedLight, pPackedOverlay, true);
+            ResourceLocation textureLocation = VaultAdditions.id("entity/bed/velvet_bed_" + color.getName());
+            Material material = new Material(TextureAtlas.LOCATION_BLOCKS, textureLocation);
+
+            this.renderPiece(pPoseStack, pBufferSource, this.headRoot, Direction.SOUTH, material, pPackedLight, pPackedOverlay, false);
+            this.renderPiece(pPoseStack, pBufferSource, this.footRoot, Direction.SOUTH, material, pPackedLight, pPackedOverlay, true);
         }
 
     }
 
-    /**
-     *
-     * @param pFoot {@code true} if piece to render is the foot of the bed, {@code false} otherwise or if being rendered
-     * by a {@link net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer}
-     */
     private void renderPiece(PoseStack pPoseStack, MultiBufferSource pBufferSource, ModelPart pModelPart, Direction pDirection, Material pMaterial, int pPackedLight, int pPackedOverlay, boolean pFoot) {
         pPoseStack.pushPose();
         pPoseStack.translate(0.0D, 0.5625D, pFoot ? -1.0D : 0.0D);
