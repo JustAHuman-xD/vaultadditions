@@ -1,11 +1,12 @@
 package io.github.a1qs.vaultadditions.init;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.item.ColoredVelvetBedItem;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.item.PowerOrb;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -34,4 +35,26 @@ public class ModItems {
 
     public static final RegistryObject<Item> SHIELD = ModItems.ITEMS.register("shield",
             () -> new Item(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
+
+    public static final RegistryObject<Item> VELVET_BED_ITEM_WHITE = registerBedItem("colored_velvet_bed_white", ModBlocks.VELVET_BED_WHITE);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_ORANGE = registerBedItem("colored_velvet_bed_orange", ModBlocks.VELVET_BED_ORANGE);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_MAGENTA = registerBedItem("colored_velvet_bed_magenta", ModBlocks.VELVET_BED_MAGENTA);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_LIGHT_BLUE = registerBedItem("colored_velvet_bed_light_blue", ModBlocks.VELVET_BED_LIGHT_BLUE);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_YELLOW = registerBedItem("colored_velvet_bed_yellow", ModBlocks.VELVET_BED_YELLOW);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_LIME = registerBedItem("colored_velvet_bed_lime", ModBlocks.VELVET_BED_LIME);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_PINK = registerBedItem("colored_velvet_bed_pink", ModBlocks.VELVET_BED_PINK);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_GRAY = registerBedItem("colored_velvet_bed_gray", ModBlocks.VELVET_BED_GRAY);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_LIGHT_GRAY = registerBedItem("colored_velvet_bed_light_gray", ModBlocks.VELVET_BED_LIGHT_GRAY);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_CYAN = registerBedItem("colored_velvet_bed_cyan", ModBlocks.VELVET_BED_CYAN);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_PURPLE = registerBedItem("colored_velvet_bed_purple", ModBlocks.VELVET_BED_PURPLE);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_BLUE = registerBedItem("colored_velvet_bed_blue", ModBlocks.VELVET_BED_BLUE);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_BROWN = registerBedItem("colored_velvet_bed_brown", ModBlocks.VELVET_BED_BROWN);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_GREEN = registerBedItem("colored_velvet_bed_green", ModBlocks.VELVET_BED_GREEN);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_RED = registerBedItem("colored_velvet_bed_red", ModBlocks.VELVET_BED_RED);
+    public static final RegistryObject<Item> VELVET_BED_ITEM_BLACK = registerBedItem("colored_velvet_bed_black", ModBlocks.VELVET_BED_BLACK);
+
+    private static RegistryObject<Item> registerBedItem(String name, RegistryObject<Block> block) {
+        return ITEMS.register(name,
+                () -> new ColoredVelvetBedItem(block.get(), new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB).stacksTo(1)));
+    }
 }

@@ -1,5 +1,7 @@
 package io.github.a1qs.vaultadditions.init;
 
+import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.block.blockentity.render.ColoredVelvetBedRenderer;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.*;
 import iskallia.vault.VaultMod;
 import iskallia.vault.dynamodel.DynamicModelProperties;
@@ -7,9 +9,45 @@ import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.dynamodel.model.item.HandHeldModel;
 import iskallia.vault.dynamodel.model.item.PlainItemModel;
 import iskallia.vault.dynamodel.model.item.shield.ShieldModel;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.DyeColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModModels {
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ColoredVelvetBedRenderer.HEAD_LAYER_LOCATION, ColoredVelvetBedRenderer::createHeadLayer);
+        event.registerLayerDefinition(ColoredVelvetBedRenderer.FOOT_LAYER_LOCATION, ColoredVelvetBedRenderer::createFootLayer);
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public static void stitchTextures(TextureStitchEvent.Pre event) {
+        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+            return;
+        }
+
+        // Loop through all 16 Minecraft colors and register each texture
+        for (DyeColor color : DyeColor.values()) {
+            ResourceLocation texture = VaultAdditions.id("entity/bed/velvet_bed_" + color.getName());
+            event.addSprite(texture);
+        }
+
+    }
+
+
+
+
     public static DynamicModelProperties STANDARD_PROPERTIES = new DynamicModelProperties().allowTransmogrification().discoverOnRoll();
 
     public static class Armor {

@@ -38,4 +38,24 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<EventActiveBlockEntity>> EVENT_ACTIVE_BLOCK_ENTITY = BLOCK_ENTITIES.register("event_active_block_entity",
             () -> BlockEntityType.Builder.of(EventActiveBlockEntity::new, ModBlocks.EVENT_ACTIVE_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ColoredVelvetBedBlockEntity>> COLORED_VELVET_BED_BLOCK_ENTITY = BLOCK_ENTITIES.register("colored_velvet_bed_block_entity",
+            () -> BlockEntityType.Builder.of(ColoredVelvetBedBlockEntity::new,
+                    ModBlocks.VELVET_BED_WHITE.get(),
+                    ModBlocks.VELVET_BED_ORANGE.get(),
+                    ModBlocks.VELVET_BED_MAGENTA.get(),
+                    ModBlocks.VELVET_BED_LIGHT_BLUE.get(),
+                    ModBlocks.VELVET_BED_YELLOW.get(),
+                    ModBlocks.VELVET_BED_LIME.get(),
+                    ModBlocks.VELVET_BED_PINK.get(),
+                    ModBlocks.VELVET_BED_GRAY.get(),
+                    ModBlocks.VELVET_BED_LIGHT_GRAY.get(),
+                    ModBlocks.VELVET_BED_CYAN.get(),
+                    ModBlocks.VELVET_BED_PURPLE.get(),
+                    ModBlocks.VELVET_BED_BLUE.get(),
+                    ModBlocks.VELVET_BED_BROWN.get(),
+                    ModBlocks.VELVET_BED_GREEN.get(),
+                    ModBlocks.VELVET_BED_RED.get(),
+                    ModBlocks.VELVET_BED_BLACK.get()
+            ).build(null));
 }
