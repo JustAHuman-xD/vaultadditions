@@ -131,6 +131,7 @@ public class ModModels {
         GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean allowTransmog, boolean hideElytra, EquipmentSlot... slots) {
             this.model = new GeckoArmorModel(id, displayName, animationName, transitionTicks, hideElytra);
             this.model.properties(new DynamicModelProperties());
+            this.model.usingLayers(new DummyArmorLayers());
             if (allowTransmog) {
                 this.model.getModelProperties().allowTransmogrification().discoverOnRoll();
             }
