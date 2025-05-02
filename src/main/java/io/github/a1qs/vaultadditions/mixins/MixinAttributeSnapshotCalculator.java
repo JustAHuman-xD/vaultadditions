@@ -105,11 +105,11 @@ public class MixinAttributeSnapshotCalculator {
     @Mixin(AttributeSnapshot.AttributeValue.class)
     public interface InvokeAttributeSnapshotAttributeValue {
         @Invoker("<init>")
-        static AttributeSnapshot.AttributeValue<?, ?> invokeConstructor() {
+        static AttributeSnapshot.AttributeValue invokeConstructor() {
             throw new AssertionError();
         }
 
-        @Invoker("addCachedValue")
+        @Invoker(value = "addCachedValue", remap = false)
         void invokeAddCachedValue(Object object);
     }
 }

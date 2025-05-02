@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LootStatueTileEntity.class)
 public abstract class MixinLootStatueTileEntity extends SkinnableTileEntity {
-    @Shadow private int chipCount;
+    @Shadow(remap = false) private int chipCount;
 
     private MixinLootStatueTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);

@@ -15,7 +15,6 @@
     "MixinDashAbility",
     "MixinGearModelRollRaritiesConfig",
     "MixinLootStatueBlock",
-    "MixinLootStatueBlockItem",
     "MixinLootStatueTileEntity",
     "MixinLootStatueUpperBlock",
     "MixinManaShieldAbility",
