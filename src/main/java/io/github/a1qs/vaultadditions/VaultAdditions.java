@@ -71,6 +71,7 @@ public class VaultAdditions {
 
     @SubscribeEvent
     public void registerRenderers(final EntityRenderersEvent.AddLayers event) {
+        LOGGER.info("Registering VaultAdditions renderers");
         GeoArmorRenderer.registerArmorRenderer(VaultArmorItem.class, VaultGeckoArmorRenderer::new);
     }
 
