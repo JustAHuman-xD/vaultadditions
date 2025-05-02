@@ -30,7 +30,7 @@ public abstract class AbstractStatueLootConfig extends Config {
     }
 
     public WeightedList<ProductEntry> getDrops() {
-        return DROPS;
+        return DROPS.copy();
     }
 
     public IntRangeEntry getRollRange() {
