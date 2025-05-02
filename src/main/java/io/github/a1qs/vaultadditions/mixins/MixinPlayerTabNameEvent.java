@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.events.TabListNameFormatEvent;
 import iskallia.vault.event.PlayerTabNameEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -13,7 +14,7 @@ public class MixinPlayerTabNameEvent {
 
     /**
      * Cancelling the VaultHunters implementation to replace it with our own in <br>
-     * {@link io.github.a1qs.vaultadditions.events.TabListNameFormatEvent#onTabListNameFormat(PlayerEvent.TabListNameFormat)}
+     * {@link TabListNameFormatEvent#onTabListNameFormat(PlayerEvent.TabListNameFormat)}
      */
     @Inject(method = "onTabListNameFormat", at = @At("HEAD"), cancellable = true)
     private static void cancelTabFormat(PlayerEvent.TabListNameFormat event, CallbackInfo ci) {

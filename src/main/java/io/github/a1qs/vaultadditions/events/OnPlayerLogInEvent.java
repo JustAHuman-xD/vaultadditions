@@ -1,17 +1,13 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
-import io.github.a1qs.vaultadditions.init.ModModels;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.EventSyncMessage;
 import io.github.a1qs.vaultadditions.util.PlayerModelGrants;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
-import iskallia.vault.VaultMod;
-import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.world.data.DiscoveredModelsData;
@@ -22,19 +18,10 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import xyz.iwolfking.woldsvaults.init.ModItems;
-
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class OnPlayerLogInEvent {
@@ -68,23 +55,23 @@ public class OnPlayerLogInEvent {
 
 
         for (PlayerModelGrants config : PlayerModelGrants.GrantConfigurations.PLAYER_GRANTS) {
-            if (playerName.toLowerCase().contains(config.getPlayerName()) || !FMLEnvironment.production) {
+            if (playerName.toLowerCase().contains(config.playerName()) || !FMLEnvironment.production) {
                 DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get((ServerLevel) player.level);
 
-                for (PlayerModelGrants.ArmorGrantData grant : config.getGrants()) {
-                    ResourceLocation modelId = grant.getModel().getId();
+                for (PlayerModelGrants.ArmorGrantData grant : config.grants()) {
+                    ResourceLocation modelId = grant.model().getId();
 
                     boolean hasModel = discoveredModelsData.getDiscoveredModels(player.getUUID())
                             .stream()
                             .anyMatch(id -> id.toString().startsWith(modelId.toString()));
 
                     if (!hasModel) {
-                        MutableComponent info = new TextComponent(grant.getMessage()).withStyle(ChatFormatting.GOLD);
+                        MutableComponent info = new TextComponent(grant.message()).withStyle(ChatFormatting.GOLD);
                         player.sendMessage(info, Util.NIL_UUID);
 
-                        if (grant.getItem() != null) {
-                            discoveredModelsData.discoverModelAndBroadcast(grant.getItem(), modelId, player);
-                        } else if(grant.getModel() instanceof ArmorModel armorModel) {
+                        if (grant.item() != null) {
+                            discoveredModelsData.discoverModelAndBroadcast(grant.item(), modelId, player);
+                        } else if(grant.model() instanceof ArmorModel armorModel) {
                             discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, armorModel);
                         }
                     }

@@ -15,10 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ModDynamicModels.Swords.class, remap = false)
 public class MixinModDynamicModels$Swords {
-
-    @Shadow
-    @Final
-    public static DynamicModelRegistry<HandHeldModel> REGISTRY;
+    @Shadow @Final public static DynamicModelRegistry<HandHeldModel> REGISTRY;
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectWandModels(CallbackInfo ci) {

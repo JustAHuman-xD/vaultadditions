@@ -1,7 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins;
 
-import io.github.a1qs.vaultadditions.init.ModModels;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
+import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ElytraLayer;
@@ -24,16 +25,9 @@ public abstract class MixinElytraLayer<T extends LivingEntity, M extends EntityM
 
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true, remap = false)
     public void shouldRender(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir) {
-        if(entity instanceof Player player) {
-            if(
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOY_82, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOY_82_GROGU, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOKAGE_ROBES, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.HOKAGE_ROBES_MASKLESS, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.SPACE_MARINE, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.BOKATAN, EquipmentSlot.CHEST, player) ||
-                    ModelUtil.isWearingArmorPiece(ModModels.Armor.DINDJARIN, EquipmentSlot.CHEST, player)
-            ) {
+        if (entity instanceof Player player) {
+            ItemStack chest = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex());
+            if (chest.getItem() instanceof VaultArmorItem && ModelUtil.getArmorModel(chest) instanceof AdditionalArmorModel model && model.hidesElytra()) {
                 cir.setReturnValue(false);
             }
         }

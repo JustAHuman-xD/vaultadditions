@@ -15,14 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ModGearAttributes.class, remap = false)
 public class MixinModGearAttributes {
-
-    @Shadow
-    @Final
-    private static Table<Attribute, AttributeModifier.Operation, VaultGearAttribute<?>> VANILLA_ATTRIBUTES;
+    @Shadow @Final private static Table<Attribute, AttributeModifier.Operation, VaultGearAttribute<?>> VANILLA_ATTRIBUTES;
 
     @Inject(method = "registerAssociations", at = @At("TAIL"))
     private static void registerAdditionalAssociations(CallbackInfo ci) {
         VANILLA_ATTRIBUTES.put(ModAttributes.SIZE_SCALE, AttributeModifier.Operation.MULTIPLY_TOTAL, io.github.a1qs.vaultadditions.init.vault.ModGearAttributes.SIZE_SCALE);
     }
-
 }

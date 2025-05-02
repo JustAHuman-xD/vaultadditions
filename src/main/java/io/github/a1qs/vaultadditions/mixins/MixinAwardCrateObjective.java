@@ -18,9 +18,10 @@ public class MixinAwardCrateObjective {
     @Inject(method = "awardCrate", at = @At("RETURN"))
     private void addBorderShardReward(Vault vault, Listener listener, ChunkRandom random, CallbackInfo ci) {
         StatCollector stats = vault.get(Vault.STATS).get(listener.get(Listener.ID));
-        EventData d = EventData.getServer();
-        if(d.conditionsCompleted() && d.getActiveEvent().getEventId().equals(VaultAdditionsEvent.ADD_VAULT_COMPLETION_ITEM)) {
-            if(random.nextFloat() < d.getActiveEvent().getChance()) stats.get(StatCollector.REWARD).add(d.getActiveEvent().getItemStack());
+        EventData data = EventData.getServer();
+        VaultAdditionsEvent event = data.getActiveEvent();
+        if (data.conditionsCompleted() && event.is(VaultAdditionsEvent.ADD_VAULT_COMPLETION_ITEM) && random.nextFloat() < event.getChance()) {
+            stats.get(StatCollector.REWARD).add(event.getItemStack());
         }
     }
 }

@@ -24,20 +24,17 @@ public class MixinVaultBarOverlay {
     @Debug(export = true)
     @Inject(method = "renderPointText", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = At.Shift.BEFORE))
     private static void renderPowerPoints(Minecraft minecraft, LocalPlayer player, PoseStack matrixStack, int right, MultiBufferSource.BufferSource buffer, CallbackInfo ci) {
-
-        IVaultOptions options = (IVaultOptions)Minecraft.getInstance().options;
-        if (options.showPointMessages()) {
-            int x;
-            int gap = 5;
-
-            minecraft.getProfiler().popPush("batchPowerPointText");
-            if (MiscUtil.unspentPowerPoints != 0 && VaultBarOverlay.vaultLevel >= 100) {
-                MiscUtil.POWER_POINT_SUPPLIER.ifChanged(MixinVaultBarOverlay::vaultadditions$onUnspentPowerPointsChanged);
-                x = right - MiscUtil.unspentPowerPointComponentWidth - gap;
-                minecraft.font.drawInBatch(MiscUtil.unspentPowerPointComponent, (float)x, 18.0F, 16777215, true, matrixStack.last().pose(), buffer, false, 0, 15728880);
-                matrixStack.translate(0.0, 12.0, 0.0);
-            }
+        minecraft.getProfiler().popPush("batchPowerPointText");
+        IVaultOptions options = (IVaultOptions) Minecraft.getInstance().options;
+        if (!options.showPointMessages() || MiscUtil.unspentPowerPoints == 0 || VaultBarOverlay.vaultLevel < 100) {
+            return;
         }
+
+        int gap = 5;
+        int x = right - MiscUtil.unspentPowerPointComponentWidth - gap;
+        minecraft.font.drawInBatch(MiscUtil.unspentPowerPointComponent, (float)x, 18.0F, 16777215, true, matrixStack.last().pose(), buffer, false, 0, 15728880);
+        matrixStack.translate(0.0, 12.0, 0.0);
+        MiscUtil.POWER_POINT_SUPPLIER.ifChanged(MixinVaultBarOverlay::vaultadditions$onUnspentPowerPointsChanged);
     }
 
     @Unique

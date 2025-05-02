@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class MixinLootStatueTileEntity extends SkinnableTileEntity {
     @Shadow private int chipCount;
 
-
-    public MixinLootStatueTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
+    private MixinLootStatueTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state) {
         super(tileEntityTypeIn, pos, state);
     }
 
@@ -39,11 +38,10 @@ public abstract class MixinLootStatueTileEntity extends SkinnableTileEntity {
      */
     @Overwrite(remap = false)
     private int getModifiedInterval() {
-        LootStatueTileEntity thisInstance = ((LootStatueTileEntity) (Object) this);
         int interval = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getInterval();
-        if (thisInstance.getChipCount() == 0) {
+        if (chipCount == 0) {
             return interval;
         }
-        return interval - CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getIntervalDecrease(thisInstance.getChipCount());
+        return interval - CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getIntervalDecrease(chipCount);
     }
 }

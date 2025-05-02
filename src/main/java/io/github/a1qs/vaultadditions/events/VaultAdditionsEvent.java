@@ -41,6 +41,10 @@ public class VaultAdditionsEvent {
         );
     }
 
+    public boolean is(ResourceLocation id) {
+        return getEventId().equals(id);
+    }
+
     public int getRequiredCrystals() {
         return requiredCrystals;
     }
@@ -130,7 +134,5 @@ public class VaultAdditionsEvent {
     public float getChance() {
         return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getChance();
     }
-
-
 
 }

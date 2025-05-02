@@ -24,7 +24,7 @@ public class ExpertisePointIncreasePower extends LearnableSkill {
 
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.INT.writeBits(this.pointIncrease, buffer);
+        buffer.writeInt(this.pointIncrease);
     }
 
     public void readBits(BitBuffer buffer) {
@@ -33,30 +33,26 @@ public class ExpertisePointIncreasePower extends LearnableSkill {
     }
 
     public Optional<CompoundTag> writeNbt() {
-        return super.writeNbt().map((nbt) -> {
-            Adapters.INT.writeNbt(this.pointIncrease).ifPresent((tag) -> {
-                nbt.put("pointIncrease", tag);
-            });
+        return super.writeNbt().map(nbt -> {
+            nbt.putInt("pointIncrease", 0);
             return nbt;
         });
     }
 
     public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
-        this.pointIncrease = Adapters.INT.readNbt(nbt.get("pointIncrease")).orElseThrow();
+        this.pointIncrease = Adapters.INT.readNbt(nbt.get("pointIncrease")).orElse(0);
     }
 
     public Optional<JsonObject> writeJson() {
-        return super.writeJson().map((json) -> {
-            Adapters.INT.writeJson(this.pointIncrease).ifPresent((element) -> {
-                json.add("pointIncrease", element);
-            });
+        return super.writeJson().map(json -> {
+            json.addProperty("pointIncrease", this.pointIncrease);
             return json;
         });
     }
 
     public void readJson(JsonObject json) {
         super.readJson(json);
-        this.pointIncrease = Adapters.INT.readJson(json.get("pointIncrease")).orElseThrow();
+        this.pointIncrease = Adapters.INT.readJson(json.get("pointIncrease")).orElse(0);
     }
 }

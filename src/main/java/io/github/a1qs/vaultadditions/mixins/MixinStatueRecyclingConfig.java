@@ -10,9 +10,7 @@ import java.util.HashMap;
 
 @Mixin(value = StatueRecyclingConfig.class, remap = false)
 public abstract class MixinStatueRecyclingConfig {
-
-    @Shadow
-    private HashMap<String, Integer> itemValues;
+    @Shadow private HashMap<String, Integer> itemValues;
 
     /**
      * @author a1qs
@@ -20,11 +18,11 @@ public abstract class MixinStatueRecyclingConfig {
      */
     @Overwrite
     public int getItemValue(String id) {
-        if (this.itemValues.containsKey(id)) {
-            return this.itemValues.get(id);
-        } else {
-            VaultMod.LOGGER.error("Could not find statue recycle value of id '{}' defaulted to 1", id);
-            return 1;
+        Integer value = this.itemValues.get(id);
+        if (value != null) {
+            return value;
         }
+        VaultMod.LOGGER.error("Could not find statue recycle value of id '{}' defaulted to 1", id);
+        return 1;
     }
 }

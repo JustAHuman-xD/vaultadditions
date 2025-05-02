@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class PowerOrb extends Item {
@@ -30,9 +31,9 @@ public class PowerOrb extends Item {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(
-                new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
+        pTooltipComponents.add(new TextComponent("Grants a").withStyle(ChatFormatting.YELLOW)
                         .append(new TextComponent(" Power Point").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(16724414))))
                         .append(new TextComponent(" upon use.").withStyle(ChatFormatting.YELLOW))
         );
@@ -40,25 +41,20 @@ public class PowerOrb extends Item {
 
     @Nonnull
     public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
-        ItemStack heldItemStack = player.getItemInHand(hand);
-
+        ItemStack itemStack = player.getItemInHand(hand);
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
+
         if (!world.isClientSide) {
-
             PlayerAdditionalVaultStatData statsData = PlayerAdditionalVaultStatData.get((ServerLevel) world);
-            if(player.isCrouching()) {
-                int itemStackCount = heldItemStack.getCount();
-                if(!player.getAbilities().instabuild) heldItemStack.shrink(itemStackCount);
-                statsData.addPowerPoints((ServerPlayer) player, itemStackCount);
-                return InteractionResultHolder.success(heldItemStack);
+            int amount = player.isCrouching() ? itemStack.getCount() : 1;
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(amount);
             }
-
-            if(!player.getAbilities().instabuild) heldItemStack.shrink(1);
-            statsData.addPowerPoints((ServerPlayer) player, 1);
-            player.awardStat(Stats.ITEM_USED.get(this));
-            return InteractionResultHolder.success(heldItemStack);
+            statsData.addPowerPoints((ServerPlayer) player, amount);
+            player.awardStat(Stats.ITEM_USED.get(this), amount);
+            return InteractionResultHolder.success(itemStack);
         }
 
-        return InteractionResultHolder.sidedSuccess(heldItemStack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
     }
 }

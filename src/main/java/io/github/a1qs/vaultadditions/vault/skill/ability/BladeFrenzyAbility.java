@@ -38,16 +38,6 @@ public class BladeFrenzyAbility extends InstantManaAbility {
     private float percentAttackDealt;
     private float knockbackStrengthMultiplier;
 
-    public BladeFrenzyAbility() {
-    }
-
-    public BladeFrenzyAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCost, float radius, float percentAttackDealt, float knockbackStrengthMultiplier) {
-        super(unlockLevel, learnPointCost, regretPointCost, cooldownTicks, manaCost);
-        this.radius = radius;
-        this.percentAttackDealt = percentAttackDealt;
-        this.knockbackStrengthMultiplier = knockbackStrengthMultiplier;
-    }
-
     protected Ability.ActionResult doAction(SkillContext context) {
         return context.getSource().as(ServerPlayer.class).map((player) -> {
             Vec3 pos = context.getSource().getPos().orElse(player.position());
@@ -179,6 +169,8 @@ public class BladeFrenzyAbility extends InstantManaAbility {
     @Override
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map(json -> {
+            json.addProperty("radius", this.radius);
+            json.addP
             Adapters.FLOAT.writeJson(this.radius).ifPresent(element -> json.add("radius", element));
             Adapters.FLOAT.writeJson(this.percentAttackDealt).ifPresent(element -> json.add("percentAttackDealt", element));
             Adapters.FLOAT.writeJson(this.knockbackStrengthMultiplier).ifPresent(element -> json.add("knockbackStrengthMultiplier", element));

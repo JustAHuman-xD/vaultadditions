@@ -24,7 +24,7 @@ public class SkillPointIncreasePower extends LearnableSkill {
 
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.INT.writeBits(this.pointIncrease, buffer);
+        buffer.writeInt(this.pointIncrease);
     }
 
     public void readBits(BitBuffer buffer) {
@@ -33,10 +33,8 @@ public class SkillPointIncreasePower extends LearnableSkill {
     }
 
     public Optional<CompoundTag> writeNbt() {
-        return super.writeNbt().map((nbt) -> {
-            Adapters.INT.writeNbt(this.pointIncrease).ifPresent((tag) -> {
-                nbt.put("pointIncrease", tag);
-            });
+        return super.writeNbt().map(nbt -> {
+            nbt.putInt("pointIncrease", this.pointIncrease);
             return nbt;
         });
     }
@@ -47,10 +45,8 @@ public class SkillPointIncreasePower extends LearnableSkill {
     }
 
     public Optional<JsonObject> writeJson() {
-        return super.writeJson().map((json) -> {
-            Adapters.INT.writeJson(this.pointIncrease).ifPresent((element) -> {
-                json.add("pointIncrease", element);
-            });
+        return super.writeJson().map(json -> {
+            json.addProperty("pointIncrease", this.pointIncrease);
             return json;
         });
     }

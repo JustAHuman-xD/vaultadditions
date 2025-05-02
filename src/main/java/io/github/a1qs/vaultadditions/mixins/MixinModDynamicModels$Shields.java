@@ -14,10 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ModDynamicModels.Shields.class, remap = false)
 public class MixinModDynamicModels$Shields {
-
-    @Shadow
-    @Final
-    public static DynamicModelRegistry<ShieldModel> REGISTRY;
+    @Shadow @Final public static DynamicModelRegistry<ShieldModel> REGISTRY;
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectShieldModels(CallbackInfo ci) {

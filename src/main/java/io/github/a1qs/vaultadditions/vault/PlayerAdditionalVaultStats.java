@@ -20,7 +20,6 @@ public class PlayerAdditionalVaultStats implements INBTSerializable<CompoundTag>
         this.uuid = uuid;
     }
 
-
     public int getUnspentPowerPoints() {
         return this.unspentPowerPoints;
     }

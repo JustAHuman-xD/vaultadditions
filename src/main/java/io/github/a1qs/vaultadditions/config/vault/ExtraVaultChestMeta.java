@@ -53,7 +53,7 @@ public class ExtraVaultChestMeta extends Config {
         this.itemsToConsider.add(new WeightedList.Entry<>(new ItemEntry(ModItems.POWER_ORB.get(), 1), 2));
     }
 
-    public double getpowerCrystalChance(Block block, VaultRarity rarity) {
+    public double getPowerCrystalChance(Block block, VaultRarity rarity) {
         return this.powerCrystalChances.getOrDefault(block, Collections.emptyMap()).getOrDefault(rarity, (double) 0.0F);
     }
 

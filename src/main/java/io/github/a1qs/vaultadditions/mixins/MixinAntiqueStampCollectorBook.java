@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.mixins;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.antique.Antique;
 import iskallia.vault.container.inventory.AntiqueCollectorBookContainer;
 import iskallia.vault.init.ModItems;
@@ -16,20 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Optional;
-
 @Mixin(value = AntiqueStampCollectorBook.class)
 public class MixinAntiqueStampCollectorBook {
 
-
     @Inject(method = "interceptPlayerInventoryItemAddition", at = @At("HEAD"), cancellable = true, remap = false)
     private static void curioSupport(Inventory playerInventory, ItemStack toAdd, CallbackInfoReturnable<Boolean> cir) {
-
-        if (!toAdd.is(ModItems.ANTIQUE)) {
+        Player player = playerInventory.player;
+        if (player.containerMenu instanceof AntiqueCollectorBookContainer) {
             cir.setReturnValue(false);
             return;
         }
-
 
         Antique antique = AntiqueItem.getAntique(toAdd);
         if (antique == null) {
@@ -37,18 +32,10 @@ public class MixinAntiqueStampCollectorBook {
             return;
         }
 
-        Player player = playerInventory.player;
-        if (player.containerMenu instanceof AntiqueCollectorBookContainer) {
-            cir.setReturnValue(false);
-            return;
-        }
+        ItemStack antiqueBook = CuriosApi.getCuriosHelper().findFirstCurio(player, ModItems.ANTIQUE_COLLECTOR_BOOK)
+                .map(SlotResult::stack).orElse(ItemStack.EMPTY);
 
-        ItemStack antiqueBook = ItemStack.EMPTY;
-        if(CuriosApi.getCuriosHelper().findFirstCurio(player, ModItems.ANTIQUE_COLLECTOR_BOOK).isPresent()) {
-            antiqueBook = CuriosApi.getCuriosHelper().findFirstCurio(player, ModItems.ANTIQUE_COLLECTOR_BOOK).get().stack();
-        }
-
-        if(!antiqueBook.isEmpty()) {
+        if (!antiqueBook.isEmpty()) {
             AntiqueStampCollectorBook.StoredAntiques antiques = AntiqueStampCollectorBook.getStoredAntiques(antiqueBook);
             AntiqueStampCollectorBook.StoredAntiqueInfo info = antiques.getInfo(antique);
             int count = info.getCount();
@@ -58,7 +45,6 @@ public class MixinAntiqueStampCollectorBook {
             toAdd.setCount(toAdd.getCount() - added);
             AntiqueStampCollectorBook.setStoredAntiques(antiqueBook, antiques);
             cir.setReturnValue(true);
-            return; // not neccessary but idc
         }
     }
 }

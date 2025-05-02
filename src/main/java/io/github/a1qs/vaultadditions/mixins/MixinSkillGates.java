@@ -17,10 +17,7 @@ public class MixinSkillGates {
             ordinal = 0
     )
     private List<String> addPowerSkills(List<String> allSkillIds) {
-        CustomVaultConfigRegistry.POWERS.getAll().skills.forEach((s) -> {
-            allSkillIds.add(s.getId());
-        });
-
+        CustomVaultConfigRegistry.POWERS.getAll().skills.forEach(skill -> allSkillIds.add(skill.getId()));
         return allSkillIds;
     }
 }

@@ -23,80 +23,57 @@ public class AirMobilityPower extends LearnableSkill {
     private float playerBaseSpeed;
     private float playerBaseAirMovement;
 
-    public AirMobilityPower(int unlockLevel, int learnPointCost, int regretPointCost, float playerBaseSpeed, float playerBaseAirMovement) {
-        super(unlockLevel, learnPointCost, regretPointCost);
-        this.playerBaseSpeed = playerBaseSpeed;
-        this.playerBaseAirMovement = playerBaseAirMovement;
-    }
-
-    public AirMobilityPower() {
-    }
-
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onAirMobilityTick(TickEvent.PlayerTickEvent event) {
-        if(KeybindEvents.isZephyrToggled) return;
+        if (KeybindEvents.isZephyrToggled) {
+            return;
+        }
 
         PowerTree tree = ClientPowerData.getPowerTree();
-        for(AirMobilityPower power : tree.getAll(AirMobilityPower.class, Skill::isUnlocked)) {
+        for (AirMobilityPower power : tree.getAll(AirMobilityPower.class, Skill::isUnlocked)) {
             event.player.setSpeed(power.playerBaseSpeed);
             event.player.flyingSpeed = power.playerBaseAirMovement;
         }
     }
 
-
-
-
-
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.FLOAT.writeBits(this.playerBaseSpeed, buffer);
-        Adapters.FLOAT.writeBits(this.playerBaseAirMovement, buffer);
+        buffer.writeFloat(this.playerBaseSpeed);
+        buffer.writeFloat(this.playerBaseAirMovement);
     }
 
     public void readBits(BitBuffer buffer) {
         super.readBits(buffer);
-        this.playerBaseSpeed = Adapters.FLOAT.readBits(buffer).orElseThrow();
-        this.playerBaseAirMovement = Adapters.FLOAT.readBits(buffer).orElseThrow();
+        this.playerBaseSpeed = Adapters.FLOAT.readBits(buffer).orElse(0F);
+        this.playerBaseAirMovement = Adapters.FLOAT.readBits(buffer).orElse(0F);
     }
 
     public Optional<CompoundTag> writeNbt() {
-        return super.writeNbt().map((nbt) -> {
-            Adapters.FLOAT.writeNbt(this.playerBaseSpeed).ifPresent((tag) -> {
-                nbt.put("playerBaseSpeed", tag);
-            });
-            Adapters.FLOAT.writeNbt(this.playerBaseAirMovement).ifPresent((tag) -> {
-                nbt.put("playerBaseAirMovement", tag);
-            });
+        return super.writeNbt().map(nbt -> {
+            nbt.putFloat("playerBaseSpeed", this.playerBaseSpeed);
+            nbt.putFloat("playerBaseAirMovement", this.playerBaseAirMovement);
             return nbt;
         });
     }
 
     public void readNbt(CompoundTag nbt) {
         super.readNbt(nbt);
-        this.playerBaseSpeed = Adapters.FLOAT.readNbt(nbt.get("playerBaseSpeed")).orElseThrow(() -> {
-            return new IllegalStateException("Unknown attribute in " + nbt);
-        });
-        this.playerBaseAirMovement = Adapters.FLOAT.readNbt(nbt.get("playerBaseAirMovement")).orElseThrow();
+        this.playerBaseSpeed = Adapters.FLOAT.readNbt(nbt.get("playerBaseSpeed")).orElse(0F);
+        this.playerBaseAirMovement = Adapters.FLOAT.readNbt(nbt.get("playerBaseAirMovement")).orElse(0F);
     }
 
     public Optional<JsonObject> writeJson() {
-        return super.writeJson().map((json) -> {
-            Adapters.FLOAT.writeJson(this.playerBaseSpeed).ifPresent((element) -> {
-                json.add("playerBaseSpeed", element);
-            });
-            Adapters.FLOAT.writeJson(this.playerBaseAirMovement).ifPresent((element) -> {
-                json.add("playerBaseAirMovement", element);
-            });
+        return super.writeJson().map(json -> {
+            json.addProperty("playerBaseSpeed", this.playerBaseSpeed);
+            json.addProperty("playerBaseAirMovement", this.playerBaseAirMovement);
             return json;
         });
     }
 
     public void readJson(JsonObject json) {
         super.readJson(json);
-        this.playerBaseSpeed = Adapters.FLOAT.readJson(json.get("playerBaseSpeed")).orElseThrow();
-        this.playerBaseAirMovement = Adapters.FLOAT.readJson(json.get("playerBaseAirMovement")).orElseThrow();
+        this.playerBaseSpeed = Adapters.FLOAT.readJson(json.get("playerBaseSpeed")).orElse(0F);
+        this.playerBaseAirMovement = Adapters.FLOAT.readJson(json.get("playerBaseAirMovement")).orElse(0F);
     }
-
 
 }

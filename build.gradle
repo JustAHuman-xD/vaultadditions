@@ -105,6 +105,10 @@ repositories {
         dir 'libs'
     }
 
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
 
     maven {
         url "https://www.cursemaven.com"
@@ -117,6 +121,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5925633")
 
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.18:3.0.57')
     implementation fg.deobf("curse.maven:curios-309927:4418032")
     implementation fg.deobf("curse.maven:quark-243121:3840125")
     implementation fg.deobf("curse.maven:autoreglib-250363:3642382")

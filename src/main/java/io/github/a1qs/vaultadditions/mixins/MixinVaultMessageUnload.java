@@ -18,17 +18,13 @@ import java.util.function.Supplier;
  */
 @Mixin(value = VaultMessage.Unload.class, remap = false)
 public class MixinVaultMessageUnload {
-    @Unique
-    private static final UUID OVERVAULT_VAULT_ID = UUID.fromString("69c0e010-06d2-4a26-88b9-81f185e193cc");
+    @Unique private static final UUID OVERVAULT_VAULT_ID = UUID.fromString("69c0e010-06d2-4a26-88b9-81f185e193cc");
 
-    @Mutable
-    @Final
-    @Shadow
-    private UUID id;
+    @Mutable @Final @Shadow private UUID id;
 
     @Inject(method = "<init>(Liskallia/vault/core/vault/Vault;)V", at = @At("TAIL"))
     private void fixNullId(Vault vault, CallbackInfo ci) {
-        if(id == null) {
+        if (id == null) {
             id = OVERVAULT_VAULT_ID;
         }
     }

@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 public class VaultAdditions {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MOD_ID = "vaultadditions";
-    public static boolean isWorldBorderFixerLoaded = ModList.get().isLoaded("worldborderfixer");
     public static final CreativeModeTab VAULT_ADDITIONS_TAB = new ModCreativeTab(MOD_ID);
 
     public VaultAdditions() {
@@ -37,8 +36,6 @@ public class VaultAdditions {
         ModParticles.PARTICLE_TYPES.register(eventBus);
         ModSounds.SOUNDS.register(eventBus);
 
-
-
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
 
@@ -46,11 +43,10 @@ public class VaultAdditions {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        if(FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
-            if(!isWorldBorderFixerLoaded) LOGGER.error("Worldborderfixer is not installed. Please install 'Multi World Borders Unofficial'!");
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER && !ModList.get().isLoaded("worldborderfixer")) {
+            LOGGER.error("Worldborderfixer is not installed. Please install 'Multi World Borders Unofficial'!");
         }
     }
-
 
     public void commonSetup(final FMLCommonSetupEvent event) {
         ModNetwork.initialize();
@@ -67,8 +63,6 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
     }
-
-
 
     public static ResourceLocation id(String name) {
         return new ResourceLocation(MOD_ID, name);

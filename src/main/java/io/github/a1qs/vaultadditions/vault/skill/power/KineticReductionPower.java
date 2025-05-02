@@ -22,10 +22,9 @@ import java.util.Optional;
 public class KineticReductionPower extends LearnableSkill {
     private float damageReduction;
 
-
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.FLOAT.writeBits(this.damageReduction, buffer);
+        buffer.writeFloat(this.damageReduction);
     }
 
     public void readBits(BitBuffer buffer) {
@@ -34,10 +33,8 @@ public class KineticReductionPower extends LearnableSkill {
     }
 
     public Optional<CompoundTag> writeNbt() {
-        return super.writeNbt().map((nbt) -> {
-            Adapters.FLOAT.writeNbt(this.damageReduction).ifPresent((tag) -> {
-                nbt.put("damageReduction", tag);
-            });
+        return super.writeNbt().map(nbt -> {
+            nbt.putFloat("damageReduction", this.damageReduction);
             return nbt;
         });
     }
@@ -49,9 +46,7 @@ public class KineticReductionPower extends LearnableSkill {
 
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map((json) -> {
-            Adapters.FLOAT.writeJson(this.damageReduction).ifPresent((element) -> {
-                json.add("damageReduction", element);
-            });
+            json.addProperty("damageReduction", this.damageReduction);
             return json;
         });
     }
@@ -67,19 +62,15 @@ public class KineticReductionPower extends LearnableSkill {
 
     @SubscribeEvent
     public static void onLivingEntityHurt(LivingHurtEvent event) {
-        LivingEntity var2 = event.getEntityLiving();
-        if (var2 instanceof Player player) {
-            if(player.getServer() == null) return;
-            if(event.getSource() != DamageSource.FLY_INTO_WALL) return;
-
-            float damageReduction = 0.0F;
-            PowerTree expertises = PlayerPowersData.get(player.getServer()).getPowers(player);
-
-            for (KineticReductionPower power : expertises.getAll(KineticReductionPower.class, Skill::isUnlocked)) {
-                damageReduction = power.getDamageReduction();
-            }
-
-            event.setAmount(event.getAmount() * (1.0F - damageReduction));
+        if (!(event.getEntityLiving() instanceof Player player) || player.getServer() == null || event.getSource() != DamageSource.FLY_INTO_WALL ) {
+            return;
         }
+
+        float damageReduction = 0.0F;
+        PowerTree expertises = PlayerPowersData.get(player.getServer()).getPowers(player);
+        for (KineticReductionPower power : expertises.getAll(KineticReductionPower.class, Skill::isUnlocked)) {
+            damageReduction = power.getDamageReduction();
+        }
+        event.setAmount(event.getAmount() * (1.0F - damageReduction));
     }
 }

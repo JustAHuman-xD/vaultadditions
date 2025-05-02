@@ -40,42 +40,41 @@ public class MixinLootStatueBlock {
     @Overwrite
     public void setPlacedBy(Level pLevel, BlockPos pos, BlockState pState, LivingEntity pPlacer, ItemStack stack) {
         BlockPos blockpos = pos.above();
+        CompoundTag tag = stack.getTag();
         pLevel.setBlock(blockpos, ModBlocks.LOOT_STATUE_UPPER.defaultBlockState().setValue(LootStatueUpperBlock.HALF, Half.BOTTOM), 3);
         pLevel.setBlock(blockpos.above(), ModBlocks.LOOT_STATUE_UPPER.defaultBlockState().setValue(LootStatueUpperBlock.HALF, Half.TOP), 3);
-        if (pPlacer instanceof ServerPlayer player) {
-            BlockEntity var9 = pLevel.getBlockEntity(pos);
-            if (var9 instanceof LootStatueTileEntity be) {
-                if(stack.getTag() != null) {
-                    if(!stack.getTag().getCompound("BlockEntityTag").contains("LootItem")) {
-                        final CompoundTag data = new CompoundTag();
-                        ListTag itemList = new ListTag();
-                        List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getOptions();
+        if (!(pPlacer instanceof ServerPlayer player) || !(pLevel.getBlockEntity(pos) instanceof LootStatueTileEntity be) || tag == null) {
+            return;
+        }
 
-                        for (ItemStack option : options) {
-                            itemList.add(option.serializeNBT());
-                        }
+        if(!tag.getCompound("BlockEntityTag").contains("LootItem")) {
+            CompoundTag data = new CompoundTag();
+            ListTag itemList = new ListTag();
 
-                        data.put("Items", itemList);
-                        data.put("Position", NbtUtils.writeBlockPos(pos));
-                        NetworkHooks.openGui(player, new MenuProvider() {
-                            public @NotNull Component getDisplayName() {
-                                return new TextComponent("Loot Statue Options");
-                            }
+            List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getOptions();
+            for (ItemStack option : options) {
+                itemList.add(option.serializeNBT());
+            }
 
-                            public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-                                return new LootStatueContainer(windowId, data);
-                            }
-                        }, (buffer) -> buffer.writeNbt(data));
-                    }
-                    if (stack.getOrCreateTag().getCompound("BlockEntityTag").contains("LootItem") && be.getLootItem().getTag() != null) {
-                        if (be.getLootItem().getTag().contains("Charged")) {
-                            be.getLootItem().getTag().remove("Charged");
-                            if(be.getLootItem().getTag().isEmpty()) {
-                                be.getLootItem().setTag(null);
-                            }
-                        }
-                    }
+            data.put("Items", itemList);
+            data.put("Position", NbtUtils.writeBlockPos(pos));
+            NetworkHooks.openGui(player, new MenuProvider() {
+                public @NotNull Component getDisplayName() {
+                    return new TextComponent("Loot Statue Options");
                 }
+
+                public AbstractContainerMenu createMenu(int windowId, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
+                    return new LootStatueContainer(windowId, data);
+                }
+            }, (buffer) -> buffer.writeNbt(data));
+        }
+
+        ItemStack lootItem = be.getLootItem();
+        CompoundTag lootTag = lootItem.getTag();
+        if (tag.getCompound("BlockEntityTag").contains("LootItem") && lootTag != null) {
+            lootTag.remove("Charged");
+            if (lootTag.isEmpty()) {
+                lootItem.setTag(null);
             }
         }
     }

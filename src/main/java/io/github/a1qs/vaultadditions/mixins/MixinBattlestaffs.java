@@ -15,8 +15,7 @@ import xyz.iwolfking.woldsvaults.models.Battlestaffs;
 
 @Mixin(value = Battlestaffs.class, remap = false)
 public class MixinBattlestaffs {
-    @Shadow
-    @Final
+    @Shadow @Final
     public static DynamicModelRegistry<HandHeldModel> REGISTRY;
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))

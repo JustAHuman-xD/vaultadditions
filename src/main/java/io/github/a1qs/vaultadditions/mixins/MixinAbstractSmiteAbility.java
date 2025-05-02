@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.util.SoundChoice;
+import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
 import iskallia.vault.init.ModSounds;
 import iskallia.vault.skill.ability.effect.spi.AbstractSmiteAbility;
 import iskallia.vault.skill.ability.effect.spi.core.ToggleManaAbility;
@@ -25,22 +27,16 @@ public class MixinAbstractSmiteAbility extends ToggleManaAbility {
 
     @Inject(method = "doDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", ordinal = 1))
     public void injectSoundEvents(ServerPlayer player, float radius, float percentAbilityPowerDealt, CallbackInfoReturnable<Boolean> cir, @Local LivingEntity entity) {
-        if(player == null) {
+        if (player == null) {
             VaultAdditions.LOGGER.error("Player is null when trying to play sound for 'Smite: Archon'!");
             return;
         }
-        if(ModelUtil.isWearingHoySet(player)) {
-            player.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ARCHON_BOLT.get(), SoundSource.PLAYERS, 0.4F, 1.5F + Mth.randomBetween(entity.getRandom(), -0.2F, 0.2F));
-            return;
+
+        SoundChoice sound = new SoundChoice(ModSounds.SMITE_BOLT, 0.4F, 1.5F + Mth.randomBetween(entity.getRandom(), -0.2F, 0.2F));
+        if (ModelUtil.getWornSet(player) instanceof AdditionalArmorModel model) {
+            sound = model.getCustomSound(AbstractSmiteAbility.class, sound);
         }
-
-        if(ModelUtil.isWearingHokageRobesSet(player)) {
-            player.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ARCHON_BOLT.get(), SoundSource.PLAYERS, 0.4F, 1.5F + Mth.randomBetween(entity.getRandom(), -0.2F, 0.2F));
-            return;
-        }
-
-        player.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSounds.SMITE_BOLT, SoundSource.PLAYERS, 0.4F, 1.5F + Mth.randomBetween(entity.getRandom(), -0.2F, 0.2F));
-
+        player.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
     }
 
     @WrapWithCondition(method = "doDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;playSound(Lnet/minecraft/world/entity/player/Player;DDDLnet/minecraft/sounds/SoundEvent;Lnet/minecraft/sounds/SoundSource;FF)V", ordinal = 1))

@@ -19,15 +19,6 @@ public class GearAttributePower extends LearnableSkill implements GearAttributeS
     private VaultGearAttribute<?> attribute;
     private double value;
 
-    public GearAttributePower(int unlockLevel, int learnPointCost, int regretPointCost, VaultGearAttribute<?> attribute, double value) {
-        super(unlockLevel, learnPointCost, regretPointCost);
-        this.attribute = attribute;
-        this.value = value;
-    }
-
-    public GearAttributePower() {
-    }
-
     public VaultGearAttribute<?> getAttribute() {
         return this.attribute;
     }
@@ -54,17 +45,18 @@ public class GearAttributePower extends LearnableSkill implements GearAttributeS
         } else if (this.canApply(context)) {
             this.onAddModifiers(context);
         }
-
     }
 
     public Stream<VaultGearAttributeInstance<?>> getGearAttributes(SkillContext context) {
-        return this.canApply(context) ? Stream.of(VaultGearAttributeInstance.cast(this.getAttribute(), this.getValue())) : Stream.empty();
+        return this.canApply(context)
+                ? Stream.of(VaultGearAttributeInstance.cast(this.getAttribute(), this.getValue()))
+                : Stream.empty();
     }
 
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
         Adapters.GEAR_ATTRIBUTE.writeBits(this.attribute, buffer);
-        Adapters.DOUBLE.writeBits(this.value, buffer);
+        buffer.writeDouble(this.value);
     }
 
     public void readBits(BitBuffer buffer) {
@@ -75,12 +67,8 @@ public class GearAttributePower extends LearnableSkill implements GearAttributeS
 
     public Optional<CompoundTag> writeNbt() {
         return super.writeNbt().map((nbt) -> {
-            Adapters.GEAR_ATTRIBUTE.writeNbt(this.attribute).ifPresent((tag) -> {
-                nbt.put("attribute", tag);
-            });
-            Adapters.DOUBLE.writeNbt(this.value).ifPresent((tag) -> {
-                nbt.put("value", tag);
-            });
+            Adapters.GEAR_ATTRIBUTE.writeNbt(this.attribute).ifPresent(tag -> nbt.put("attribute", tag));
+            nbt.putDouble("value", this.value);
             return nbt;
         });
     }
@@ -95,12 +83,8 @@ public class GearAttributePower extends LearnableSkill implements GearAttributeS
 
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map((json) -> {
-            Adapters.GEAR_ATTRIBUTE.writeJson(this.attribute).ifPresent((element) -> {
-                json.add("attribute", element);
-            });
-            Adapters.DOUBLE.writeJson(this.value).ifPresent((element) -> {
-                json.add("value", element);
-            });
+            Adapters.GEAR_ATTRIBUTE.writeJson(this.attribute).ifPresent(element -> json.add("attribute", element));
+            json.addProperty("value", this.value);
             return json;
         });
     }

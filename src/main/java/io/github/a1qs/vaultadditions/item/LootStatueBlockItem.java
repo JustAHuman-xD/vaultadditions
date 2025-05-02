@@ -3,7 +3,7 @@ package io.github.a1qs.vaultadditions.item;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
-import io.github.a1qs.vaultadditions.init.ModBlocks;
+import iskallia.vault.init.ModBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -65,13 +65,14 @@ public class LootStatueBlockItem extends BlockItem {
         }
     }
 
-    /* Generally unused */
     public static ItemStack getStatueBlockItem(String nickname) {
-        ItemStack itemStack = new ItemStack(ModBlocks.LOOT_STATUE_VAULT.get());
+        ItemStack itemStack = new ItemStack(ModBlocks.LOOT_STATUE_ITEM);
+
         CompoundTag nbt = new CompoundTag();
         nbt.putString("PlayerNickname", nickname);
-        ItemStack loot = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.randomLoot();
+        ItemStack loot = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.randomLoot();
         nbt.put("LootItem", loot.serializeNBT());
+
         CompoundTag stackNBT = new CompoundTag();
         stackNBT.put("BlockEntityTag", nbt);
         itemStack.setTag(stackNBT);

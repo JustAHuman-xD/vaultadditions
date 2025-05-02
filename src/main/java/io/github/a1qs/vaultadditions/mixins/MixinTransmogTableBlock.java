@@ -16,7 +16,4 @@ public class MixinTransmogTableBlock {
     private static void preventPatreonCheck(Player player, Collection<ResourceLocation> discoveredModelIds, ResourceLocation modelId, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(discoveredModelIds.contains(modelId));
     }
-
-
-
 }

@@ -3,6 +3,7 @@ package io.github.a1qs.vaultadditions.mixins;
 import io.github.a1qs.vaultadditions.init.vault.ModGearAttributes;
 import iskallia.vault.block.VaultChestBlock;
 import iskallia.vault.block.entity.VaultChestTileEntity;
+import iskallia.vault.gear.data.GearDataCache;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.init.ModBlocks;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeHooks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -40,26 +42,28 @@ public class MixinVaultChestBlock extends ChestBlock {
 
     @Inject(method = "playerDestroy", at = @At(value = "INVOKE", target = "Liskallia/vault/block/entity/VaultChestTileEntity;getItem(I)Lnet/minecraft/world/item/ItemStack;"), remap = true)
     private void injectBreachingBehaviour(Level world, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack, CallbackInfo ci) {
-        if (te instanceof VaultChestTileEntity chest) {
-            boolean hasBreach = false;
+        if (!(te instanceof VaultChestTileEntity chest)) {
+            return;
+        }
 
-            if(player.getMainHandItem().getItem() instanceof VaultGearItem) {
-                VaultGearData data = VaultGearData.read(player.getMainHandItem().copy());
-                hasBreach = data.hasAttribute(ModGearAttributes.BREACHING);
+        boolean hasBreach = false;
+        if (player.getMainHandItem().getItem() instanceof VaultGearItem) {
+            VaultGearData data = VaultGearData.read(player.getMainHandItem().copy());
+            hasBreach = data.hasAttribute(ModGearAttributes.BREACHING);
+        }
+
+        for (int slot = 0; slot < chest.getContainerSize(); ++slot) {
+            ItemStack invStack = chest.getItem(slot);
+            if (invStack.isEmpty()) {
+                continue;
             }
 
-            for (int slot = 0; slot < chest.getContainerSize(); ++slot) {
-                ItemStack invStack = chest.getItem(slot);
-                if (!invStack.isEmpty()) {
-                    Block.popResource(world, pos, invStack);
-                    chest.setItem(slot, ItemStack.EMPTY);
-
-                    if (hasBreach) {
-                        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-                    } else {
-                        break;
-                    }
-                }
+            Block.popResource(world, pos, invStack);
+            chest.setItem(slot, ItemStack.EMPTY);
+            if (hasBreach) {
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            } else {
+                break;
             }
         }
     }
@@ -67,22 +71,18 @@ public class MixinVaultChestBlock extends ChestBlock {
 
     @Override
     public float getDestroyProgress(BlockState pState, Player pPlayer, BlockGetter pLevel, BlockPos pPos) {
-        if(pState.getBlock() == ModBlocks.WOODEN_CHEST || pState.getBlock() == ModBlocks.WOODEN_BARREL) return super.getDestroyProgress(pState, pPlayer, pLevel, pPos);
-
-        if(!(pPlayer.getMainHandItem().getItem() instanceof VaultGearItem)) return super.getDestroyProgress(pState, pPlayer, pLevel, pPos);
-
-        VaultGearData data = VaultGearData.read(pPlayer.getMainHandItem().copy());
-
-        boolean hasBreach = data.hasAttribute(ModGearAttributes.BREACHING);
-
-        float f = pState.getDestroySpeed(pLevel, pPos);
-
-        if (f == -1.0F) {
-            return 0.0F;
-        } else {
-            int i = net.minecraftforge.common.ForgeHooks.isCorrectToolForDrops(pState, pPlayer) ? 30 : 100;
-            i += hasBreach ? 1500 : 3;
-            return pPlayer.getDigSpeed(pState, pPos) / f / (float)i;
+        if (pState.getBlock() == ModBlocks.WOODEN_CHEST || pState.getBlock() == ModBlocks.WOODEN_BARREL || !(pPlayer.getMainHandItem().getItem() instanceof VaultGearItem)) {
+            return super.getDestroyProgress(pState, pPlayer, pLevel, pPos);
         }
+
+        boolean hasBreach = GearDataCache.of(pPlayer.getMainHandItem()).hasAttribute(ModGearAttributes.BREACHING);
+        float destroySpeed = pState.getDestroySpeed(pLevel, pPos);
+        if (destroySpeed == -1.0F) {
+            return 0.0F;
+        }
+
+        int i = ForgeHooks.isCorrectToolForDrops(pState, pPlayer) ? 30 : 100;
+        i += hasBreach ? 1500 : 3;
+        return pPlayer.getDigSpeed(pState, pPos) / destroySpeed / (float) i;
     }
 }

@@ -26,16 +26,6 @@ public class VanillaAttributePower extends LearnableSkill implements GearAttribu
     private AttributeModifier.Operation operation;
     public double amount;
 
-    public VanillaAttributePower(int unlockLevel, int learnPointCost, int regretPointCost, Attribute attribute, AttributeModifier.Operation operation, double amount) {
-        super(unlockLevel, learnPointCost, regretPointCost);
-        this.attribute = attribute;
-        this.operation = operation;
-        this.amount = amount;
-    }
-
-    public VanillaAttributePower() {
-    }
-
     public void onAdd(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent(this::refreshSnapshot);
     }
@@ -50,7 +40,6 @@ public class VanillaAttributePower extends LearnableSkill implements GearAttribu
         } else {
             this.onAddModifiers(context);
         }
-
     }
 
     public Stream<VaultGearAttributeInstance<?>> getGearAttributes(SkillContext context) {
@@ -62,7 +51,7 @@ public class VanillaAttributePower extends LearnableSkill implements GearAttribu
         super.writeBits(buffer);
         Adapters.ATTRIBUTE.writeBits(this.attribute, buffer);
         OPERATION_ORDINAL.writeBits(this.operation, buffer);
-        Adapters.DOUBLE.writeBits(this.amount, buffer);
+        buffer.writeDouble(this.amount);
     }
 
     public void readBits(BitBuffer buffer) {
@@ -74,15 +63,9 @@ public class VanillaAttributePower extends LearnableSkill implements GearAttribu
 
     public Optional<CompoundTag> writeNbt() {
         return super.writeNbt().map((nbt) -> {
-            Adapters.ATTRIBUTE.writeNbt(this.attribute).ifPresent((tag) -> {
-                nbt.put("attribute", tag);
-            });
-            OPERATION_NAME.writeNbt(this.operation).ifPresent((tag) -> {
-                nbt.put("operation", tag);
-            });
-            Adapters.DOUBLE.writeNbt(this.amount).ifPresent((tag) -> {
-                nbt.put("amount", tag);
-            });
+            Adapters.ATTRIBUTE.writeNbt(this.attribute).ifPresent(tag -> nbt.put("attribute", tag));
+            OPERATION_NAME.writeNbt(this.operation).ifPresent(tag -> nbt.put("operation", tag));
+            nbt.putDouble("amount", this.amount);
             return nbt;
         });
     }
@@ -98,15 +81,9 @@ public class VanillaAttributePower extends LearnableSkill implements GearAttribu
 
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map((json) -> {
-            Adapters.ATTRIBUTE.writeJson(this.attribute).ifPresent((element) -> {
-                json.add("attribute", element);
-            });
-            OPERATION_NAME.writeJson(this.operation).ifPresent((element) -> {
-                json.add("operation", element);
-            });
-            Adapters.DOUBLE.writeJson(this.amount).ifPresent((element) -> {
-                json.add("amount", element);
-            });
+            Adapters.ATTRIBUTE.writeJson(this.attribute).ifPresent(element -> json.add("attribute", element));
+            OPERATION_NAME.writeJson(this.operation).ifPresent(element -> json.add("operation", element));
+            json.addProperty("amount", this.amount);
             return json;
         });
     }

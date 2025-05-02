@@ -17,7 +17,7 @@ public class MixinSkillAdapter {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onAdapterInit(CallbackInfo ci) {
-        Skill.Adapter instance = ((Skill.Adapter) (Object)this);
+        Skill.Adapter instance = (Skill.Adapter) (Object) this;
 
         /* Power Skills */
         instance.register("vaultadditions_expertises", PowerTree.class, PowerTree::new);
@@ -39,7 +39,5 @@ public class MixinSkillAdapter {
         instance.register("legacy_mana_shield", LegacyManaShieldAbility.class, LegacyManaShieldAbility::new);
         instance.register("blade_frenzy", BladeFrenzyAbility.class, BladeFrenzyAbility::new);
         instance.register("thorned_frenzy", ThornedFrenzyAbility.class, ThornedFrenzyAbility::new);
-
-
     }
 }

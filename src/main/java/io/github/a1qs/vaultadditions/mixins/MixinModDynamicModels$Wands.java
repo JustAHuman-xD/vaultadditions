@@ -15,10 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ModDynamicModels.Wands.class, remap = false)
 public class MixinModDynamicModels$Wands {
-
-    @Shadow
-    @Final
-    public static DynamicModelRegistry<PlainItemModel> REGISTRY;
+    @Shadow @Final public static DynamicModelRegistry<PlainItemModel> REGISTRY;
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectWandModels(CallbackInfo ci) {

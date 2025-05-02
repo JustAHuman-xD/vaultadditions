@@ -16,14 +16,11 @@ public class MixinModDynamicModels$Armor {
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectArmorModels(CallbackInfo ci) {
-        PIECE_REGISTRY.registerAll(ModModels.Armor.HOY_82);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.HOY_82_GROGU);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.DINDJARIN);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.HOKAGE_ROBES_MASKLESS);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.CELESTIAL);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.VIKING);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.BOKATAN);
-        PIECE_REGISTRY.registerAll(ModModels.Armor.SPACE_MARINE);
+        for (ModModels.Armor set : ModModels.Armor.values()) {
+            PIECE_REGISTRY.registerAll(set.getModel());
+        }
+        for (ModModels.GeckoArmor set : ModModels.GeckoArmor.values()) {
+            PIECE_REGISTRY.registerAll(set.getModel());
+        }
     }
 }

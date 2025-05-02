@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(value = VaultModifierTypeRegistry.class, remap = false)
 public class MixinVaultModifierTypeRegistry {
-
     @Shadow @Final private static Map<ResourceLocation, VaultModifierType<?, ?>> MODIFIER_TYPE_REGISTRY;
 
     static  {

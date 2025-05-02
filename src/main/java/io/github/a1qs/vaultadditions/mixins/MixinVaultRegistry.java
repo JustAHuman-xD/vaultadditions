@@ -13,9 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = VaultRegistry.class, remap = false)
 public class MixinVaultRegistry {
-    @Shadow
-    @Final
-    public static SupplierRegistry<ClockModifier> CLOCK_MODIFIER;
+    @Shadow @Final public static SupplierRegistry<ClockModifier> CLOCK_MODIFIER;
 
     @Inject(method = "<clinit>", at = @At(value = "TAIL"))
     private static void injectRegistries(CallbackInfo ci) {

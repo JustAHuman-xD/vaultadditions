@@ -26,8 +26,7 @@ import java.util.*;
 
 @Mixin(value = AttributeSnapshotCalculator.class, remap = false)
 public class MixinAttributeSnapshotCalculator {
-    @Unique
-    private static final Set<UUID> trackedPlayers = new HashSet<>();
+    @Unique private static final Map<UUID, ArmorModel> vaultadditions$setEffects = new HashMap<>();
 
     @Inject(method = "computeSnapshot", at = @At(value = "INVOKE", target = "Liskallia/vault/snapshot/AttributeSnapshotCalculator;addExpertiseInformationToSnapshot(Lnet/minecraft/server/level/ServerPlayer;Liskallia/vault/snapshot/AttributeSnapshot;)V"))
     private static void injectPowerCompute(ServerPlayer player, AttributeSnapshot snapshot, CallbackInfo ci) {
@@ -43,92 +42,74 @@ public class MixinAttributeSnapshotCalculator {
     @Unique
     private static void vaultadditions$addPowerInformationToSnapshot(ServerPlayer player, AttributeSnapshot snapshot) {
         PowerTree expertise = PlayerPowersData.get(player.getLevel()).getPowers(player);
-        expertise.iterate(GearAttributeSkill.class, (attributeSkill) -> {
-            if (attributeSkill instanceof Skill skill) {
-                if (skill.isUnlocked()) {
-                    attributeSkill.getGearAttributes(MiscUtil.ofPowers(player)).forEach((attributeValue) -> {
-                        Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
-                        VaultGearAttribute<?> attribute = attributeValue.getAttribute();
-                        AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
-                                attribute,
-                                (attr) -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
-                        );
+        expertise.iterate(GearAttributeSkill.class,attributeSkill -> {
+            if (attributeSkill instanceof Skill skill && skill.isUnlocked()) {
+                attributeSkill.getGearAttributes(MiscUtil.ofPowers(player)).forEach(attributeValue -> {
+                    Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
+                    VaultGearAttribute<?> attribute = attributeValue.getAttribute();
+                    AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
+                            attribute,
+                            attr -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
+                    );
 
-                        InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
-                        snapshotInvoker.invokeAddCachedValue(attributeValue.getValue());
-                    });
-                }
+                    InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
+                    snapshotInvoker.invokeAddCachedValue(attributeValue.getValue());
+                });
             }
-
         });
     }
 
     @Unique
     private static void vaultadditions$addArmorSetEffects(ServerPlayer player, AttributeSnapshot snapshot) {
+        ArmorModel wornSet = ModelUtil.getWornSet(player);
+        if (wornSet == null) {
+            return;
+        }
+
         boolean hasEffect = false;
+        List<ArmorSetEffect> effects = ArmorEffectRegistry.getEffectsForArmor(wornSet);
+        for(ArmorSetEffect effect : effects) {
+            if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
+                vanillaEffect.apply(player);
+            }
 
-        for(Map.Entry<ArmorModel, List<ArmorSetEffect>> obj : ArmorEffectRegistry.getArmorEffects().entrySet()) {
-            if(!ModelUtil.isWearingArmorSet(obj.getKey(), player)) continue;
+            Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
+            VaultGearAttribute<?> attribute = effect.getVaultGearAttributeInstance().getAttribute();
+            AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
+                    attribute,
+                    attr -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
+            );
+            InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
+            snapshotInvoker.invokeAddCachedValue(effect.getVaultGearAttributeInstance().getValue());
+            hasEffect = true;
+        }
 
-            if(ArmorEffectRegistry.getEffectsForArmor(obj.getKey()) != null) {
-                List<ArmorSetEffect> effectList = ArmorEffectRegistry.getEffectsForArmor(obj.getKey());
-
-
-
-                for(ArmorSetEffect effect : effectList) {
-                    if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
-                        vanillaEffect.apply(player); // Apply effect to player
-                    }
-                    Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> gearAttributeValues = ((AccessorAttributeSnapshot) snapshot).getGearAttributeValues();
-                    VaultGearAttribute<?> attribute = effect.getVaultGearAttributeInstance().getAttribute();
-
-                    AttributeSnapshot.AttributeValue<?, ?> attributeSnapshotValue = gearAttributeValues.computeIfAbsent(
-                            attribute,
-                            (attr) -> InvokeAttributeSnapshotAttributeValue.invokeConstructor()
-                    );
-                    InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
-                    snapshotInvoker.invokeAddCachedValue(effect.getVaultGearAttributeInstance().getValue());
-                    hasEffect = true;
+        ArmorModel oldSet = vaultadditions$setEffects.remove(player.getUUID());
+        if (!hasEffect || wornSet != oldSet) {
+            List<ArmorSetEffect> oldEffects = ArmorEffectRegistry.getEffectsForArmor(oldSet);
+            for (ArmorSetEffect effect : oldEffects) {
+                if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
+                    vanillaEffect.remove(player);
                 }
             }
         }
-
-        // Remove effects if player is no longer wearing a full armor set
-        // this shit is black magic and i dont want to look at it
-        // dont look at it either, it MIGHT work and im willing to take those odds
-        if (!hasEffect && trackedPlayers.contains(player.getUUID())) {
-            for (List<ArmorSetEffect> effects : ArmorEffectRegistry.getArmorEffects().values()) {
-                for (ArmorSetEffect effect : effects) {
-                    if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
-                        vanillaEffect.remove(player);
-                    }
-                }
-            }
-            trackedPlayers.remove(player.getUUID());
-        } else if (hasEffect) {
-            trackedPlayers.add(player.getUUID());
-        }
-
+        vaultadditions$setEffects.put(player.getUUID(), wornSet);
     }
 
     @Mixin(value = AttributeSnapshot.class, remap = false)
     public interface AccessorAttributeSnapshot {
         @Accessor
         Map<VaultGearAttribute<?>, AttributeSnapshot.AttributeValue<?, ?>> getGearAttributeValues();
-
     }
 
-    @Mixin(targets = "iskallia.vault.snapshot.AttributeSnapshot$AttributeValue")
+    @Mixin(AttributeSnapshot.AttributeValue.class)
     public interface InvokeAttributeSnapshotAttributeValue {
         @Invoker("<init>")
-        static AttributeSnapshot.AttributeValue invokeConstructor() {
+        static AttributeSnapshot.AttributeValue<?, ?> invokeConstructor() {
             throw new AssertionError();
         }
 
         @Invoker("addCachedValue")
         void invokeAddCachedValue(Object object);
-
-        @Accessor("cachedValues")
-        List<?> getCachedValues();
     }
 }

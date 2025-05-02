@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -16,28 +17,25 @@ import java.util.List;
 
 @Mixin(LootStatueUpperBlock.class)
 public abstract class MixinLootStatueUpperBlock extends Block {
-
-    public MixinLootStatueUpperBlock(Properties pProperties) {
+    private MixinLootStatueUpperBlock(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         return List.of();
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide) {
-            int i = state.getValue(LootStatueUpperBlock.HALF) == Half.BOTTOM ? 1 : 2;
-            BlockPos p = pos.below(i);
-            BlockState statue = level.getBlockState(p);
-
-            statue.getBlock().playerWillDestroy(level, p, statue, player);
+            BlockPos below = pos.below(state.getValue(LootStatueUpperBlock.HALF) == Half.BOTTOM ? 1 : 2);
+            BlockState statue = level.getBlockState(below);
+            statue.getBlock().playerWillDestroy(level, below, statue, player);
             return;
         }
-
         super.playerWillDestroy(level, pos, state, player);
     }
 }
