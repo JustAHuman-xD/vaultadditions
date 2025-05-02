@@ -134,9 +134,9 @@ public class BladeFrenzyAbility extends InstantManaAbility {
     @Override
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
-        Adapters.FLOAT.writeBits(this.radius, buffer);
-        Adapters.FLOAT.writeBits(this.percentAttackDealt, buffer);
-        Adapters.FLOAT.writeBits(this.knockbackStrengthMultiplier, buffer);
+        buffer.writeFloat(this.radius);
+        buffer.writeFloat(this.percentAttackDealt);
+        buffer.writeFloat(this.knockbackStrengthMultiplier);
     }
 
     @Override
@@ -150,9 +150,9 @@ public class BladeFrenzyAbility extends InstantManaAbility {
     @Override
     public Optional<CompoundTag> writeNbt() {
         return super.writeNbt().map(nbt -> {
-            Adapters.FLOAT.writeNbt(this.radius).ifPresent(tag -> nbt.put("radius", tag));
-            Adapters.FLOAT.writeNbt(this.percentAttackDealt).ifPresent(tag -> nbt.put("percentAttackDealt", tag));
-            Adapters.FLOAT.writeNbt(this.knockbackStrengthMultiplier).ifPresent(tag -> nbt.put("knockbackStrengthMultiplier", tag));
+            nbt.putFloat("radius", this.radius);
+            nbt.putFloat("percentAttackDealt", this.percentAttackDealt);
+            nbt.putFloat("knockbackStrengthMultiplier", this.knockbackStrengthMultiplier);
             return nbt;
         });
     }
@@ -163,17 +163,14 @@ public class BladeFrenzyAbility extends InstantManaAbility {
         this.radius = Adapters.FLOAT.readNbt(nbt.get("radius")).orElse(0.0F);
         this.percentAttackDealt = Adapters.FLOAT.readNbt(nbt.get("percentAttackDealt")).orElse(0.0F);
         this.knockbackStrengthMultiplier = Adapters.FLOAT.readNbt(nbt.get("knockbackStrengthMultiplier")).orElse(0.0F);
-
     }
 
     @Override
     public Optional<JsonObject> writeJson() {
         return super.writeJson().map(json -> {
             json.addProperty("radius", this.radius);
-            json.addP
-            Adapters.FLOAT.writeJson(this.radius).ifPresent(element -> json.add("radius", element));
-            Adapters.FLOAT.writeJson(this.percentAttackDealt).ifPresent(element -> json.add("percentAttackDealt", element));
-            Adapters.FLOAT.writeJson(this.knockbackStrengthMultiplier).ifPresent(element -> json.add("knockbackStrengthMultiplier", element));
+            json.addProperty("percentAttackDealt", this.percentAttackDealt);
+            json.addProperty("knockbackStrengthMultiplier", this.knockbackStrengthMultiplier);
             return json;
         });
     }
