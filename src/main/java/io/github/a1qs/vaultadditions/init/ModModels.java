@@ -23,8 +23,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.NewRegistryEvent;
 
 import java.util.Set;
 
@@ -32,24 +35,6 @@ import java.util.Set;
 public class ModModels {
     public static final Set<AdditionalArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.HOYTEST.model);
     public static final Set<AdditionalArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
-
-    static {
-        for (AdditionalArmorModel model : HOY_ARMOR) {
-            model.abilitySound(SmiteArchonAbility.class, ModSounds.HOY_ACTIVATE_ARCHON.get());
-            model.abilitySound(AbstractSmiteAbility.class, ModSounds.HOY_ARCHON_BOLT.get());
-            model.abilitySound(DashAbility.class, ModSounds.HOY_DASH.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_ACTIVATE_MANASHIELD.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_MANASHIELD_HIT.get());
-            model.elytraSound(ModSounds.HOY_ELYTRA_GLIDE.get(), 0.2F);
-        }
-
-        for (AdditionalArmorModel model : HOKAGE_ARMOR) {
-            model.abilitySound(SmiteArchonAbility.class, ModSounds.TIGER_ACTIVATE_ARCHON.get(), 0.2F, 1F);
-            model.abilitySound(AbstractSmiteAbility.class, ModSounds.TIGER_ARCHON_BOLT.get());
-            model.abilitySound(DashAbility.class, ModSounds.TIGER_DASH.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.TIGER_ACTIVATE_MANASHIELD.get());
-        }
-    }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
@@ -69,6 +54,24 @@ public class ModModels {
         for (DyeColor color : DyeColor.values()) {
             ResourceLocation texture = VaultAdditions.id("entity/bed/velvet_bed_" + color.getName());
             event.addSprite(texture);
+        }
+    }
+
+    public static void registerSounds() {
+        for (AdditionalArmorModel model : HOY_ARMOR) {
+            model.abilitySound(SmiteArchonAbility.class, ModSounds.HOY_ACTIVATE_ARCHON.get());
+            model.abilitySound(AbstractSmiteAbility.class, ModSounds.HOY_ARCHON_BOLT.get());
+            model.abilitySound(DashAbility.class, ModSounds.HOY_DASH.get());
+            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_ACTIVATE_MANASHIELD.get());
+            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_MANASHIELD_HIT.get());
+            model.elytraSound(ModSounds.HOY_ELYTRA_GLIDE.get(), 0.2F);
+        }
+
+        for (AdditionalArmorModel model : HOKAGE_ARMOR) {
+            model.abilitySound(SmiteArchonAbility.class, ModSounds.TIGER_ACTIVATE_ARCHON.get(), 0.2F, 1F);
+            model.abilitySound(AbstractSmiteAbility.class, ModSounds.TIGER_ARCHON_BOLT.get());
+            model.abilitySound(DashAbility.class, ModSounds.TIGER_DASH.get());
+            model.abilitySound(ManaShieldAbility.class, ModSounds.TIGER_ACTIVATE_MANASHIELD.get());
         }
     }
 
