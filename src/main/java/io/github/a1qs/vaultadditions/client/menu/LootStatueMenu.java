@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.client.menu;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.container.LootStatueContainer;
@@ -144,7 +145,6 @@ public class LootStatueMenu extends AbstractContainerScreen<LootStatueContainer>
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if ((keyCode == 256 || keyCode == 69) && this.minecraft != null && this.minecraft.player != null) {
-            ModNetwork.CHANNEL.sendToServer(StatueSelectItemMessage.selectItem(this.getSelected().getStack(), this.statuePos));
             this.minecraft.player.closeContainer();
             return true;
         } else if (keyCode == 263) {
@@ -154,7 +154,6 @@ public class LootStatueMenu extends AbstractContainerScreen<LootStatueContainer>
             if (keyCode == 262) {
                 this.keyUp();
             }
-
             return false;
         }
     }

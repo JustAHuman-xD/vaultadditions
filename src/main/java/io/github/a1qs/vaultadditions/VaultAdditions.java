@@ -43,6 +43,7 @@ public class VaultAdditions {
 
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::clientSetup);
+        eventBus.addListener(this::registerRenderers);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfigs.SPEC, "vaultadditions-server.toml");
 
