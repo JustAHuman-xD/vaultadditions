@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.VaultMod;
 import iskallia.vault.config.Config;
-import iskallia.vault.config.entry.IntRangeEntry;
 import iskallia.vault.config.entry.vending.ProductEntry;
 import iskallia.vault.util.data.WeightedList;
 import net.minecraft.world.item.ItemStack;
@@ -27,14 +26,6 @@ public abstract class AbstractStatueLootConfig extends Config {
     @Override
     protected void reset() {
 
-    }
-
-    public WeightedList<ProductEntry> getDrops() {
-        return DROPS.copy();
-    }
-
-    public IntRangeEntry getRollRange() {
-        return new IntRangeEntry(MIN_ITEM_GENERATED, MAX_ITEM_GENERATED);
     }
 
     public int getInterval() {
