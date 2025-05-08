@@ -9,9 +9,9 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class VaultGeckoModelProvider<T extends VaultArmorItem & IAnimatable> extends AnimatedGeoModel<T> {
-    private static final ResourceLocation DEFAULT_MODEL = VaultMod.id("geo/hoytest.geo.json");
-    private static final ResourceLocation DEFAULT_TEXTURE = VaultMod.id("textures/item/gear/armor/hoytest/texture.png");
-    private static final ResourceLocation DEFAULT_ANIMATION = VaultMod.id("animations/hoytest.animation.json");
+    private static final ResourceLocation DEFAULT_MODEL = VaultMod.id("geo/grogu.geo.json");
+    private static final ResourceLocation DEFAULT_TEXTURE = VaultMod.id("textures/item/gear/armor/grogu/texture.png");
+    private static final ResourceLocation DEFAULT_ANIMATION = VaultMod.id("animations/grogu.animation.json");
 
     private ItemStack lastItemStack;
 

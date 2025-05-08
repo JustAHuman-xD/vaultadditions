@@ -124,16 +124,17 @@ public class ModModels {
             this(id, displayName, animationName, transitionTicks, true, true);
         }
 
-        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean allowTransmog, boolean hideElytra) {
-            this(id, displayName, animationName, transitionTicks, allowTransmog, hideElytra, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll, boolean hideElytra) {
+            this(id, displayName, animationName, transitionTicks, discoverOnRoll, hideElytra, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         }
 
-        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean allowTransmog, boolean hideElytra, EquipmentSlot... slots) {
+        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll, boolean hideElytra, EquipmentSlot... slots) {
             this.model = new GeckoArmorModel(id, displayName, animationName, transitionTicks, hideElytra);
             this.model.properties(new DynamicModelProperties());
             this.model.usingLayers(new DummyArmorLayers());
-            if (allowTransmog) {
-                this.model.getModelProperties().allowTransmogrification().discoverOnRoll();
+            this.model.getModelProperties().allowTransmogrification();
+            if (discoverOnRoll) {
+                this.model.getModelProperties().discoverOnRoll();
             }
             for (EquipmentSlot slot : slots) {
                 this.model.addSlot(slot);
