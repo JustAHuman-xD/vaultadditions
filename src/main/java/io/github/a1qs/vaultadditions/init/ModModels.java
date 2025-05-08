@@ -33,7 +33,7 @@ import java.util.Set;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModModels {
-    public static final Set<AdditionalArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.HOYTEST.model);
+    public static final Set<AdditionalArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.GROGU.model);
     public static final Set<AdditionalArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
 
     @SubscribeEvent
@@ -116,8 +116,8 @@ public class ModModels {
     }
 
     public enum GeckoArmor {
-        HOYTEST("hoytest", "Hoytest", "ballanimation", 20);
-
+        GROGU("grogu", "Beskar & Grogu+Ball", "grogu", 20, false, true),
+        ELDRITCH("eldritch", "Eldritch", "tenticle1", 20, false, true);
         private final GeckoArmorModel model;
 
         GeckoArmor(String id, String displayName, String animationName, int transitionTicks) {
