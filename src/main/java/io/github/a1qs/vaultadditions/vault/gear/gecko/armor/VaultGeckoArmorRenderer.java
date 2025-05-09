@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModelProvider;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
@@ -26,6 +27,12 @@ public class VaultGeckoArmorRenderer<T extends VaultArmorItem & IAnimatable> ext
     public void render(float partialTick, PoseStack poseStack, VertexConsumer buffer, int packedLight) {
         ((VaultGeckoModelProvider<?>) getGeoModelProvider()).using(itemStack);
         super.render(partialTick, poseStack, buffer, packedLight);
+    }
+
+    @Override
+    public GeoArmorRenderer applySlot(EquipmentSlot slot) {
+        ((VaultGeckoModelProvider<?>) getGeoModelProvider()).using(itemStack);
+        return super.applySlot(slot);
     }
 
     public ResourceLocation getTextureLocation(ItemStack itemStack) {
