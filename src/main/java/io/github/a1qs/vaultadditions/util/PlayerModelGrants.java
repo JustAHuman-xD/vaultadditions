@@ -24,7 +24,7 @@ public record PlayerModelGrants(String playerName, List<ArmorGrantData> grants) 
                         new ArmorGrantData(ModModels.Armor.HOY_82_GROGU.getModel(), "You have been granted the Beskar & Grogu armor set!"),
                         new ArmorGrantData(ModModels.Armor.DINDJARIN.getModel(), "You have been granted the DinDjarin armor set!"),
                         ModList.get().isLoaded("woldsvaults")
-                                ? new ArmorGrantData(ModModels.WoldsBattleStaffs.DARKSABER, "You have been granted the Darksaber Battlestaff Transmog!", ModItems.BATTLESTAFF.asItem())
+                                ? new ArmorGrantData(ModModels.Item.DARKSABER.getModel(), "You have been granted the Darksaber Battlestaff Transmog!", ModItems.BATTLESTAFF.asItem())
                                 : null
                 ).filter(Objects::nonNull).toList()), // Filter out null entries
 

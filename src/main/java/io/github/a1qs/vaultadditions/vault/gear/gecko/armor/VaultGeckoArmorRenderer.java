@@ -1,5 +1,8 @@
-package io.github.a1qs.vaultadditions.vault.gear.gecko;
+package io.github.a1qs.vaultadditions.vault.gear.gecko.armor;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModelProvider;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +20,12 @@ public class VaultGeckoArmorRenderer<T extends VaultArmorItem & IAnimatable> ext
         this.leftLegBone = "LeftLeg";
         this.rightBootBone = "RightBoot";
         this.leftBootBone = "LeftBoot";
+    }
+
+    @Override
+    public void render(float partialTick, PoseStack poseStack, VertexConsumer buffer, int packedLight) {
+        ((VaultGeckoModelProvider<?>) getGeoModelProvider()).using(itemStack);
+        super.render(partialTick, poseStack, buffer, packedLight);
     }
 
     public ResourceLocation getTextureLocation(ItemStack itemStack) {

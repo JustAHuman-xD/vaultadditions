@@ -1,8 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins;
 
 import io.github.a1qs.vaultadditions.util.ModelUtil;
-import io.github.a1qs.vaultadditions.vault.gear.gecko.GeckoArmorModel;
-import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoArmorRenderer;
+import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.GeckoArmorModel;
+import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
 import iskallia.vault.gear.renderer.VaultArmorRenderProperties;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;

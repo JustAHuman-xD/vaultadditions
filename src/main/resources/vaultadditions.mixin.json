@@ -44,10 +44,11 @@
   "refmap": "vaultadditions.mixin-refmap.json",
   "client": [
     "MixinElytraLayer",
-    "MixinGeoArmorRenderer",
+    "MixinItem",
     "MixinLocalPlayer",
     "MixinVaultArmorItem",
     "MixinVaultArmorRenderProperties",
-    "MixinVaultBarOverlay"
+    "MixinVaultBarOverlay",
+    "MixinVaultGearItem"
   ]
 }

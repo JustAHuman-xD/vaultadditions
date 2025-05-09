@@ -1,46 +1,52 @@
-package io.github.a1qs.vaultadditions.vault.gear.gecko;
+package io.github.a1qs.vaultadditions.vault.gear.gecko.armor;
 
+import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
 import iskallia.vault.VaultMod;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 
-public class GeckoArmorModel extends AdditionalArmorModel {
+public class GeckoArmorModel extends AdditionalArmorModel implements VaultGeckoModel {
     private final ResourceLocation modelPath;
     private final ResourceLocation texturePath;
     private final ResourceLocation animationPath;
 
-    private final AnimationBuilder armorAnimation;
+    private final AnimationBuilder animation;
     private final float transitionTicks;
 
     public GeckoArmorModel(String id, String displayName, String animationName, float transitionTicks, boolean hidesElytra) {
         super(VaultMod.id("gear/armor/" + id), displayName, hidesElytra);
 
-        this.modelPath = VaultMod.id("geo/" + id + ".geo.json");
+        this.modelPath = VaultMod.id("geo/armor/" + id + ".geo.json");
         this.texturePath = VaultMod.id("textures/item/gear/armor/" + id + "/texture.png");
-        this.animationPath = VaultMod.id("animations/" + id + ".animation.json");
+        this.animationPath = VaultMod.id("animations/armor/" + id + ".animation.json");
 
-        this.armorAnimation = new AnimationBuilder().addAnimation(animationName, ILoopType.EDefaultLoopTypes.LOOP);
+        this.animation = new AnimationBuilder().addAnimation(animationName, ILoopType.EDefaultLoopTypes.LOOP);
         this.transitionTicks = transitionTicks;
     }
 
+    @Override
     public ResourceLocation getModelPath() {
         return this.modelPath;
     }
 
+    @Override
     public ResourceLocation getTexturePath() {
         return texturePath;
     }
 
+    @Override
     public ResourceLocation getAnimationPath() {
         return animationPath;
     }
 
-    public AnimationBuilder getArmorAnimation() {
-        return this.armorAnimation;
+    @Override
+    public AnimationBuilder getAnimation() {
+        return this.animation;
     }
 
+    @Override
     public float getTransitionTicks() {
         return this.transitionTicks;
     }

@@ -1,18 +1,38 @@
 package io.github.a1qs.vaultadditions.util;
 
 import io.github.a1qs.vaultadditions.init.ModModels;
+import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.gear.data.GearDataCache;
+import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ModelUtil {
+    private static final Map<VaultGearItem, AnimationFactory> ANIMATION_FACTORIES = new HashMap<>();
+
+    public static DynamicModel<?> getDynamicModel(ItemStack itemStack) {
+        if (itemStack == null) {
+            return null;
+        }
+
+        GearDataCache cache = GearDataCache.of(itemStack);
+        return cache.getGearModel().flatMap(model -> ModDynamicModels.REGISTRIES.getModel(itemStack.getItem(), model))
+                .orElse(null);
+    }
+
     public static ArmorModel getArmorModel(ItemStack itemStack) {
         if (itemStack == null) {
             return null;
@@ -73,5 +93,9 @@ public class ModelUtil {
             ItemStack itemStack = player.getInventory().getArmor(slot.getIndex());
             return getArmorModel(itemStack) == armorSet;
         });
+    }
+
+    public static <I extends VaultGearItem & IAnimatable> AnimationFactory getAnimationFactory(I item) {
+        return ANIMATION_FACTORIES.computeIfAbsent(item, i -> GeckoLibUtil.createFactory(item));
     }
 }
