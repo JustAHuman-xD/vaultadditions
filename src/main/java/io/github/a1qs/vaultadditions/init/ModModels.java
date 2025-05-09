@@ -188,7 +188,8 @@ public class ModModels {
 
     public enum GeckoItem {
         TEST("test", "Test", "test_animation", 20, ModelType.SWORD),
-        MADNESS("madness", "Madness Focus", "balls", 20, ModelType.FOCUS);
+        MADNESS("madness", "Madness Focus", "balls", 20, ModelType.FOCUS),
+        DARKSABER2("darksaber2", "The Darksaber 2", "darksaber2", 20, ModelType.BATTLESTAFF);
         private final DynamicModel<?> model;
         private final ModelType type;
 
