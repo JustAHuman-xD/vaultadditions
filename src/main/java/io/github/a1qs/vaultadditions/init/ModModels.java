@@ -187,8 +187,8 @@ public class ModModels {
     }
 
     public enum GeckoItem {
-        TEST("test", "Test", "test_animation", 20, ModelType.SWORD);
-
+        TEST("test", "Test", "test_animation", 20, ModelType.SWORD),
+        MADNESS("madness", "Madness Focus", "balls", 20, ModelType.FOCUS);
         private final DynamicModel<?> model;
         private final ModelType type;
 
