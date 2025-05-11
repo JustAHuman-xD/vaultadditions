@@ -1,5 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.vault.gear.gecko.item.GeckoItemRenderProperties;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.item.VaultGeckoItemRenderer;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.item.gear.VaultArmorItem;
@@ -26,8 +27,8 @@ public class MixinItem {
             return properties -> {
                 if (properties == this) {
                     throw new IllegalStateException("Don't extend IItemRenderProperties in your item, use an anonymous class instead.");
-                } else if (!(properties instanceof VaultGeckoItemRenderer)) {
-                    this.renderProperties = new VaultGeckoItemRenderer<>(properties);
+                } else if (!(properties instanceof GeckoItemRenderProperties)) {
+                    this.renderProperties = new GeckoItemRenderProperties(properties);
                 }
             };
         }
@@ -37,22 +38,12 @@ public class MixinItem {
     @Inject(method = "initializeClient", at = @At("HEAD"), remap = false)
     public void addDefaultGeckoRenderer(Consumer<IItemRenderProperties> consumer, CallbackInfo ci) {
         if (applies()) {
-            consumer.accept(new IItemRenderProperties() {
-                BlockEntityWithoutLevelRenderer renderer = null;
-
-                @Override
-                public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
-                    if (renderer == null) {
-                        renderer = new VaultGeckoItemRenderer<>(null);
-                    }
-                    return renderer;
-                }
-            });
+            consumer.accept(new GeckoItemRenderProperties(null));
         }
     }
 
     @Unique
     private boolean applies() {
-        return this instanceof VaultGearItem && !(((Object) this) instanceof VaultArmorItem);
+        return this instanceof VaultGearItem && !VaultArmorItem.class.isInstance(this);
     }
 }
