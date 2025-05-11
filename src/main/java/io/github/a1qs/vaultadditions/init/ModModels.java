@@ -42,11 +42,13 @@ public class ModModels {
         }
         for (Item item : Item.values()) {
             ModDynamicModels.REGISTRIES.getAssociatedRegistry(item.getType().getItem())
-                    .ifPresent(registry -> registry.register(forceCast(item.getModel())));
+                    .ifPresentOrElse(registry -> registry.register(forceCast(item.getModel())),
+                            () -> VaultAdditions.LOGGER.error("Failed to register item model for {}", item.name()));
         }
         for (GeckoItem item : GeckoItem.values()) {
             ModDynamicModels.REGISTRIES.getAssociatedRegistry(item.getType().getItem())
-                    .ifPresent(registry -> registry.register(forceCast(item.getModel())));
+                    .ifPresentOrElse(registry -> registry.register(forceCast(item.getModel())),
+                            () -> VaultAdditions.LOGGER.error("Failed to register gecko item model for {}", item.name()));
         }
     }
 
@@ -58,14 +60,11 @@ public class ModModels {
 
     @SubscribeEvent @OnlyIn(Dist.CLIENT)
     public static void stitchTextures(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            return;
-        }
-
-        // Loop through all 16 Minecraft colors and register each texture
-        for (DyeColor color : DyeColor.values()) {
-            ResourceLocation texture = VaultAdditions.id("entity/bed/velvet_bed_" + color.getName());
-            event.addSprite(texture);
+        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+            for (DyeColor color : DyeColor.values()) {
+                ResourceLocation texture = VaultAdditions.id("entity/bed/velvet_bed_" + color.getName());
+                event.addSprite(texture);
+            }
         }
     }
 
@@ -216,6 +215,11 @@ public class ModModels {
     }
 
     private static <C> C forceCast(Object obj) {
-        return (C) obj;
+        try {
+            return (C) obj;
+        } catch (Exception e) {
+            VaultAdditions.LOGGER.error("Failed to cast object " + obj + " to expected type", e);
+            throw e;
+        }
     }
 }

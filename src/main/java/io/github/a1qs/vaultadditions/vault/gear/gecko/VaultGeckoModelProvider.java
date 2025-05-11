@@ -17,7 +17,9 @@ public class VaultGeckoModelProvider<T extends Item & VaultGearItem & IAnimatabl
     private ItemStack lastItemStack;
 
     public void using(ItemStack itemStack) {
-        this.lastItemStack = itemStack;
+        if (itemStack != null && !itemStack.isEmpty()) {
+            this.lastItemStack = itemStack;
+        }
     }
 
     public ResourceLocation getModelLocation(Item item) {

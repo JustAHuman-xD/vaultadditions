@@ -36,11 +36,6 @@ public class VaultGeckoItemRenderer<T extends Item & VaultGearItem & IAnimatable
         super.render(animatable, poseStack, bufferSource, packedLight, stack);
     }
 
-    public ResourceLocation getTextureLocation(ItemStack itemStack) {
-        this.currentItemStack = itemStack;
-        return ((VaultGeckoModelProvider<?>) getGeoModelProvider()).getTextureLocation(this.currentItemStack);
-    }
-
     @Override
     public ResourceLocation getTextureLocation(T animatable) {
         return ((VaultGeckoModelProvider<?>) getGeoModelProvider()).getTextureLocation(this.currentItemStack);
