@@ -61,14 +61,9 @@ public class MixinAttributeSnapshotCalculator {
 
     @Unique
     private static void vaultadditions$addArmorSetEffects(ServerPlayer player, AttributeSnapshot snapshot) {
-        ArmorModel wornSet = ModelUtil.getWornSet(player);
-        if (wornSet == null) {
-            return;
-        }
-
         boolean hasEffect = false;
-        List<ArmorSetEffect> effects = ArmorEffectRegistry.getEffectsForArmor(wornSet);
-        for(ArmorSetEffect effect : effects) {
+        ArmorModel wornSet = ModelUtil.getWornSet(player);
+        for(ArmorSetEffect effect : ArmorEffectRegistry.getEffectsForArmor(wornSet)) {
             if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
                 vanillaEffect.apply(player);
             }
@@ -86,8 +81,7 @@ public class MixinAttributeSnapshotCalculator {
 
         ArmorModel oldSet = vaultadditions$setEffects.remove(player.getUUID());
         if (!hasEffect || wornSet != oldSet) {
-            List<ArmorSetEffect> oldEffects = ArmorEffectRegistry.getEffectsForArmor(oldSet);
-            for (ArmorSetEffect effect : oldEffects) {
+            for (ArmorSetEffect effect : ArmorEffectRegistry.getEffectsForArmor(oldSet)) {
                 if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
                     vanillaEffect.remove(player);
                 }

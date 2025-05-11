@@ -23,7 +23,7 @@ public class ArmorEffectRegistry {
     }
 
     public static List<ArmorSetEffect> getEffectsForArmor(ArmorModel model) {
-        return ARMOR_EFFECTS.getOrDefault(model, Collections.emptyList());
+        return model == null ? Collections.emptyList() : ARMOR_EFFECTS.getOrDefault(model, Collections.emptyList());
     }
 
     public static void registerArmorSetEffects() {

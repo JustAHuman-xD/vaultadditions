@@ -66,16 +66,18 @@ public class ModelUtil {
     }
 
     public static boolean isWearingHoySet(Player player) {
-        return ModModels.HOY_ARMOR.contains(getWornSet(player));
+        ArmorModel model = getWornSet(player);
+        return model != null && ModModels.HOY_ARMOR.contains(getWornSet(player));
     }
 
     public static boolean isWearingHokageRobesSet(Player player) {
-        return ModModels.HOKAGE_ARMOR.contains(getWornSet(player));
+        ArmorModel model = getWornSet(player);
+        return model != null && ModModels.HOKAGE_ARMOR.contains(model);
     }
 
     public static boolean isWearingJetpackPiece(Player player) {
         ArmorModel chestModel = getArmorModel(player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex()));
-        return ModModels.HOY_ARMOR.contains(chestModel);
+        return chestModel != null && ModModels.HOY_ARMOR.contains(chestModel);
     }
 
 
