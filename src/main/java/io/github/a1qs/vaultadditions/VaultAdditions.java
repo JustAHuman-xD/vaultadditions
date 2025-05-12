@@ -90,7 +90,7 @@ public class VaultAdditions {
             MiscUtil.limitedLog("Held item %s render properties %s, direct properties %s",
                     ForgeRegistries.ITEMS.getKey(item),
                     RenderProperties.get(item).getClass().getName(),
-                    item.getRenderPropertiesInternal().getClass().getName());
+                    item.getRenderPropertiesInternal() == null ? "null" : item.getRenderPropertiesInternal().getClass().getName());
         }
     }
 
