@@ -32,11 +32,6 @@ public class GeckoHandHeldModel extends HandHeldModel implements VaultGeckoModel
     }
 
     @Override
-    public BakedModel bakeModel(ModelResourceLocation modelLocation, ForgeModelBakery modelLoader, BlockModel unbakedModel) {
-        return new CustomRenderedItemModel(super.bakeModel(modelLocation, modelLoader, unbakedModel));
-    }
-
-    @Override
     public ResourceLocation getModelPath() {
         return modelPath;
     }

@@ -1,13 +1,10 @@
 package io.github.a1qs.vaultadditions.vault.gear.gecko.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModelProvider;
 import iskallia.vault.gear.item.VaultGearItem;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.resources.ResourceLocation;
