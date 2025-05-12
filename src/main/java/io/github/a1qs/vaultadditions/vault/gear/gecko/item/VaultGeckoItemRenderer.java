@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.vault.gear.gecko.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModelProvider;
@@ -28,15 +29,11 @@ public class VaultGeckoItemRenderer<T extends Item & VaultGearItem & IAnimatable
     @Override
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         if (!(ModelUtil.getDynamicModel(stack) instanceof VaultGeckoModel)) {
-            if (Screen.hasShiftDown()) {
-                VaultAdditions.LOGGER.info("Stack has no vault gecko model, nbt: {}, model: {}", stack.getOrCreateTag().getAsString(), ModelUtil.getDynamicModel(stack));
-            }
+            MiscUtil.limitedLog("Stack has no vault gecko model, nbt: %s, model: %s", stack.getOrCreateTag().getAsString(), ModelUtil.getDynamicModel(stack));
             defaultProperties.getItemStackRenderer().renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
             return;
         }
-        if (Screen.hasShiftDown()) {
-            VaultAdditions.LOGGER.info("rendering gekco item");
-        }
+        MiscUtil.limitedLog("rendering gecko item");
         super.renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
     }
 

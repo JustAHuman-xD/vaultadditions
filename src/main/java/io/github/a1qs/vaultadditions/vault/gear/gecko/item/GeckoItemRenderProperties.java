@@ -16,6 +16,7 @@ public class GeckoItemRenderProperties implements IItemRenderProperties {
 
     @Override
     public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+        VaultAdditions.LOGGER.info("GeckoItemRenderProperties getItemStackRenderer");
         if (renderer == null) {
             renderer = new VaultGeckoItemRenderer<>(defaultProperties);
         }

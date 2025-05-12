@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.util;
 
 
 
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.data.PlayerAdditionalVaultStatData;
 import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import iskallia.vault.skill.PlayerVaultStats;
@@ -13,9 +14,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class MiscUtil {
+    private static final Map<String, Long> TIMES = new HashMap<>();
     public static UUID sizeScaleModifierUUID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
     public static int unspentPowerPoints;
     public static final ObservableSupplier<Integer> POWER_POINT_SUPPLIER = ObservableSupplier.of(() -> unspentPowerPoints, Integer::equals);
@@ -28,4 +32,17 @@ public class MiscUtil {
         return new SkillContext(stats.getVaultLevel(), additionalStats.getUnspentPowerPoints(), 0, SkillSource.of(player));
     }
 
+    public static boolean limitedLog(String log, Object... args) {
+        String toLog = log.formatted(args);
+        if (TIMES.getOrDefault(toLog, 0L) < System.currentTimeMillis()) {
+            TIMES.put(toLog, System.currentTimeMillis() + 5000);
+            if (args.length > 0 && args[args.length - 1] instanceof Throwable t) {
+                VaultAdditions.LOGGER.error(toLog, t);
+            } else {
+                VaultAdditions.LOGGER.info(toLog);
+            }
+            return true;
+        }
+        return false;
+    }
 }

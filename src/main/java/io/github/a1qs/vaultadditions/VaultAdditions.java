@@ -4,17 +4,23 @@ import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.*;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
 import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +29,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
@@ -74,6 +81,17 @@ public class VaultAdditions {
     public void registerRenderers(final EntityRenderersEvent.AddLayers event) {
         LOGGER.info("Registering VaultAdditions renderers");
         GeoArmorRenderer.registerArmorRenderer(VaultArmorItem.class, VaultGeckoArmorRenderer::new);
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
+            Item item = event.player.getMainHandItem().getItem();
+            MiscUtil.limitedLog("Held item %s render properties %s, direct properties %s",
+                    ForgeRegistries.ITEMS.getKey(item),
+                    RenderProperties.get(item).getClass().getName(),
+                    item.getRenderPropertiesInternal().getClass().getName());
+        }
     }
 
     public static ResourceLocation id(String name) {
