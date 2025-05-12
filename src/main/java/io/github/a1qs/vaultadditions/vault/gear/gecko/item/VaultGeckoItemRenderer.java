@@ -22,13 +22,14 @@ public class VaultGeckoItemRenderer<T extends Item & VaultGearItem & IAnimatable
     public VaultGeckoItemRenderer(IItemRenderProperties defaultProperties) {
         super(new VaultGeckoModelProvider<>());
         this.defaultProperties = defaultProperties != null ? defaultProperties : IItemRenderProperties.DUMMY;
+        VaultAdditions.LOGGER.info("VaultGeckoItemRenderer created with default renderer: {}", this.defaultProperties.getItemStackRenderer().getClass().getName());
     }
 
     @Override
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         if (!(ModelUtil.getDynamicModel(stack) instanceof VaultGeckoModel)) {
             if (Screen.hasShiftDown()) {
-                VaultAdditions.LOGGER.info("Stack has no vault gekco model, nbt: {}, model: {}", stack.getOrCreateTag().getAsString(), ModelUtil.getDynamicModel(stack));
+                VaultAdditions.LOGGER.info("Stack has no vault gecko model, nbt: {}, model: {}", stack.getOrCreateTag().getAsString(), ModelUtil.getDynamicModel(stack));
             }
             defaultProperties.getItemStackRenderer().renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
             return;
