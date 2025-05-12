@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;

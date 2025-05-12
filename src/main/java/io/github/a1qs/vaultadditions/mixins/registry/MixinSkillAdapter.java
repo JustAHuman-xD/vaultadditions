@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.registry;
 
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import io.github.a1qs.vaultadditions.vault.skill.ability.BladeFrenzyAbility;

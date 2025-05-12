@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.armor_effects.sound;
 
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -9,7 +9,6 @@ import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel
 import iskallia.vault.init.ModSounds;
 import iskallia.vault.skill.ability.effect.spi.AbstractSmiteAbility;
 import iskallia.vault.skill.ability.effect.spi.core.ToggleManaAbility;
-import iskallia.vault.skill.base.SkillContext;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;

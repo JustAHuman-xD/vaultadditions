@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.registry;
 
 import com.google.common.collect.Table;
 import iskallia.vault.gear.attribute.VaultGearAttribute;

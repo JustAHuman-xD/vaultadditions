@@ -41,14 +41,10 @@ public class ModModels {
             ModDynamicModels.Armor.PIECE_REGISTRY.registerAll(armor.getModel());
         }
         for (Item item : Item.values()) {
-            ModDynamicModels.REGISTRIES.getAssociatedRegistry(item.getType().getItem())
-                    .ifPresentOrElse(registry -> registry.register(forceCast(item.getModel())),
-                            () -> VaultAdditions.LOGGER.error("Failed to register item model for {}", item.name()));
+            item.getType().register(item.model);
         }
         for (GeckoItem item : GeckoItem.values()) {
-            ModDynamicModels.REGISTRIES.getAssociatedRegistry(item.getType().getItem())
-                    .ifPresentOrElse(registry -> registry.register(forceCast(item.getModel())),
-                            () -> VaultAdditions.LOGGER.error("Failed to register gecko item model for {}", item.name()));
+            item.getType().register(item.model);
         }
     }
 
@@ -211,15 +207,6 @@ public class ModModels {
 
         public ModelType getType() {
             return this.type;
-        }
-    }
-
-    private static <C> C forceCast(Object obj) {
-        try {
-            return (C) obj;
-        } catch (Exception e) {
-            VaultAdditions.LOGGER.error("Failed to cast object " + obj + " to expected type", e);
-            throw e;
         }
     }
 }

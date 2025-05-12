@@ -1,10 +1,8 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
 import io.github.a1qs.vaultadditions.vault.gear.gecko.item.GeckoItemRenderProperties;
-import io.github.a1qs.vaultadditions.vault.gear.gecko.item.VaultGeckoItemRenderer;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.item.gear.VaultArmorItem;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.IItemRenderProperties;
 import org.spongepowered.asm.mixin.Mixin;

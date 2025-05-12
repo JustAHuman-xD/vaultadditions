@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.loot_statue;
 
 import iskallia.vault.VaultMod;
 import iskallia.vault.config.StatueRecyclingConfig;

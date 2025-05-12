@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.patreon;
 
 import iskallia.vault.block.TransmogTableBlock;
 import net.minecraft.resources.ResourceLocation;

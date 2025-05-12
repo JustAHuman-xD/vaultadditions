@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.loot_statue;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import iskallia.vault.config.StatueLootConfig;
