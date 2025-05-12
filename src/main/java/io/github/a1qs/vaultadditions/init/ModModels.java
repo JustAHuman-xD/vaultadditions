@@ -33,7 +33,7 @@ public class ModModels {
     public static final Set<AdditionalArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.GROGU.model);
     public static final Set<AdditionalArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
 
-    public static void register() {
+    static {
         for (Armor armor : Armor.values()) {
             ModDynamicModels.Armor.PIECE_REGISTRY.registerAll(armor.getModel());
         }

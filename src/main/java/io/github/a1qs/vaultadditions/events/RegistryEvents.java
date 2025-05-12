@@ -26,8 +26,4 @@ public class RegistryEvents {
     public static void onSoundRegister(RegistryEvent.Register<SoundEvent> event) {
         ModModels.registerSounds();
     }
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onItemRegistry(RegistryEvent.Register<Item> event) {
-        ModModels.register();
-    }
 }
