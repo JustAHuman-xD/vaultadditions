@@ -27,7 +27,6 @@ public class MixinItem {
                 if (properties == this) {
                     throw new IllegalStateException("Don't extend IItemRenderProperties in your item, use an anonymous class instead.");
                 } else if (!(properties instanceof GeckoItemRenderProperties)) {
-                    VaultAdditions.LOGGER.info("Wrapping vault item {}'s render properties {} for gecko support", getClass().getSimpleName(), properties.getClass().getSimpleName());
                     this.renderProperties = new GeckoItemRenderProperties(properties);
                 }
             };
@@ -39,7 +38,6 @@ public class MixinItem {
     public void addDefaultGeckoRenderer(Consumer<IItemRenderProperties> consumer, CallbackInfo ci) {
         if (applies()) {
             consumer.accept(new GeckoItemRenderProperties(null));
-            VaultAdditions.LOGGER.info("Adding gecko support to {}", getClass().getSimpleName());
         }
     }
 
