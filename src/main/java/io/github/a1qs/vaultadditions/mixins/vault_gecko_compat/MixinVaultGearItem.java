@@ -1,13 +1,12 @@
 package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import iskallia.vault.dynamodel.DynamicModel;
+import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.dynamodel.registry.DynamicModelRegistry;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.init.ModDynamicModels;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -22,22 +21,19 @@ public interface MixinVaultGearItem extends VaultGearItem, IAnimatable {
     default void registerControllers(AnimationData data) {
         for (DynamicModelRegistry<? extends DynamicModel<?>> registry : ModDynamicModels.REGISTRIES.getUniqueRegistries()) {
             registry.forEach((id, model) -> {
-                if (!(model instanceof VaultGeckoModel gecko)) {
+                VaultGeckoModel gecko = model instanceof VaultGeckoModel geckoModel ? geckoModel : null;
+                if (model instanceof ArmorPieceModel piece && piece.getArmorModel() instanceof VaultGeckoModel geckoModel) {
+                    gecko = geckoModel;
+                }
+                if (gecko == null) {
                     return;
                 }
 
+                VaultGeckoModel finalGecko = gecko;
                 data.addAnimationController(new AnimationController<>(this, model.getId() + " Animation Controller", gecko.getTransitionTicks(), event -> {
                     ItemStack itemStack = event.getExtraDataOfType(ItemStack.class).get(0);
-                    DynamicModel<?> eventModel = ModelUtil.getDynamicModel(itemStack);
-                    if (Screen.hasShiftDown()) {
-                        VaultAdditions.LOGGER.info("Animation Event Fired for {}, this controller for {}, matched : {}",
-                                eventModel == null ? "null" : eventModel.getId().toString(),
-                                id.toString(),
-                                model == eventModel
-                        );
-                    }
-                    if (eventModel == model) {
-                        event.getController().setAnimation(gecko.getAnimation());
+                    if (ModelUtil.getDynamicModel(itemStack) == model) {
+                        event.getController().setAnimation(finalGecko.getAnimation());
                         return PlayState.CONTINUE;
                     } else {
                         return PlayState.STOP;
