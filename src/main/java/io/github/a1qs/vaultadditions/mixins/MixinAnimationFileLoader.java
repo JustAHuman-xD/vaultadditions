@@ -16,7 +16,7 @@ import software.bernie.geckolib3.util.json.JsonAnimationUtils;
 
 import java.util.Map;
 
-@Mixin(AnimationFileLoader.class)
+@Mixin(value = AnimationFileLoader.class, remap = false)
 public abstract class MixinAnimationFileLoader {
     @Shadow protected abstract JsonObject loadFile(ResourceLocation location, ResourceManager manager);
 
