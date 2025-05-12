@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.item.GeckoItemRenderProperties;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.item.gear.VaultArmorItem;
