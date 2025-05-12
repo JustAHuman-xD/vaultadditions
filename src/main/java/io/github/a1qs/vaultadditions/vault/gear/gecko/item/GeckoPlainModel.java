@@ -1,10 +1,15 @@
 package io.github.a1qs.vaultadditions.vault.gear.gecko.item;
 
+import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import iskallia.vault.VaultMod;
 import iskallia.vault.dynamodel.model.item.HandHeldModel;
 import iskallia.vault.dynamodel.model.item.PlainItemModel;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 
@@ -25,6 +30,11 @@ public class GeckoPlainModel extends PlainItemModel implements VaultGeckoModel {
 
         this.animation = new AnimationBuilder().addAnimation(animationName, ILoopType.EDefaultLoopTypes.LOOP);
         this.transitionTicks = transitionTicks;
+    }
+
+    @Override
+    public BakedModel bakeModel(ModelResourceLocation modelLocation, ForgeModelBakery modelLoader, BlockModel unbakedModel) {
+        return new CustomRenderedItemModel(super.bakeModel(modelLocation, modelLoader, unbakedModel));
     }
 
     @Override
