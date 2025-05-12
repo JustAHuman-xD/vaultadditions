@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.mixins;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,12 +27,14 @@ public abstract class MixinAnimationFileLoader {
      */
     @Overwrite
     public AnimationFile loadAllAnimations(MolangParser parser, ResourceLocation location, ResourceManager manager) {
+        VaultAdditions.LOGGER.info("HAS OVERWRITTEN LOAD ALL");
         AnimationFile animationFile = new AnimationFile();
-        GeckoLib.LOGGER.debug("Attempting to load animation file {}...", location.toString());
+        GeckoLib.LOGGER.info("Attempting to load animation file {}...", location.toString());
         JsonObject jsonRepresentation = this.loadFile(location, manager);
 
         for(Map.Entry<String, JsonElement> entry : JsonAnimationUtils.getAnimations(jsonRepresentation)) {
             String animationName = entry.getKey();
+            GeckoLib.LOGGER.info("Attempting to load animation {}...", animationName);
             try {
                 Animation animation = JsonAnimationUtils.deserializeJsonToAnimation(JsonAnimationUtils.getAnimation(jsonRepresentation, animationName), parser);
                 animationFile.putAnimation(animationName, animation);
@@ -41,7 +44,7 @@ public abstract class MixinAnimationFileLoader {
             }
         }
 
-        GeckoLib.LOGGER.debug("Animation file {} processed", location.toString());
+        GeckoLib.LOGGER.info("Animation file {} processed", location.toString());
         return animationFile;
     }
 }
