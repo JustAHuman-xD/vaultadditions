@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import iskallia.vault.dynamodel.DynamicModel;
@@ -8,7 +7,6 @@ import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.dynamodel.registry.DynamicModelRegistry;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.init.ModDynamicModels;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -31,19 +29,10 @@ public interface MixinVaultGearItem extends VaultGearItem, IAnimatable {
                     return;
                 }
 
-                VaultAdditions.LOGGER.info("Registering AnimationController for {} ({})", model.getId(), getClass().getSimpleName());
-
                 VaultGeckoModel finalGecko = gecko;
-                data.addAnimationController(new AnimationController<>(this, model.getId() + " Animation Controller", gecko.getTransitionTicks(), event -> {
+                data.addAnimationController(new AnimationController<>(this, ((DynamicModel<?>) gecko).getId() + " Animation Controller", gecko.getTransitionTicks(), event -> {
                     DynamicModel<?> eventModel = ModelUtil.getDynamicModel(event.getExtraDataOfType(ItemStack.class).get(0));
-                    if (Screen.hasShiftDown()) {
-                        VaultAdditions.LOGGER.info("Animation Event Fired for {}, this controller for {}, matched : {}",
-                                eventModel == null ? "null" : eventModel.getId().toString(),
-                                id.toString(),
-                                model == eventModel
-                        );
-                    }
-                    if (eventModel == model) {
+                    if (eventModel == finalGecko) {
                         event.getController().setAnimation(finalGecko.getAnimation());
                         return PlayState.CONTINUE;
                     } else {
