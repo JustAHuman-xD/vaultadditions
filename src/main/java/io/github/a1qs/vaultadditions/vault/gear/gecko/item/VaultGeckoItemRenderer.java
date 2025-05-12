@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.vault.gear.gecko.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModelProvider;
 import iskallia.vault.gear.item.VaultGearItem;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,7 +24,7 @@ public class VaultGeckoItemRenderer<T extends Item & VaultGearItem & IAnimatable
 
     @Override
     public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        if (!(ModelUtil.getDynamicModel(stack) instanceof GeckoHandHeldModel)) {
+        if (!(ModelUtil.getDynamicModel(stack) instanceof VaultGeckoModel)) {
             defaultProperties.getItemStackRenderer().renderByItem(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
             return;
         }
