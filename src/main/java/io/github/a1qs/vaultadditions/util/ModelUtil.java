@@ -30,7 +30,7 @@ public class ModelUtil {
 
         GearDataCache cache = GearDataCache.of(itemStack);
         return cache.getGearModel().flatMap(model -> ModDynamicModels.REGISTRIES.getModel(itemStack.getItem(), model))
-                .map(model -> model instanceof ArmorPieceModel piece ? piece.getArmorModel() : null)
+                .map(model -> model instanceof ArmorPieceModel piece ? piece.getArmorModel() : model)
                 .orElse(null);
     }
 
