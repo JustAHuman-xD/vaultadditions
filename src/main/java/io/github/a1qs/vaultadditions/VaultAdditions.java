@@ -83,17 +83,6 @@ public class VaultAdditions {
         GeoArmorRenderer.registerArmorRenderer(VaultArmorItem.class, VaultGeckoArmorRenderer::new);
     }
 
-    @SubscribeEvent
-    public void onTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && event.side == LogicalSide.SERVER) {
-            Item item = event.player.getMainHandItem().getItem();
-            MiscUtil.limitedLog("Held item %s render properties %s, direct properties %s",
-                    ForgeRegistries.ITEMS.getKey(item),
-                    RenderProperties.get(item).getClass().getName(),
-                    item.getRenderPropertiesInternal() == null ? "null" : item.getRenderPropertiesInternal().getClass().getName());
-        }
-    }
-
     public static ResourceLocation id(String name) {
         return new ResourceLocation(MOD_ID, name);
     }

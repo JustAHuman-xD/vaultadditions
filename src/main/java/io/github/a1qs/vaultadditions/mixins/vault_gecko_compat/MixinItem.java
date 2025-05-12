@@ -27,10 +27,8 @@ public class MixinItem {
                 if (properties == this) {
                     throw new IllegalStateException("Don't extend IItemRenderProperties in your item, use an anonymous class instead.");
                 } else if (!(properties instanceof GeckoItemRenderProperties)) {
-                    VaultAdditions.LOGGER.info("Wrapping vault item {}'s render properties {} for gecko support", getClass().getName(), properties.getClass().getName());
                     this.renderProperties = new GeckoItemRenderProperties(properties);
                 } else {
-                    VaultAdditions.LOGGER.info("Using default GeckoItemRenderProperties");
                     this.renderProperties = properties;
                 }
             };
@@ -41,7 +39,6 @@ public class MixinItem {
     @Inject(method = "initializeClient", at = @At("HEAD"), remap = false)
     public void addDefaultGeckoRenderer(Consumer<IItemRenderProperties> consumer, CallbackInfo ci) {
         if (applies()) {
-            VaultAdditions.LOGGER.info("Adding gecko support to {}", getClass().getName());
             consumer.accept(new GeckoItemRenderProperties(null));
         }
     }
