@@ -6,6 +6,7 @@ import io.github.a1qs.vaultadditions.init.ModModels;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,5 +25,9 @@ public class RegistryEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onSoundRegister(RegistryEvent.Register<SoundEvent> event) {
         ModModels.registerSounds();
+    }
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onItemRegistry(RegistryEvent.Register<Item> event) {
+        ModModels.register();
     }
 }
