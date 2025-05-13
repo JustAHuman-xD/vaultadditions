@@ -18,71 +18,84 @@
 				"ball1": {
 					"rotation": {
 						"0.0": {
-								"vector": [0, 0, 0]
-
+							"vector": [0, 0, 0],
+							"easing": "linear"
 						},
 						"12.0": {
-								"vector": [0, 359, 0]
-							}
-
+							"vector": [0, 359, 0],
+							"easing": "linear"
+						}
 					},
 					"position": {
 						"0.0": {
-								"vector": [0, 0, 0]
-
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
 						},
 						"2.0": {
-								"vector": [0, 1.5, 0]
-							},
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"4.0": {
-								"vector": [0, -1.5, 0]
-							},
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"6.0": {
-								"vector": [0, 0, 0]
-							},
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"8.0": {
-								"vector": [0, 1.5, 0]
-							},
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"10.0": {
-								"vector": [0, -1.5, 0]
-							},
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"12.0": {
-								"vector": [0, 0, 0]
-							}
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						}
 					}
 				},
 				"ball2": {
 					"rotation": {
 						"0.0": {
-								"vector": [0, 0, 0]
-							},
+							"vector": [0, 0, 0]
+						},
 						"12.0": {
-								"vector": [0, 359, 0]
-							}
+							"vector": [0, 359, 0],
+							"easing": "linear"
+						}
 					},
 					"position": {
 						"0.0": {
-								"vector": [0, 0, 0]
-							},
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"2.0": {
-								"vector": [0, 1.5, 0]
-							},
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"4.0": {
-								"vector": [0, -1.5, 0]
-							},
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"6.0": {
-								"vector": [0, 0, 0]
-							},
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"8.0": {
-								"vector": [0, 1.5, 0]
-							},
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						},
 						"10.0": {
-								"vector": [0, -1.5, 0]
-							}
+							"vector": [0, 1.5, 0],
+							"easing": "easeInOutQuad"
 						},
 						"12.0": {
-								"vector": [0, 0, 0]
-							}
+							"vector": [0, -1.5, 0],
+							"easing": "easeInOutQuad"
+						}
 					}
 				}
 			}
