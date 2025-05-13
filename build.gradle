@@ -119,7 +119,7 @@ repositories {
 dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
-    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:5925633")
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:6477559")
 
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.18:3.0.57')
     implementation fg.deobf("curse.maven:curios-309927:4418032")
