@@ -5,6 +5,7 @@ import io.github.a1qs.vaultadditions.item.ColoredVelvetBedItem;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.item.PowerOrb;
+import iskallia.vault.item.BasicItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
@@ -20,6 +21,12 @@ public class ModItems {
 
     public static final RegistryObject<Item> POWER_ORB = ITEMS.register("power_orb",
             () -> new PowerOrb(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
+
+    public static final RegistryObject<Item> DAMAGE_CORE = ITEMS.register("damage_core",
+            () -> new BasicItem(VaultAdditions.id("damage_core")));
+
+    public static final RegistryObject<Item> FRACTURE_CORE = ITEMS.register("fracture_core",
+            () -> new BasicItem(VaultAdditions.id("fracture_core")));
 
     public static final RegistryObject<Item> LOOT_STATUE_VAULT = ModItems.ITEMS.register("loot_statue_vault",
             () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_VAULT.get()));

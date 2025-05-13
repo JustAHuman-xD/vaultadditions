@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinAntiqueStampCollectorBook",
+    "additional_gear_cores.MixinAnvilRecipes",
     "MixinAttributeSnapshotCalculator",
     "MixinAttributeSnapshotCalculator$AccessorAttributeSnapshot",
     "MixinAttributeSnapshotCalculator$InvokeAttributeSnapshotAttributeValue",
@@ -12,6 +13,7 @@
     "MixinClassicLootLogic",
     "MixinMultiJumpTrinket",
     "MixinPlayerTabNameEvent",
+    "additional_gear_cores.MixinRepairGearAnvilRecipe",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinVaultChestBlock",
