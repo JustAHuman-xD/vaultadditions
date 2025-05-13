@@ -10,15 +10,17 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.client.model.ForgeModelBakery;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Debug(export = true)
 @Mixin(ModDynamicModels.class)
 public class MixinModDynamicModels {
-    @Inject(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Liskallia/vault/init/ModDynamicModels;jsonModelExists(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/ResourceLocation;)Z", shift = At.Shift.AFTER))
+    @Inject(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/BlockModel;bake(Lnet/minecraft/client/resources/model/ModelBakery;Lnet/minecraft/client/renderer/block/model/BlockModel;Ljava/util/function/Function;Lnet/minecraft/client/resources/model/ModelState;Lnet/minecraft/resources/ResourceLocation;Z)Lnet/minecraft/client/resources/model/BakedModel;"))
     private static void onBakeExistingModel(ForgeModelBakery modelLoader, ResourceManager resourceManager, ResourceLocation modelId, DynamicModel<?> dynamicModel, DynamicModelRegistry<?> registry, ModelResourceLocation modelLocation, CallbackInfo ci) {
         if (getGeckoModel(dynamicModel) != null) {
             VaultAdditions.LOGGER.info("Baked PRIOR existing GECKO model {}", modelId.toString());
@@ -27,7 +29,7 @@ public class MixinModDynamicModels {
         }
     }
 
-    @Inject(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Liskallia/vault/dynamodel/DynamicModel;bakeModel(Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraftforge/client/model/ForgeModelBakery;Lnet/minecraft/client/renderer/block/model/BlockModel;)Lnet/minecraft/client/resources/model/BakedModel;", shift = At.Shift.AFTER))
+    @Inject(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Liskallia/vault/dynamodel/DynamicModel;bakeModel(Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraftforge/client/model/ForgeModelBakery;Lnet/minecraft/client/renderer/block/model/BlockModel;)Lnet/minecraft/client/resources/model/BakedModel;"))
     private static void onCreateRuntimeModel(ForgeModelBakery modelLoader, ResourceManager resourceManager, ResourceLocation modelId, DynamicModel<?> dynamicModel, DynamicModelRegistry<?> registry, ModelResourceLocation modelLocation, CallbackInfo ci) {
         if (getGeckoModel(dynamicModel) != null) {
             VaultAdditions.LOGGER.info("Creating runtime GECKO model {}", modelId.toString());
