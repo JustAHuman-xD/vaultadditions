@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.util;
 
 import io.github.a1qs.vaultadditions.init.ModModels;
+import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
 import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Unique;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -100,5 +102,14 @@ public class ModelUtil {
 
     public static <I extends VaultGearItem & IAnimatable> AnimationFactory getAnimationFactory(I item) {
         return ANIMATION_FACTORIES.computeIfAbsent(item, i -> GeckoLibUtil.createFactory(item));
+    }
+
+    public static VaultGeckoModel getGeckoModel(DynamicModel<?> model) {
+        if (model instanceof VaultGeckoModel gecko) {
+            return gecko;
+        } else if (model instanceof ArmorPieceModel piece && piece.getArmorModel() instanceof VaultGeckoModel gecko) {
+            return gecko;
+        }
+        return null;
     }
 }

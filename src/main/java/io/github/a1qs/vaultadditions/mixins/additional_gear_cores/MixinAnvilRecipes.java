@@ -20,6 +20,6 @@ public abstract class MixinAnvilRecipes {
 
     @Shadow
     private static <T extends AnvilRecipe> T register(T recipe) {
-        throw new IllegalArgumentException("Mixin Failed");
+        throw new AssertionError("Mixin failed to inject");
     }
 }
