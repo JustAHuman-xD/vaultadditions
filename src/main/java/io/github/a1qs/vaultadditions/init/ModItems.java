@@ -23,10 +23,10 @@ public class ModItems {
             () -> new PowerOrb(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 
     public static final RegistryObject<Item> DAMAGE_CORE = ITEMS.register("damage_core",
-            () -> new BasicItem(VaultAdditions.id("damage_core")));
+            () -> new Item(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 
     public static final RegistryObject<Item> FRACTURE_CORE = ITEMS.register("fracture_core",
-            () -> new BasicItem(VaultAdditions.id("fracture_core")));
+            () -> new Item(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
 
     public static final RegistryObject<Item> LOOT_STATUE_VAULT = ModItems.ITEMS.register("loot_statue_vault",
             () -> new LootStatueBlockItem(ModBlocks.LOOT_STATUE_VAULT.get()));

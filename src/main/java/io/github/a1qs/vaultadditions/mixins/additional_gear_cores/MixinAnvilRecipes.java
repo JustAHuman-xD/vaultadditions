@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AnvilRecipes.class)
+@Mixin(value = AnvilRecipes.class, remap = false)
 public abstract class MixinAnvilRecipes {
     @Inject(method = "register()V", at = @At("TAIL"))
     private static void register(CallbackInfo ci) {

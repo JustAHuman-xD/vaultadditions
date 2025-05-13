@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class MixinRepairGearAnvilRecipe {
     @Inject(method = "onSimpleCraft", at = @At(value = "INVOKE", target = "Liskallia/vault/gear/data/VaultGearData;read(Lnet/minecraft/world/item/ItemStack;)Liskallia/vault/gear/data/VaultGearData;"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     public void onlyRepairDamagedGear(AnvilContext context, CallbackInfoReturnable<Boolean> cir, ItemStack primary, ItemStack secondary) {
-        if (primary.getDamageValue() <= 0) {
+        if (primary.getDamageValue() == 0) {
             cir.setReturnValue(false);
         }
     }
