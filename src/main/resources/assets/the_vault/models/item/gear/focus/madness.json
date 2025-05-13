@@ -2,88 +2,76 @@
   "credit": "Made with Blockbench",
   "parent": "builtin/entity",
   "texture_size": [
-    64,
-    64
+    32,
+    32
   ],
   "display": {
     "thirdperson_righthand": {
       "rotation": [
-        90.52,
-        1.8,
-        -179.22
+        -1,
+        41,
+        -4
       ],
       "translation": [
         -0.5,
-        8.5,
-        4.75
+        -2.25,
+        0
       ],
       "scale": [
-        0.65,
-        0.65,
-        0.65
+        0.7,
+        0.7,
+        0.7
       ]
     },
     "thirdperson_lefthand": {
       "rotation": [
-        90.52,
-        1.8,
-        -179.22
+        -1,
+        41,
+        -4
       ],
       "translation": [
         -0.5,
-        8.5,
-        4.75
+        -2.25,
+        0
       ],
       "scale": [
-        0.65,
-        0.65,
-        0.65
+        0.7,
+        0.7,
+        0.7
       ]
     },
     "firstperson_righthand": {
       "rotation": [
-        32,
-        10,
-        -180
+        -1,
+        41,
+        -4
       ],
       "translation": [
-        -1,
-        6,
-        1.5
+        -0.5,
+        -2.25,
+        0
       ],
       "scale": [
-        0.4,
-        0.4,
-        0.4
+        0.7,
+        0.7,
+        0.7
       ]
     },
     "firstperson_lefthand": {
       "rotation": [
-        32,
-        10,
-        -180
+        -17,
+        41,
+        -4
       ],
       "translation": [
-        -1,
-        6,
-        1.5
+        1.75,
+        -2.25,
+        0
       ],
       "scale": [
-        0.4,
-        0.4,
-        0.4
-      ]
-    },
-    "ground": {
-      "rotation": [
-        0,
-        0,
-        180
-      ],
-      "translation": [
-        0,
-        3.5,
-        0
+        0.7,
+        0.7,
+        0.7
       ]
     }
   }
