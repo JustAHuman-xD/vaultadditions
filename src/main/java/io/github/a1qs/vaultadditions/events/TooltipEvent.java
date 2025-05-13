@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
-import io.github.a1qs.vaultadditions.vault.gear.seteffect.effect.ArmorSetEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.ArmorEffectRegistry;
+import io.github.a1qs.vaultadditions.vault.gear.effect.set.ArmorSetEffect;
 import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;

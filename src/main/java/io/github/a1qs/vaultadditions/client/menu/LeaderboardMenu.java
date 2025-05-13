@@ -1,20 +1,17 @@
 package io.github.a1qs.vaultadditions.client.menu;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.util.TextUtil;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
 import io.github.a1qs.vaultadditions.util.UsernameProvider;
-import iskallia.vault.client.util.ClientScheduler;
-import iskallia.vault.item.tool.ColorBlender;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.*;
-import org.spongepowered.asm.mixin.Mutable;
 
 import java.util.*;
 
@@ -136,7 +133,7 @@ public class LeaderboardMenu extends Screen {
             Minecraft.getInstance().font.drawShadow(pPoseStack, textComponent, adjustedX - this.font.width(textComponent) / 2.0f, y + lineSpacing, 0xFFFFFF);
         }
         MutableComponent txt = new TranslatableComponent("text.leaderboard.bonus_vault_time_player").append(
-                TextUtil.blendString(CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedSeconds(playerContributions) + "s", 20.0F, TextUtil.RAINBOW));
+                TextUtil.blendString(Configs.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedSeconds(playerContributions) + "s", 20.0F, TextUtil.RAINBOW));
 
         adjustedX = adjustXToFit(txt.getString(), x);
         Minecraft.getInstance().font.drawShadow(pPoseStack, txt, adjustedX - this.font.width(txt) / 2.0f, y + lineSpacing * 2, 0xFFFFFF);
@@ -193,7 +190,7 @@ public class LeaderboardMenu extends Screen {
 
     private void renderMisc(PoseStack pPoseStack) {
         MutableComponent cmp1 = new TranslatableComponent("text.leaderboard.global_time_increase").append(
-                TextUtil.blendString(CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedSeconds(this.totalContributions) + "s", 20.0F, TextUtil.RAINBOW));
+                TextUtil.blendString(Configs.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedSeconds(this.totalContributions) + "s", 20.0F, TextUtil.RAINBOW));
 
         MutableComponent cmp2 = new TranslatableComponent("text.leaderboard.total_contributions").append(
                 TextUtil.blendString(String.valueOf(this.totalContributions), 20.0F, TextUtil.RAINBOW));

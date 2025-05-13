@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.vault.gear.seteffect.effect;
+package io.github.a1qs.vaultadditions.vault.gear.effect.set;
 
 import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;

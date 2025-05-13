@@ -1,21 +1,21 @@
-package io.github.a1qs.vaultadditions.vault.gear.seteffect.effect;
+package io.github.a1qs.vaultadditions.vault.gear.effect.set;
 
-import iskallia.vault.gear.attribute.VaultGearAttribute;
+import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
 import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
 import iskallia.vault.gear.attribute.VaultGearModifier;
 import net.minecraft.network.chat.MutableComponent;
 
-public class VaultAttributeArmorEffect<T extends Number> extends ArmorSetEffect {
-    private final VaultGearAttribute<?> attribute;
-    private final T value;
+public class AbilityAttributeArmorEffect extends ArmorSetEffect {
+    private final String abilityName;
+    private final int abilityLevel;
 
-    public VaultAttributeArmorEffect(VaultGearAttribute<T> attribute, T attributeValue) {
-        this.attribute = attribute;
-        this.value = attributeValue;
+    public AbilityAttributeArmorEffect(String abilityName, int abilityLevel) {
+        this.abilityName = abilityName;
+        this.abilityLevel = abilityLevel;
     }
     @Override
     public VaultGearAttributeInstance<?> getVaultGearAttributeInstance() {
-        return VaultGearAttributeInstance.cast(this.attribute, this.value);
+        return VaultGearAttributeHelper.abilityLevelAttributeInstance(this.abilityName, this.abilityLevel);
     }
 
     // yummy unchecked assignment !!!!!

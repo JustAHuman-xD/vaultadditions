@@ -1,6 +1,8 @@
 package io.github.a1qs.vaultadditions.mixins.armor_effects;
 
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.vault.gear.effect.transmog.HideElytraEffect;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.model.EntityModel;
@@ -27,7 +29,7 @@ public abstract class MixinElytraLayer<T extends LivingEntity, M extends EntityM
     public void shouldRender(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Player player) {
             ItemStack chest = player.getInventory().getArmor(EquipmentSlot.CHEST.getIndex());
-            if (chest.getItem() instanceof VaultArmorItem && ModelUtil.getArmorModel(chest) instanceof AdditionalArmorModel model && model.hidesElytra()) {
+            if (chest.getItem() instanceof VaultArmorItem && Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(chest, HideElytraEffect.INSTANCE)) {
                 cir.setReturnValue(false);
             }
         }

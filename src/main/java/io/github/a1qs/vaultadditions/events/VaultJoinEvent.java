@@ -1,7 +1,6 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
-import io.github.a1qs.vaultadditions.config.vault.ExtraVaultTimeContributionsConfig;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
 import io.github.a1qs.vaultadditions.vault.core.time.modifier.PowerCrystalExtension;
 import iskallia.vault.core.vault.Vault;
@@ -40,8 +39,8 @@ public class VaultJoinEvent {
             UUID ownerID = vault.get(Vault.OWNER);
             PowerCrystalData powerCrystalData = PowerCrystalData.get(srv);
 
-            int extraTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedTicks(powerCrystalData.getPlayerContributedCrystals(ownerID));
-            int extraTotalTicks = CustomVaultConfigRegistry.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedTicks(powerCrystalData.getTotalContributedCrystals());
+            int extraTicks = Configs.EXTRA_VAULT_TIME_CONTRIBUTIONS.getPlayerCappedTicks(powerCrystalData.getPlayerContributedCrystals(ownerID));
+            int extraTotalTicks = Configs.EXTRA_VAULT_TIME_CONTRIBUTIONS.getServerCappedTicks(powerCrystalData.getTotalContributedCrystals());
 
             int totalTicks = extraTicks + extraTotalTicks;
             vault.get(Vault.CLOCK).addModifier(new PowerCrystalExtension(vault.get(Vault.ID), totalTicks));

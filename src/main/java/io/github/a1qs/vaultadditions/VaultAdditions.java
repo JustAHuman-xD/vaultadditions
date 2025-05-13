@@ -6,7 +6,7 @@ import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
-import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
+import io.github.a1qs.vaultadditions.vault.gear.effect.ArmorEffectRegistry;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;

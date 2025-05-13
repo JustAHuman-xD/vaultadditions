@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.events;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -72,67 +72,67 @@ public class VaultAdditionsEvent {
     // Event data getters
 
     public ResourceLocation getEventId() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventId();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventId();
     }
 
     public Component getEventStartMessage() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
                 .value.getParsedMessage(
-                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                        Configs.EVENT_CONFIG.getWeightedList().get(
                                 this.getConfigIndex()
                         ).value.getEventStartMessage());
     }
 
     public Component getEventEndMessage() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
                 .value.getParsedMessage(
-                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                        Configs.EVENT_CONFIG.getWeightedList().get(
                                 this.getConfigIndex()
                         ).value.getEventEndMessage());
     }
 
     public Component getEventLoginMessage() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
                 .value.getParsedMessage(
-                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                        Configs.EVENT_CONFIG.getWeightedList().get(
                                 this.getConfigIndex()
                         ).value.getEventLoginMessage());
     }
 
     public Component getEventDisplayMessage() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
                 .value.getParsedMessage(
-                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                        Configs.EVENT_CONFIG.getWeightedList().get(
                                 this.getConfigIndex()
                         ).value.getEventDisplayMessage());
     }
 
     public Component getEventEnabledMessage() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex())
                 .value.getParsedMessage(
-                        CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(
+                        Configs.EVENT_CONFIG.getWeightedList().get(
                                 this.getConfigIndex()
                         ).value.getEventEnabledMessage());
     }
 
     public boolean isCrystalSubmissionEvent() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.isCrystalSubmission();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.isCrystalSubmission();
     }
 
     public Map<ResourceLocation, Integer> getAdditionalModifiers() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getAdditionalModifiers();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getAdditionalModifiers();
     }
 
     public long getEventDuration() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventDuration();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getEventDuration();
     }
 
     public ItemStack getItemStack() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getItemToAdd();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getItemToAdd();
     }
 
     public float getChance() {
-        return CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getChance();
+        return Configs.EVENT_CONFIG.getWeightedList().get(this.getConfigIndex()).value.getChance();
     }
 
 }

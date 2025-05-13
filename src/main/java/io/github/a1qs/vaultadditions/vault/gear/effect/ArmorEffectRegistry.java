@@ -1,7 +1,7 @@
-package io.github.a1qs.vaultadditions.vault.gear.seteffect;
+package io.github.a1qs.vaultadditions.vault.gear.effect;
 
 import io.github.a1qs.vaultadditions.init.ModModels;
-import io.github.a1qs.vaultadditions.vault.gear.seteffect.effect.*;
+import io.github.a1qs.vaultadditions.vault.gear.effect.set.*;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.init.ModAttributes;
 import iskallia.vault.init.ModGearAttributes;
