@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins.registry;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import iskallia.vault.init.ModConfigs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,7 +13,7 @@ public class MixinModConfigs {
 
     @Inject(method = "register", at = @At("TAIL"))
     private static void injectRegistries(CallbackInfo ci) {
-        CustomVaultConfigRegistry.registerCustomConfigs();
+        Configs.registerCustomConfigs();
         VaultAdditions.LOGGER.info("Successfully loaded custom Vault Configs");
     }
 }

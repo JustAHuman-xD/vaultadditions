@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.data;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.config.vault.entry.EventEntry;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
@@ -43,7 +43,7 @@ public class EventData extends SavedData {
     public void startEvent(EventEntry event) {
         VaultAdditions.LOGGER.info("Started Event: {}", event.getEventId());
 
-        VaultAdditionsEvent activeEventInstance = new VaultAdditionsEvent(EntryHelper.findIndexOf(CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList(), event), 0, 0);
+        VaultAdditionsEvent activeEventInstance = new VaultAdditionsEvent(EntryHelper.findIndexOf(Configs.EVENT_CONFIG.getWeightedList(), event), 0, 0);
         if(event.isCrystalSubmission()) {
             activeEventInstance.setRequiredCrystals(rand.nextInt(
                     event.getMinCrystalsSubmitted(),
@@ -97,7 +97,7 @@ public class EventData extends SavedData {
             }
 
             if (eventData.isTimePassed(timestamp)) {
-                EventEntry e = CustomVaultConfigRegistry.EVENT_CONFIG.getWeightedList().getRandom(new Random());
+                EventEntry e = Configs.EVENT_CONFIG.getWeightedList().getRandom(new Random());
                 eventData.startEvent(e);
                 eventsToRemove.add(scheduledEvent);
             }

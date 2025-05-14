@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.util;
 
 import com.mojang.authlib.GameProfile;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraftforge.common.UsernameCache;
@@ -18,8 +18,8 @@ public class UsernameProvider {
     }
 
     public static String getRandomUsername() {
-        if(CustomVaultConfigRegistry.NAME_PROVIDER_CONFIG.IS_USED) {
-            return CustomVaultConfigRegistry.NAME_PROVIDER_CONFIG.getRandomName();
+        if(Configs.NAME_PROVIDER_CONFIG.IS_USED) {
+            return Configs.NAME_PROVIDER_CONFIG.getRandomName();
         }
         return getRandomKnownUsername();
     }

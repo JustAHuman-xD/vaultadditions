@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.block.blockentity;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import iskallia.vault.block.entity.SkinnableTileEntity;
 import net.minecraft.core.BlockPos;
@@ -28,10 +28,10 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
         super(ModBlockEntities.LOOT_STATUE_BLOCK_ENTITY.get(), pos, state);
         this.lootItem = ItemStack.EMPTY;
         switch(state.getBlock().getRegistryName().toString()) {
-            case "vaultadditions:loot_statue_gift" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getRandomItemCount();
-            case "vaultadditions:loot_statue_gift_mega" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getRandomItemCount();
-            case "vaultadditions:loot_statue_arena" -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getRandomItemCount();
-            default -> this.itemsRemaining = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getRandomItemCount();
+            case "vaultadditions:loot_statue_gift" -> this.itemsRemaining = Configs.STATUE_LOOT_GIFT.getRandomItemCount();
+            case "vaultadditions:loot_statue_gift_mega" -> this.itemsRemaining = Configs.STATUE_LOOT_MEGA_GIFT.getRandomItemCount();
+            case "vaultadditions:loot_statue_arena" -> this.itemsRemaining = Configs.STATUE_LOOT_ARENA.getRandomItemCount();
+            default -> this.itemsRemaining = Configs.STATUE_LOOT_VAULT.getRandomItemCount();
         }
 
         this.totalItems = itemsRemaining;
@@ -84,16 +84,16 @@ public class LootStatueBlockEntity extends SkinnableTileEntity {
     private int getModifiedInterval(BlockState state) {
         switch(state.getBlock().getRegistryName().toString()) {
             case "vaultadditions:loot_statue_gift" -> {
-                return CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getInterval();
+                return Configs.STATUE_LOOT_GIFT.getInterval();
             }
             case "vaultadditions:loot_statue_gift_mega" -> {
-                return CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getInterval();
+                return Configs.STATUE_LOOT_MEGA_GIFT.getInterval();
             }
             case "vaultadditions:loot_statue_arena" -> {
-                return CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getInterval();
+                return Configs.STATUE_LOOT_ARENA.getInterval();
             }
             default -> {
-                return CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getInterval();
+                return Configs.STATUE_LOOT_VAULT.getInterval();
             }
         }
     }
