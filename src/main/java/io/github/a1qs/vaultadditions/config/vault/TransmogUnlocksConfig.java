@@ -8,6 +8,7 @@ import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +27,7 @@ public class TransmogUnlocksConfig extends Config {
     }
 
     @Override
-    public <T extends Config> T readConfig() {
-        super.readConfig();
+    protected void onLoad(@Nullable Config oldConfigInstance) {
         for (Map.Entry<String, List<String>> entry : unlocks.entrySet()) {
             DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(entry.getKey())).orElse(null);
             if (model != null) {
@@ -74,7 +74,6 @@ public class TransmogUnlocksConfig extends Config {
 
             transmogUnlocks.put(uuid, transmogs);
         }
-        return (T) this;
     }
 
     @Override
