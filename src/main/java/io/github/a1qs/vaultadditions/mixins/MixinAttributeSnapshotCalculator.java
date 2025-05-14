@@ -75,10 +75,12 @@ public class MixinAttributeSnapshotCalculator {
         }
 
         List<AttributeTransmogEffect> oldEffects = vaultadditions$setEffects.remove(player.getUUID());
-        oldEffects.removeAll(effects);
-        for (AttributeTransmogEffect<?> effect : oldEffects) {
-            if (effect instanceof VanillaAttributeArmorTransmogEffect<?> vanillaEffect) {
-                vanillaEffect.remove(player);
+        if (oldEffects != null) {
+            oldEffects.removeAll(effects);
+            for (AttributeTransmogEffect<?> effect : oldEffects) {
+                if (effect instanceof VanillaAttributeArmorTransmogEffect<?> vanillaEffect) {
+                    vanillaEffect.remove(player);
+                }
             }
         }
         vaultadditions$setEffects.put(player.getUUID(), effects);
