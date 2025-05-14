@@ -29,19 +29,39 @@ public class TransmogUnlocksConfig extends Config {
     public <T extends Config> T readConfig() {
         super.readConfig();
         for (Map.Entry<String, List<String>> entry : unlocks.entrySet()) {
+            DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(entry.getKey())).orElse(null);
+            if (model != null) {
+                for (String playerId : entry.getValue()) {
+                    try {
+                        UUID uuid = UUID.fromString(playerId);
+                        DynamicModel<?> finalModel = model;
+                        transmogUnlocks.compute(uuid, (id, models) -> {
+                            if (models == null) {
+                                models = new ArrayList<>();
+                            }
+                            models.add(finalModel);
+                            return models;
+                        });
+                    } catch (Exception e) {
+                        VaultAdditions.LOGGER.error("[Transmog Unlocks Config] Invalid uuid {} under model {}, skipping", playerId, entry.getKey());
+                    }
+                }
+                continue;
+            }
+
             UUID uuid;
             try {
                 uuid = UUID.fromString(entry.getKey());
             } catch (Exception e) {
-                VaultAdditions.LOGGER.error("[Transmog Unlocks Config] Invalid UUID: {}, skipping", entry.getKey());
+                VaultAdditions.LOGGER.error("[Transmog Unlocks Config] Invalid key {}, expected UUID, or Model Id, skipping", entry.getKey());
                 continue;
             }
 
             List<DynamicModel<?>> transmogs = new ArrayList<>();
-            for (String modelId : unlocks.get(entry.getKey())) {
-                DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(modelId)).orElse(null);
+            for (String modelId : entry.getValue()) {
+                model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(modelId)).orElse(null);
                 if (model == null) {
-                    VaultAdditions.LOGGER.warn("[Transmog Unlocks Config] Invalid transmog model: {}, skipping", modelId);
+                    VaultAdditions.LOGGER.warn("[Transmog Unlocks Config] Invalid transmog model {} under uuid {}, skipping", modelId, entry.getKey());
                     continue;
                 }
                 transmogs.add(model);
