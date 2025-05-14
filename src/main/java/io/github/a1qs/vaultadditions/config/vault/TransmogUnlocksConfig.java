@@ -31,7 +31,6 @@ public class TransmogUnlocksConfig extends Config {
         for (Map.Entry<String, List<String>> entry : unlocks.entrySet()) {
             DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(entry.getKey())).orElse(null);
             if (model != null) {
-                VaultAdditions.LOGGER.info("Granting transmog {} to uuids: ", entry.getKey());
                 for (String playerId : entry.getValue()) {
                     try {
                         UUID uuid = UUID.fromString(playerId);
@@ -43,7 +42,6 @@ public class TransmogUnlocksConfig extends Config {
                             models.add(finalModel);
                             return models;
                         });
-                        VaultAdditions.LOGGER.info("- {}", uuid);
                     } catch (Exception e) {
                         VaultAdditions.LOGGER.error("[Transmog Unlocks Config] Invalid uuid {} under model {}, skipping", playerId, entry.getKey());
                     }
@@ -59,8 +57,6 @@ public class TransmogUnlocksConfig extends Config {
                 continue;
             }
 
-            VaultAdditions.LOGGER.info("Granting transmogs to player with uuid: {}", uuid);
-
             List<DynamicModel<?>> transmogs = new ArrayList<>();
             for (String modelId : entry.getValue()) {
                 model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(modelId)).orElse(null);
@@ -69,7 +65,6 @@ public class TransmogUnlocksConfig extends Config {
                     continue;
                 }
                 transmogs.add(model);
-                VaultAdditions.LOGGER.info("- {}", modelId);
             }
 
             transmogUnlocks.put(uuid, transmogs);

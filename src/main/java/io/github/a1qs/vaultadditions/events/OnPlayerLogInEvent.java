@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.EventData;
@@ -54,10 +53,8 @@ public class OnPlayerLogInEvent {
     @SubscribeEvent
     public static void transmogUnlocks(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getPlayer();
-        VaultAdditions.LOGGER.info("{} ({}) joined, checking transmogs", player.getName(), player.getUUID());
         List<DynamicModel<?>> models = Configs.TRANSMOG_UNLOCKS.getUnlocks(player);
         if (models == null) {
-            VaultAdditions.LOGGER.info("- NONE");
             return;
         }
 
@@ -67,18 +64,15 @@ public class OnPlayerLogInEvent {
         Set<ResourceLocation> discoveredModels = discoveredModelsData.getDiscoveredModels(player.getUUID());
         for (DynamicModel<?> model : models) {
             ResourceLocation id = model.getId();
-            VaultAdditions.LOGGER.info("- {}", id.toString());
             if (model instanceof ArmorModel armor) {
                 for (ArmorPieceModel piece : armor.getPieces().values()) {
                     if (!discoveredModels.contains(piece.getId())) {
-                        VaultAdditions.LOGGER.info("Granting");
                         discoveredModelsData.discoverAllArmorPieceAndBroadcast(player, armor);
                         break;
                     }
                 }
             } else {
                 if (!discoveredModels.contains(id)) {
-                    VaultAdditions.LOGGER.info("Granting");
                     ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(id).ifPresent(pair -> {
                         discoveredModelsData.discoverModelAndBroadcast(pair.getSecond(), id, player);
                     });
