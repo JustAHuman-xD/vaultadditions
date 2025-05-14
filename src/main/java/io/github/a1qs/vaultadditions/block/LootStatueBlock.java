@@ -254,10 +254,6 @@ public class LootStatueBlock extends BaseEntityBlock {
         return super.use(state, world, pos, player, handIn, hit);
     }
 
-
-
-
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);

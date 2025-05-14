@@ -1,9 +1,9 @@
 package io.github.a1qs.vaultadditions.mixins.armor_effects.sound;
 
 import io.github.a1qs.vaultadditions.VaultAdditions;
-import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.util.SoundChoice;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AbilitySoundTransmogEffect;
+import iskallia.vault.init.ModAbilities;
 import iskallia.vault.init.ModSounds;
 import iskallia.vault.skill.ability.effect.ManaShieldAbility;
 import iskallia.vault.skill.ability.effect.spi.core.Ability;
@@ -31,11 +31,7 @@ public class MixinManaShieldAbility extends Ability {
             VaultAdditions.LOGGER.error("Player is null when trying to play sound for 'Mana Shield'!");
             return;
         }
-
-        SoundChoice sound = ENABLE_SOUND;
-        if (ModelUtil.getWornSet(player) instanceof AdditionalArmorModel model) {
-            sound = model.getCustomSound(ManaShieldAbility.class, sound);
-        }
+        SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, ENABLE_SOUND);
         player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
     }
 
@@ -43,11 +39,8 @@ public class MixinManaShieldAbility extends Ability {
     @Inject(method = "on", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/attributes/AttributeInstance;removeModifier(Ljava/util/UUID;)V"))
     private static void modifyHitSound(LivingDamageEvent event, CallbackInfo ci) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            float pitch = 0.7F + player.getLevel().getRandom().nextFloat(0.6F);
-            SoundChoice sound = new SoundChoice(ModSounds.MANA_SHIELD_HIT, 0.1F, pitch);
-            if (ModelUtil.getWornSet(player) instanceof AdditionalArmorModel model) {
-                sound = model.getCustomSound(ManaShieldAbility.class, 1, sound);
-            }
+            SoundChoice def = new SoundChoice(ModSounds.MANA_SHIELD_HIT, 0.1F,  0.7F + player.getLevel().getRandom().nextFloat(0.6F));
+            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, 1, def);
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
         }
     }

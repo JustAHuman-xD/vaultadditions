@@ -11,26 +11,22 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.function.Supplier;
-
 public class VanillaAttributeArmorTransmogEffect<T> extends AttributeTransmogEffect<T> {
-    private final Supplier<VaultGearAttributeInstance<T>> factory;
     private final Attribute attribute;
     private final AttributeModifier.Operation operation;
     private final double value;
     private final AttributeModifier modifier;
 
-    public VanillaAttributeArmorTransmogEffect(Supplier<VaultGearAttributeInstance<T>> factory, Attribute attribute, AttributeModifier.Operation operation, double value) {
-        this.factory = factory;
+    public VanillaAttributeArmorTransmogEffect(Attribute attribute, AttributeModifier.Operation operation, double value) {
+        this((VaultGearAttributeInstance<T>) VaultGearAttributeInstance.cast(ModGearAttributes.getGearAttribute(attribute, operation), value), attribute, operation, value);
+    }
+
+    public VanillaAttributeArmorTransmogEffect(VaultGearAttributeInstance<T> instance, Attribute attribute, AttributeModifier.Operation operation, double value) {
+        super(instance);
         this.attribute = attribute;
         this.operation = operation;
         this.value = value;
         this.modifier = new AttributeModifier("Armor Set Effect", value, operation);
-    }
-
-    @Override
-    public VaultGearAttributeInstance<T> getVaultGearAttributeInstance() {
-        return factory.get();
     }
 
     public void apply(Player player) {
@@ -62,8 +58,6 @@ public class VanillaAttributeArmorTransmogEffect<T> extends AttributeTransmogEff
         Attribute attribute = ForgeRegistries.ATTRIBUTES.getValue(ResourceLocation.tryParse(object.get("attribute").getAsString()));
         AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(object.get("operation").getAsString());
         double value = object.get("value").getAsDouble();
-        return new VanillaAttributeArmorTransmogEffect<>(() -> {
-            return VaultGearAttributeInstance.cast(ModGearAttributes.getGearAttribute(attribute, operation), value);
-        }, attribute, operation, value);
+        return new VanillaAttributeArmorTransmogEffect<>(attribute, operation, value);
     }
 }

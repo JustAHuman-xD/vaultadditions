@@ -5,12 +5,12 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 
-public class HideElytraEffect extends TransmogEffect {
-    public static final HideElytraEffect INSTANCE = new HideElytraEffect();
+public class HideElytraTransmogEffect extends TransmogEffect {
+    public static final HideElytraTransmogEffect INSTANCE = new HideElytraTransmogEffect();
 
     @Override
     public MutableComponent getTooltip() {
-        return new TextComponent("Hides Elytra");
+        return null;
     }
 
     @Override

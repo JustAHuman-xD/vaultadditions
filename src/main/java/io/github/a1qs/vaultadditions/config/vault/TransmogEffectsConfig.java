@@ -5,12 +5,31 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.init.ModModels;
+import io.github.a1qs.vaultadditions.init.ModSounds;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.util.SoundChoice;
+import io.github.a1qs.vaultadditions.util.VaultGearAttributeHelper;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AbilitySoundTransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AttributeTransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.ElytraSoundTransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.HideElytraTransmogEffect;
 import io.github.a1qs.vaultadditions.vault.gear.effect.TransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.VanillaAttributeArmorTransmogEffect;
 import iskallia.vault.config.Config;
 import iskallia.vault.dynamodel.DynamicModel;
+import iskallia.vault.dynamodel.model.armor.ArmorModel;
+import iskallia.vault.gear.attribute.VaultGearAttributeInstance;
+import iskallia.vault.init.ModAbilities;
+import iskallia.vault.init.ModAttributes;
 import iskallia.vault.init.ModDynamicModels;
+import iskallia.vault.init.ModGearAttributes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +74,15 @@ public class TransmogEffectsConfig extends Config {
             if (type.isInstance(effect)) {
                 effects.add(type.cast(effect));
             }
+        }
+        return effects;
+    }
+
+    public <T extends TransmogEffect> List<T> getEffects(ServerPlayer player, Class<T> type) {
+        ArmorModel wornModel = ModelUtil.getWornSet(player);
+        List<T> effects = new ArrayList<>(getEffects(wornModel, type));
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            effects.addAll(getEffects(player.getItemBySlot(slot), type));
         }
         return effects;
     }
@@ -104,7 +132,56 @@ public class TransmogEffectsConfig extends Config {
 
     @Override
     protected void reset() {
+        for (ArmorModel model : ModModels.HOKAGE_ARMOR) {
+            JsonArray effects = new JsonArray();
+            effects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+            effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Empower", -0.25F)).serialize());
+            effects.add(new VanillaAttributeArmorTransmogEffect<>(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.1F).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.SMITE_ARCHON, new SoundChoice(ModSounds.TIGER_ACTIVATE_ARCHON.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect("Smite_Abstract", new SoundChoice(ModSounds.TIGER_ARCHON_BOLT.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.DASH, new SoundChoice(ModSounds.TIGER_DASH.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.MANA_SHIELD, new SoundChoice(ModSounds.TIGER_ACTIVATE_MANASHIELD.get())).serialize());
+            transmogEffects.add(model.getId().toString(), effects);
+        }
 
+        for (ArmorModel model : ModModels.HOY_ARMOR) {
+            JsonArray effects = new JsonArray();
+            effects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+            effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Mana_Shield_Legacy", -0.25F)).serialize());
+            effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Smite_Archon", -0.25F)).serialize());
+            effects.add(new ElytraSoundTransmogEffect(ModSounds.HOY_ELYTRA_GLIDE.get(), 0.2F).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.SMITE_ARCHON, new SoundChoice(ModSounds.HOY_ACTIVATE_ARCHON.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect("Smite_Abstract", new SoundChoice(ModSounds.HOY_ARCHON_BOLT.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.DASH, new SoundChoice(ModSounds.HOY_DASH.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.MANA_SHIELD, new SoundChoice(ModSounds.HOY_ACTIVATE_MANASHIELD.get())).serialize());
+            effects.add(new AbilitySoundTransmogEffect(ModAbilities.MANA_SHIELD, new SoundChoice(ModSounds.HOY_MANASHIELD_HIT.get())).serialize());
+            transmogEffects.add(model.getId().toString(), effects);
+        }
+
+        JsonArray vikingEffects = new JsonArray();
+        vikingEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.potionEffect(MobEffects.DAMAGE_BOOST, 10)).serialize());
+        vikingEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityLevel("Rampage", 2)).serialize());
+        transmogEffects.add(ModModels.Armor.VIKING.getModel().getId().toString(), vikingEffects);
+
+        JsonArray celestialEffects = new JsonArray();
+        celestialEffects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+        celestialEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Empower", -0.25F)).serialize());
+        celestialEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityCooldownPercentage("Ghost_Walk", -0.5F)).serialize());
+        celestialEffects.add(new VanillaAttributeArmorTransmogEffect<>(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.1F).serialize());
+        transmogEffects.add(ModModels.Armor.CELESTIAL.getModel().getId().toString(), celestialEffects);
+
+        JsonArray spaceMarineEffects = new JsonArray();
+        spaceMarineEffects.add(new HideElytraTransmogEffect().serialize());
+        spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Dash", -0.25F)).serialize());
+        spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityLevel("Dash", 1)).serialize());
+        spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.potionEffect(MobEffects.DAMAGE_BOOST, 10)).serialize());
+        spaceMarineEffects.add(new AttributeTransmogEffect<>(new VaultGearAttributeInstance<>(ModGearAttributes.RESISTANCE, 0.1F)).serialize());
+        spaceMarineEffects.add(new VanillaAttributeArmorTransmogEffect<>(ModAttributes.SIZE_SCALE, AttributeModifier.Operation.MULTIPLY_TOTAL, 0.25F).serialize());
+        transmogEffects.add(ModModels.Armor.SPACE_MARINE.getModel().getId().toString(), spaceMarineEffects);
+
+        JsonArray bokatanEffects = new JsonArray();
+        bokatanEffects.add(new HideElytraTransmogEffect().serialize());
+        transmogEffects.add(ModModels.Armor.BOKATAN.getModel().getId().toString(), bokatanEffects);
     }
 
     @Override

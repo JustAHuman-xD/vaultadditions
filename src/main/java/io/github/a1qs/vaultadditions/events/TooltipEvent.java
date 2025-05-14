@@ -8,6 +8,7 @@ import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
 import iskallia.vault.gear.item.VaultGearItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +39,10 @@ public class TooltipEvent {
             toolTip.add(new TextComponent(""));
             toolTip.add(new TextComponent("Model Bonus:").withStyle(ChatFormatting.GREEN));
             for (TransmogEffect effect : pieceEffects) {
-                toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltip()));
+                MutableComponent effectText = effect.getTooltip();
+                if (effectText != null) {
+                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
+                }
             }
         }
         List<TransmogEffect> setEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece.getArmorModel());
@@ -46,7 +50,10 @@ public class TooltipEvent {
             toolTip.add(new TextComponent(""));
             toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
             for (TransmogEffect effect : setEffects) {
-                toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltip()));
+                MutableComponent effectText = effect.getTooltip();
+                if (effectText != null) {
+                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
+                }
             }
         }
     }

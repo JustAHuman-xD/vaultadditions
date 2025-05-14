@@ -3,14 +3,16 @@ package io.github.a1qs.vaultadditions.vault.skill.ability;
 import com.google.gson.JsonObject;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.init.ModEffects;
-import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.util.SoundChoice;
 import io.github.a1qs.vaultadditions.vault.gear.attribute.special.LegacyManaShieldAbsorptionModification;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AbilitySoundTransmogEffect;
 import iskallia.vault.core.data.adapter.Adapters;
 import iskallia.vault.core.net.BitBuffer;
 import iskallia.vault.gear.attribute.ability.special.base.ConfiguredModification;
 import iskallia.vault.gear.attribute.ability.special.base.SpecialAbilityModification;
 import iskallia.vault.gear.attribute.ability.special.base.template.config.FloatRangeConfig;
 import iskallia.vault.gear.attribute.ability.special.base.template.value.FloatValue;
+import iskallia.vault.init.ModAbilities;
 import iskallia.vault.init.ModSounds;
 import iskallia.vault.mana.Mana;
 import iskallia.vault.mana.ManaAction;
@@ -40,17 +42,9 @@ import java.util.Optional;
         bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class LegacyManaShieldAbility extends ToggleManaAbility {
+    private static final SoundChoice ENABLE_SOUND = new SoundChoice(ModSounds.MANA_SHIELD, 0.2F, 0.2F);
     private float percentageDamageAbsorbed;
     private float manaPerDamageScalar;
-
-    public LegacyManaShieldAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCostPerSecond, float percentageDamageAbsorbed, float manaPerDamageScalar) {
-        super(unlockLevel, learnPointCost, regretPointCost, cooldownTicks, manaCostPerSecond);
-        this.percentageDamageAbsorbed = percentageDamageAbsorbed;
-        this.manaPerDamageScalar = manaPerDamageScalar;
-    }
-
-    public LegacyManaShieldAbility() {
-    }
 
     public float getPercentageDamageAbsorbed() {
         return this.percentageDamageAbsorbed;
@@ -81,21 +75,9 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
     protected void doToggleSound(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent(player -> {
             if(!this.isActive()) return;
-
-            if(ModelUtil.isWearingHoySet(player)) {
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
-                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.HOY_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
-                return;
-            }
-
-            if(ModelUtil.isWearingHokageRobesSet(player)) {
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
-                player.playNotifySound(io.github.a1qs.vaultadditions.init.ModSounds.TIGER_ACTIVATE_MANASHIELD.get(), SoundSource.MASTER, 0.2F, 1.0F);
-                return;
-            }
-
-            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
-            player.playNotifySound(ModSounds.MANA_SHIELD, SoundSource.MASTER, 0.2F, 1.0F);
+            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, ENABLE_SOUND);
+            player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
+            player.playNotifySound(sound.event(), SoundSource.MASTER, sound.volume(), sound.pitch());
         });
     }
 
@@ -144,13 +126,9 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
 
                     float mana = Mana.decrease(player, ManaAction.PLAYER_ACTION, manaUsed);
                     ability.onDamageAbsorbed(player, damageAbsorbed);
-                    float pitch = 1.25F + -0.5F * (mana / Mana.getMax(player));
-
-                    if(ModelUtil.isWearingHoySet(player)) {
-                        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), io.github.a1qs.vaultadditions.init.ModSounds.HOY_MANASHIELD_HIT.get(), SoundSource.PLAYERS, 0.1F, pitch);
-                        return;
-                    }
-                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.MANA_SHIELD_HIT, SoundSource.PLAYERS, 0.1F, pitch);
+                    SoundChoice def = new SoundChoice(ModSounds.MANA_SHIELD_HIT, 0.1F,  1.25F + -0.5F * (mana / Mana.getMax(player)));
+                    SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, 1, def);
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
                 }
             }
         }

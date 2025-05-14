@@ -3,11 +3,9 @@ package io.github.a1qs.vaultadditions.mixins;
 import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
-import io.github.a1qs.vaultadditions.util.ModelUtil;
 import io.github.a1qs.vaultadditions.vault.gear.effect.AttributeTransmogEffect;
 import io.github.a1qs.vaultadditions.vault.gear.effect.VanillaAttributeArmorTransmogEffect;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
-import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
 import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.talent.GearAttributeSkill;
@@ -31,7 +29,6 @@ public class MixinAttributeSnapshotCalculator {
     @Inject(method = "computeSnapshot", at = @At(value = "INVOKE", target = "Liskallia/vault/snapshot/AttributeSnapshotCalculator;addExpertiseInformationToSnapshot(Lnet/minecraft/server/level/ServerPlayer;Liskallia/vault/snapshot/AttributeSnapshot;)V"))
     private static void injectPowerCompute(ServerPlayer player, AttributeSnapshot snapshot, CallbackInfo ci) {
         vaultadditions$addPowerInformationToSnapshot(player, snapshot);
-
     }
 
     @Inject(method = "computeSnapshot", at = @At("HEAD"))
@@ -61,10 +58,9 @@ public class MixinAttributeSnapshotCalculator {
 
     @Unique
     private static void vaultadditions$addArmorSetEffects(ServerPlayer player, AttributeSnapshot snapshot) {
-        ArmorModel wornSet = ModelUtil.getWornSet(player);
-        List<AttributeTransmogEffect> effects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(wornSet, AttributeTransmogEffect.class);
+        List<AttributeTransmogEffect> effects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(player, AttributeTransmogEffect.class);
         for (AttributeTransmogEffect effect : effects) {
-            if (effect instanceof VanillaAttributeArmorTransmogEffect vanillaEffect) {
+            if (effect instanceof VanillaAttributeArmorTransmogEffect<?> vanillaEffect) {
                 vanillaEffect.apply(player);
             }
 
@@ -80,8 +76,8 @@ public class MixinAttributeSnapshotCalculator {
 
         List<AttributeTransmogEffect> oldEffects = vaultadditions$setEffects.remove(player.getUUID());
         oldEffects.removeAll(effects);
-        for (AttributeTransmogEffect effect : oldEffects) {
-            if (effect instanceof VanillaAttributeArmorTransmogEffect vanillaEffect) {
+        for (AttributeTransmogEffect<?> effect : oldEffects) {
+            if (effect instanceof VanillaAttributeArmorTransmogEffect<?> vanillaEffect) {
                 vanillaEffect.remove(player);
             }
         }
