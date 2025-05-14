@@ -14,7 +14,6 @@ public class Configs {
     public static NameProviderConfig NAME_PROVIDER_CONFIG;
     public static ExtraVaultChestMeta EXTRA_VAULT_CHEST_META;
     public static ExtraVaultTimeContributionsConfig EXTRA_VAULT_TIME_CONTRIBUTIONS;
-    public static ArmorSetEffectsConfig ARMOR_SET_EFFECTS_CONFIG;
     public static TransmogEffectsConfig TRANSMOG_EFFECTS_CONFIG;
 
     public static void registerCustomConfigs() {
@@ -29,7 +28,6 @@ public class Configs {
         EVENT_CONFIG = new EventConfig().readConfig();
         EXTRA_VAULT_CHEST_META = new ExtraVaultChestMeta().readConfig();
         EXTRA_VAULT_TIME_CONTRIBUTIONS = new ExtraVaultTimeContributionsConfig().readConfig();
-        ARMOR_SET_EFFECTS_CONFIG = new ArmorSetEffectsConfig().readConfig();
         TRANSMOG_EFFECTS_CONFIG = new TransmogEffectsConfig().readConfig();
     }
 }

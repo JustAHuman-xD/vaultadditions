@@ -24,13 +24,17 @@ public class ModelUtil {
     private static final Map<VaultGearItem, AnimationFactory> ANIMATION_FACTORIES = new HashMap<>();
 
     public static DynamicModel<?> getDynamicModel(ItemStack itemStack) {
+        return getDynamicModel(itemStack, true);
+    }
+
+    public static DynamicModel<?> getDynamicModel(ItemStack itemStack, boolean parent) {
         if (itemStack == null) {
             return null;
         }
 
         GearDataCache cache = GearDataCache.of(itemStack);
         return cache.getGearModel().flatMap(model -> ModDynamicModels.REGISTRIES.getModel(itemStack.getItem(), model))
-                .map(model -> model instanceof ArmorPieceModel piece ? piece.getArmorModel() : model)
+                .map(model -> parent && model instanceof ArmorPieceModel piece ? piece.getArmorModel() : model)
                 .orElse(null);
     }
 

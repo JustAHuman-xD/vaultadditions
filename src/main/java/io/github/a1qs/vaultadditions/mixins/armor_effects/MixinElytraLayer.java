@@ -1,9 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins.armor_effects;
 
 import io.github.a1qs.vaultadditions.config.Configs;
-import io.github.a1qs.vaultadditions.util.ModelUtil;
-import io.github.a1qs.vaultadditions.vault.gear.effect.transmog.HideElytraEffect;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
+import io.github.a1qs.vaultadditions.vault.gear.effect.HideElytraEffect;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.RenderLayerParent;

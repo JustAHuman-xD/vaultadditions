@@ -1,11 +1,11 @@
 package io.github.a1qs.vaultadditions.mixins;
 
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
-import io.github.a1qs.vaultadditions.vault.gear.effect.ArmorEffectRegistry;
-import io.github.a1qs.vaultadditions.vault.gear.effect.set.ArmorSetEffect;
-import io.github.a1qs.vaultadditions.vault.gear.effect.set.VanillaAttributeArmorEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AttributeTransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.VanillaAttributeArmorTransmogEffect;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.gear.attribute.VaultGearAttribute;
@@ -26,7 +26,7 @@ import java.util.*;
 
 @Mixin(value = AttributeSnapshotCalculator.class, remap = false)
 public class MixinAttributeSnapshotCalculator {
-    @Unique private static final Map<UUID, ArmorModel> vaultadditions$setEffects = new HashMap<>();
+    @Unique private static final Map<UUID, List<AttributeTransmogEffect>> vaultadditions$setEffects = new HashMap<>();
 
     @Inject(method = "computeSnapshot", at = @At(value = "INVOKE", target = "Liskallia/vault/snapshot/AttributeSnapshotCalculator;addExpertiseInformationToSnapshot(Lnet/minecraft/server/level/ServerPlayer;Liskallia/vault/snapshot/AttributeSnapshot;)V"))
     private static void injectPowerCompute(ServerPlayer player, AttributeSnapshot snapshot, CallbackInfo ci) {
@@ -61,10 +61,10 @@ public class MixinAttributeSnapshotCalculator {
 
     @Unique
     private static void vaultadditions$addArmorSetEffects(ServerPlayer player, AttributeSnapshot snapshot) {
-        boolean hasEffect = false;
         ArmorModel wornSet = ModelUtil.getWornSet(player);
-        for(ArmorSetEffect effect : ArmorEffectRegistry.getEffectsForArmor(wornSet)) {
-            if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
+        List<AttributeTransmogEffect> effects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(wornSet, AttributeTransmogEffect.class);
+        for (AttributeTransmogEffect effect : effects) {
+            if (effect instanceof VanillaAttributeArmorTransmogEffect vanillaEffect) {
                 vanillaEffect.apply(player);
             }
 
@@ -76,18 +76,16 @@ public class MixinAttributeSnapshotCalculator {
             );
             InvokeAttributeSnapshotAttributeValue snapshotInvoker = (InvokeAttributeSnapshotAttributeValue) attributeSnapshotValue;
             snapshotInvoker.invokeAddCachedValue(effect.getVaultGearAttributeInstance().getValue());
-            hasEffect = true;
         }
 
-        ArmorModel oldSet = vaultadditions$setEffects.remove(player.getUUID());
-        if (!hasEffect || wornSet != oldSet) {
-            for (ArmorSetEffect effect : ArmorEffectRegistry.getEffectsForArmor(oldSet)) {
-                if (effect instanceof VanillaAttributeArmorEffect vanillaEffect) {
-                    vanillaEffect.remove(player);
-                }
+        List<AttributeTransmogEffect> oldEffects = vaultadditions$setEffects.remove(player.getUUID());
+        oldEffects.removeAll(effects);
+        for (AttributeTransmogEffect effect : oldEffects) {
+            if (effect instanceof VanillaAttributeArmorTransmogEffect vanillaEffect) {
+                vanillaEffect.remove(player);
             }
         }
-        vaultadditions$setEffects.put(player.getUUID(), wornSet);
+        vaultadditions$setEffects.put(player.getUUID(), effects);
     }
 
     @Mixin(value = AttributeSnapshot.class, remap = false)

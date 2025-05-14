@@ -6,15 +6,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.util.ModelUtil;
-import io.github.a1qs.vaultadditions.vault.gear.effect.transmog.TransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.TransmogEffect;
 import iskallia.vault.config.Config;
 import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class TransmogEffectsConfig extends Config {
     public final Map<DynamicModel<?>, List<TransmogEffect>> effects = new HashMap<>();
 
     public boolean hasEffect(ItemStack itemStack, TransmogEffect effect) {
-        return hasEffect(ModelUtil.getArmorModel(itemStack), effect);
+        return hasEffect(ModelUtil.getDynamicModel(itemStack, false), effect);
     }
 
     public boolean hasEffect(DynamicModel<?> model, TransmogEffect effect) {
@@ -36,11 +37,11 @@ public class TransmogEffectsConfig extends Config {
         return effectList != null && effectList.contains(effect);
     }
 
-    public List<TransmogEffect> getEffects(ItemStack itemStack, Class<? extends TransmogEffect> type) {
-        return getEffects(ModelUtil.getArmorModel(itemStack), type);
+    public <E extends TransmogEffect> List<E> getEffects(ItemStack itemStack, Class<E> type) {
+        return getEffects(ModelUtil.getDynamicModel(itemStack, false), type);
     }
 
-    public List<TransmogEffect> getEffects(DynamicModel<?> model, Class<? extends TransmogEffect> type) {
+    public <E extends TransmogEffect> List<E> getEffects(DynamicModel<?> model, Class<E> type) {
         if (model == null) {
             return List.of();
         }
@@ -49,14 +50,25 @@ public class TransmogEffectsConfig extends Config {
             return List.of();
         }
 
-        List<TransmogEffect> effects = new ArrayList<>(effectList);
-        effects.removeIf(effect -> !type.isInstance(effect));
+        List<E> effects = new ArrayList<>();
+        for (TransmogEffect effect : effectList) {
+            if (type.isInstance(effect)) {
+                effects.add(type.cast(effect));
+            }
+        }
         return effects;
     }
 
+    public List<TransmogEffect> getEffects(ItemStack itemStack) {
+        return getEffects(ModelUtil.getDynamicModel(itemStack, false));
+    }
+
+    public List<TransmogEffect> getEffects(DynamicModel<?> model) {
+        return model == null ? List.of() : effects.getOrDefault(model, List.of());
+    }
+
     @Override
-    public <T extends Config> T readConfig() {
-        super.readConfig();
+    protected void onLoad(@Nullable Config oldConfigInstance) {
         for (String key : transmogEffects.keySet()) {
             ResourceLocation id = ResourceLocation.tryParse(key);
             DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(id).orElse(null);
@@ -85,23 +97,9 @@ public class TransmogEffectsConfig extends Config {
             }
 
             if (!effects.isEmpty()) {
-                this.effects.put(model, effects);
+                this.effects.put(model, Collections.unmodifiableList(effects));
             }
         }
-        return (T) this;
-    }
-
-    @Override
-    public void writeConfig() throws IOException {
-        transmogEffects.keySet().forEach(transmogEffects::remove);
-        for (Map.Entry<DynamicModel<?>, List<TransmogEffect>> entry : effects.entrySet()) {
-            JsonArray effects = new JsonArray();
-            for (TransmogEffect effect : entry.getValue()) {
-                effects.add(effect.serialize());
-            }
-            transmogEffects.add(entry.getKey().getId().toString(), effects);
-        }
-        super.writeConfig();
     }
 
     @Override

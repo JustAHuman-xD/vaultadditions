@@ -1,17 +1,14 @@
 package io.github.a1qs.vaultadditions.events;
 
-import io.github.a1qs.vaultadditions.vault.gear.effect.ArmorEffectRegistry;
-import io.github.a1qs.vaultadditions.vault.gear.effect.set.ArmorSetEffect;
+import io.github.a1qs.vaultadditions.config.Configs;
+import io.github.a1qs.vaultadditions.util.ModelUtil;
+import io.github.a1qs.vaultadditions.vault.gear.effect.TransmogEffect;
+import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.dynamodel.model.armor.ArmorPieceModel;
-import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
-import iskallia.vault.init.ModDynamicModels;
-import iskallia.vault.init.ModGearAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -23,28 +20,33 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = {Dist.CLIENT})
 public class TooltipEvent {
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void addArmorSetBuffs(ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
         List<Component> toolTip = event.getToolTip();
-        Item item = itemStack.getItem();
+        if (!(itemStack.getItem() instanceof VaultGearItem)) {
+            return;
+        }
 
+        DynamicModel<?> model = ModelUtil.getDynamicModel(itemStack, false);
+        if (!(model instanceof ArmorPieceModel piece)) {
+            return;
+        }
 
-        if (item instanceof VaultGearItem) {
-
-            VaultGearData gearData = VaultGearData.read(itemStack);
-            ResourceLocation modelId = gearData.getFirstValue(ModGearAttributes.GEAR_MODEL).orElse(null);
-            ArmorPieceModel m = ModDynamicModels.Armor.PIECE_REGISTRY.get(modelId).orElse(null);
-            if(m != null) {
-                List<ArmorSetEffect> c = ArmorEffectRegistry.getEffectsForArmor(m.getArmorModel());
-                if(!c.isEmpty()) {
-                    toolTip.add(new TextComponent(""));
-                    toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
-                }
-                for(ArmorSetEffect effect : c) {
-                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltipComponent()));
-                }
+        List<TransmogEffect> pieceEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece);
+        if (!pieceEffects.isEmpty()) {
+            toolTip.add(new TextComponent(""));
+            toolTip.add(new TextComponent("Model Bonus:").withStyle(ChatFormatting.GREEN));
+            for (TransmogEffect effect : pieceEffects) {
+                toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltip()));
+            }
+        }
+        List<TransmogEffect> setEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece.getArmorModel());
+        if (!setEffects.isEmpty()) {
+            toolTip.add(new TextComponent(""));
+            toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
+            for (TransmogEffect effect : setEffects) {
+                toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effect.getTooltip()));
             }
         }
     }
