@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.config.vault;
 
 import com.google.gson.annotations.Expose;
 import io.github.a1qs.vaultadditions.VaultAdditions;
+import io.github.a1qs.vaultadditions.init.ModModels;
 import iskallia.vault.config.Config;
 import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
@@ -52,7 +53,22 @@ public class TransmogUnlocksConfig extends Config {
     }
 
     @Override
-    protected void reset() {}
+    protected void reset() {
+        // Hoy Unlocks
+        unlocks.put("5b61cfde-84b8-4b12-b375-26fe25be0443", List.of(
+                ModModels.Armor.HOY_82.getModel().getId().toString(),
+                ModModels.Armor.HOY_82_GROGU.getModel().getId().toString(),
+                ModModels.Armor.DINDJARIN.getModel().getId().toString(),
+                ModModels.GeckoArmor.GROGU.getModel().getId().toString(),
+                ModModels.Item.DARKSABER.getModel().getId().toString(),
+                ModModels.GeckoItem.DARKSABER2.getModel().getId().toString()
+        ));
+        // Tiger Unlocks
+        unlocks.put("8561dac7-e879-4d98-a92f-c379614eaa4e", List.of(
+                ModModels.Armor.HOKAGE_ROBES.getModel().getId().toString(),
+                ModModels.Armor.HOKAGE_ROBES_MASKLESS.getModel().getId().toString()
+        ));
+    }
 
     @Override
     public String getName() {
