@@ -124,7 +124,7 @@ public class TransmogEffectsConfig extends Config {
     }
 
     public List<TransmogEffect> getEffects(DynamicModel<?> model) {
-        return model == null ? List.of() : effects.getOrDefault(model, List.of());
+        return model == null ? List.of() : new ArrayList<>(effects.getOrDefault(model, List.of()));
     }
 
     @Override
@@ -203,17 +203,13 @@ public class TransmogEffectsConfig extends Config {
         transmogEffects.add(ModModels.Armor.CELESTIAL.getModel().getId().toString(), celestialEffects);
 
         JsonArray spaceMarineEffects = new JsonArray();
-        spaceMarineEffects.add(new HideElytraTransmogEffect().serialize());
+        spaceMarineEffects.add(HideElytraTransmogEffect.INSTANCE.serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage(ModAbilities.DASH, -0.25F)).serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityLevel(ModAbilities.DASH, 1)).serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.potionEffect(MobEffects.DAMAGE_BOOST, 10)).serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(new VaultGearAttributeInstance<>(ModGearAttributes.RESISTANCE, 0.1F)).serialize());
         spaceMarineEffects.add(new VanillaAttributeArmorTransmogEffect<>(ModAttributes.SIZE_SCALE, AttributeModifier.Operation.MULTIPLY_TOTAL, 0.25F).serialize());
         transmogEffects.add(ModModels.Armor.SPACE_MARINE.getModel().getId().toString(), spaceMarineEffects);
-
-        JsonArray bokatanEffects = new JsonArray();
-        bokatanEffects.add(new HideElytraTransmogEffect().serialize());
-        transmogEffects.add(ModModels.Armor.BOKATAN.getModel().getId().toString(), bokatanEffects);
     }
 
     @Override

@@ -57,7 +57,7 @@ public abstract class TransmogEffect {
         register(new AbilitySoundTransmogEffect(null, null));
         register(new AttributeTransmogEffect<>(null));
         register(new ElytraSoundTransmogEffect(null, 0f));
-        register(new HideElytraTransmogEffect());
+        register(HideElytraTransmogEffect.INSTANCE);
         register(new VanillaAttributeArmorTransmogEffect<>(null, null, null, 0));
     }
 }

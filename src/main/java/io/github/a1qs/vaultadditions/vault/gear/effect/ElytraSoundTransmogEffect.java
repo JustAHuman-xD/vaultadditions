@@ -31,7 +31,7 @@ public class ElytraSoundTransmogEffect extends TransmogEffect {
     @Override
     public JsonElement serialize() {
         JsonObject json = withType();
-        json.addProperty("elytraSound", elytraSound.getLocation().toString());
+        json.addProperty("elytraSound", elytraSound.getRegistryName().toString());
         json.addProperty("elytraVolumeModifier", elytraVolumeModifier);
         return json;
     }
