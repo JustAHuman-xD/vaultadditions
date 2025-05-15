@@ -20,21 +20,17 @@ public abstract class MixinModDynamicModels {
     private static boolean forceBakeGeckoModels(ResourceManager manager, ResourceLocation id, @Local(argsOnly = true) DynamicModel<?> dynamicModel) {
         if (ModelUtil.getGeckoModel(dynamicModel) != null) {
             ResourceLocation model = DynamicModel.prependToId("models/item/", dynamicModel.getId());
-            VaultAdditions.LOGGER.info("Looking for resources DIRECTLY under : {}", model);
-            for (ResourceLocation resource : manager.listResources(model.getPath(), s -> true)) {
-                VaultAdditions.LOGGER.info("Found : {}", resource);
-            }
+            ResourceLocation jsonModel = DynamicModel.appendToId(id, ".json");
+            VaultAdditions.LOGGER.info("Gecko Model {}, json exists {}, withoutjson exists {}", jsonModel, manager.hasResource(jsonModel), manager.hasResource(model));
 
             String string = model.getPath();
-            for (int i = 0; i < 2; i++) {
-                if (string.lastIndexOf("/") == -1) {
-                    break;
-                }
-                string = string.substring(0, string.lastIndexOf("/"));
-                VaultAdditions.LOGGER.info("Looking for resources under : {}", string);
-                for (ResourceLocation resource : manager.listResources(string, s -> true)) {
-                    VaultAdditions.LOGGER.info("Found : {}", resource);
-                }
+            string = string.substring(0, string.lastIndexOf("/"));
+            VaultAdditions.LOGGER.info("Looking for resources under : {}", string);
+            for (ResourceLocation resource : manager.listResources(string, s -> true)) {
+                VaultAdditions.LOGGER.info("found {}, equals={}, stringequals={}, trimequals={}", resource,
+                        resource.equals(jsonModel),
+                        resource.toString().equals(jsonModel.toString()),
+                        resource.toString().trim().equals(jsonModel.toString().trim()));
             }
         }
         return jsonModelExists(manager, id);
