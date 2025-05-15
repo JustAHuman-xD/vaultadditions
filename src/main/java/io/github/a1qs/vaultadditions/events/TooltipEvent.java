@@ -17,6 +17,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = {Dist.CLIENT})
@@ -36,24 +37,34 @@ public class TooltipEvent {
 
         List<TransmogEffect> pieceEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece);
         if (!pieceEffects.isEmpty()) {
-            toolTip.add(new TextComponent(""));
-            toolTip.add(new TextComponent("Model Bonus:").withStyle(ChatFormatting.GREEN));
+            List<Component> pieceTooltip = new ArrayList<>();
             for (TransmogEffect effect : pieceEffects) {
                 MutableComponent effectText = effect.getTooltip();
                 if (effectText != null) {
-                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
+                    pieceTooltip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
                 }
+            }
+
+            if (!pieceTooltip.isEmpty()) {
+                toolTip.add(new TextComponent(""));
+                toolTip.add(new TextComponent("Model Bonus:").withStyle(ChatFormatting.GREEN));
+                toolTip.addAll(pieceTooltip);
             }
         }
         List<TransmogEffect> setEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece.getArmorModel());
         if (!setEffects.isEmpty()) {
-            toolTip.add(new TextComponent(""));
-            toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
+            List<Component> setTooltip = new ArrayList<>();
             for (TransmogEffect effect : setEffects) {
                 MutableComponent effectText = effect.getTooltip();
                 if (effectText != null) {
-                    toolTip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
+                    setTooltip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
                 }
+            }
+
+            if (!setTooltip.isEmpty()) {
+                toolTip.add(new TextComponent(""));
+                toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
+                toolTip.addAll(setTooltip);
             }
         }
     }
