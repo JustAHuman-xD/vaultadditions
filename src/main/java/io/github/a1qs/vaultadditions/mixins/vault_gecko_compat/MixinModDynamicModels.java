@@ -13,21 +13,20 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Debug(export = true)
-@Mixin(ModDynamicModels.class)
+@Mixin(value = ModDynamicModels.class, remap = false)
 public abstract class MixinModDynamicModels {
     @Redirect(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Liskallia/vault/init/ModDynamicModels;jsonModelExists(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/ResourceLocation;)Z"))
     private static boolean forceBakeGeckoModels(ResourceManager manager, ResourceLocation id, @Local(argsOnly = true) DynamicModel<?> dynamicModel) {
         if (ModelUtil.getGeckoModel(dynamicModel) != null) {
             ResourceLocation model = DynamicModel.prependToId("models/item/", dynamicModel.getId());
             ResourceLocation jsonModel = DynamicModel.appendToId(id, ".json");
-            VaultAdditions.LOGGER.info("Gecko Model {}, json exists {}, withoutjson exists {}", jsonModel, manager.hasResource(jsonModel), manager.hasResource(model));
+            VaultAdditions.LOGGER.info("Gecko Model `{}`, json exists {}, withoutjson exists {}", jsonModel, manager.hasResource(jsonModel), manager.hasResource(model));
 
             String string = model.getPath();
             string = string.substring(0, string.lastIndexOf("/"));
             VaultAdditions.LOGGER.info("Looking for resources under : {}", string);
             for (ResourceLocation resource : manager.listResources(string, s -> true)) {
-                VaultAdditions.LOGGER.info("found {}, equals={}, stringequals={}, trimequals={}", resource,
+                VaultAdditions.LOGGER.info("found `{}`, equals={}, stringequals={}, trimequals={}", resource,
                         resource.equals(jsonModel),
                         resource.toString().equals(jsonModel.toString()),
                         resource.toString().trim().equals(jsonModel.toString().trim()));
