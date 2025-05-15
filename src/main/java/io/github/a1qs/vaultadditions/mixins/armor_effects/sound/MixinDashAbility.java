@@ -4,6 +4,7 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.util.SoundChoice;
 import io.github.a1qs.vaultadditions.vault.gear.effect.AbilitySoundTransmogEffect;
+import io.github.a1qs.vaultadditions.vault.gear.effect.TransmogEffect;
 import iskallia.vault.init.ModAbilities;
 import iskallia.vault.skill.ability.effect.DashAbility;
 import iskallia.vault.skill.ability.effect.spi.core.Ability;
@@ -23,7 +24,7 @@ public class MixinDashAbility extends Ability {
         context.getSource().as(ServerPlayer.class).ifPresent(player -> {
             VaultAdditions.LOGGER.info("All Player Active Effects:");
             for (TransmogEffect effect : Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(player)) {
-
+                VaultAdditions.LOGGER.info("Effect: {}", effect.serialize().toString());
             }
 
             SoundChoice def = new SoundChoice(null, 0.2F, 1.0F);
