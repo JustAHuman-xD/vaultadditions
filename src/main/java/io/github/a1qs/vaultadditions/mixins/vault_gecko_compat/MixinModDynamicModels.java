@@ -19,8 +19,8 @@ public abstract class MixinModDynamicModels {
     private static boolean forceBakeGeckoModels(ResourceManager manager, ResourceLocation id, @Local(argsOnly = true) DynamicModel<?> dynamicModel) {
         if (ModelUtil.getGeckoModel(dynamicModel) != null) {
             ResourceLocation model = DynamicModel.prependToId("models/item/", dynamicModel.getId());
-            ResourceLocation jsonModel = DynamicModel.appendToId(id, ".json");
-            VaultAdditions.LOGGER.info("Gecko Model `{}`, json exists {}, withoutjson exists {}", jsonModel, manager.hasResource(jsonModel), manager.hasResource(model));
+            ResourceLocation jsonModel = DynamicModel.appendToId(model, ".json");
+            VaultAdditions.LOGGER.info("Gecko Model id `{}`, model `{}`, json `{}`, json exists {}, withoutjson exists {}", dynamicModel.getId(), model, jsonModel, manager.hasResource(jsonModel), manager.hasResource(model));
 
             String string = model.getPath();
             string = string.substring(0, string.lastIndexOf("/"));
