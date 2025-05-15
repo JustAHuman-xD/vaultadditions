@@ -28,8 +28,7 @@ public abstract class MixinElytraLayer<T extends LivingEntity, M extends EntityM
     public void shouldRender(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir) {
         if (entity instanceof Player player) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-            if (Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(chest, HideElytraTransmogEffect.INSTANCE)
-                || Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(ModelUtil.getWornSet(player), HideElytraTransmogEffect.INSTANCE)) {
+            if (Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(player, HideElytraTransmogEffect.INSTANCE)) {
                 cir.setReturnValue(false);
             }
         }

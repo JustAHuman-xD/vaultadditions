@@ -24,12 +24,14 @@ import iskallia.vault.init.ModAbilities;
 import iskallia.vault.init.ModAttributes;
 import iskallia.vault.init.ModDynamicModels;
 import iskallia.vault.init.ModGearAttributes;
+import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +49,18 @@ public class TransmogEffectsConfig extends Config {
     @Expose
     private final JsonObject transmogEffects = new JsonObject();
     public final Map<DynamicModel<?>, List<TransmogEffect>> effects = new HashMap<>();
+
+    public boolean hasEffect(Player player, TransmogEffect effect) {
+        if (hasEffect(ModelUtil.getWornSet(player), effect)) {
+            return true;
+        }
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (hasEffect(player.getItemBySlot(slot), effect)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean hasEffect(ItemStack itemStack, TransmogEffect effect) {
         return hasEffect(ModelUtil.getDynamicModel(itemStack, false), effect);
