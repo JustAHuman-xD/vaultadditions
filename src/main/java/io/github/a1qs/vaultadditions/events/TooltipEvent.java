@@ -31,42 +31,30 @@ public class TooltipEvent {
         }
 
         DynamicModel<?> model = ModelUtil.getDynamicModel(itemStack, false);
-        if (!(model instanceof ArmorPieceModel piece)) {
-            return;
-        }
+        addEffectTooltip(toolTip, "Model Bonus:", Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(model));
 
-        List<TransmogEffect> pieceEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece);
-        if (!pieceEffects.isEmpty()) {
-            List<Component> pieceTooltip = new ArrayList<>();
-            for (TransmogEffect effect : pieceEffects) {
-                MutableComponent effectText = effect.getTooltip();
-                if (effectText != null) {
-                    pieceTooltip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
-                }
-            }
-
-            if (!pieceTooltip.isEmpty()) {
-                toolTip.add(new TextComponent(""));
-                toolTip.add(new TextComponent("Model Bonus:").withStyle(ChatFormatting.GREEN));
-                toolTip.addAll(pieceTooltip);
-            }
-        }
-        List<TransmogEffect> setEffects = Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece.getArmorModel());
-        if (!setEffects.isEmpty()) {
-            List<Component> setTooltip = new ArrayList<>();
-            for (TransmogEffect effect : setEffects) {
-                MutableComponent effectText = effect.getTooltip();
-                if (effectText != null) {
-                    setTooltip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
-                }
-            }
-
-            if (!setTooltip.isEmpty()) {
-                toolTip.add(new TextComponent(""));
-                toolTip.add(new TextComponent("Full Set Bonus:").withStyle(ChatFormatting.GREEN));
-                toolTip.addAll(setTooltip);
-            }
+        if (model instanceof ArmorPieceModel piece) {
+            addEffectTooltip(toolTip, "Full Set Bonus:", Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(piece.getArmorModel()));
         }
     }
 
+    private static void addEffectTooltip(List<Component> toolTip, String type, List<TransmogEffect> effects) {
+        if (effects.isEmpty()) {
+            return;
+        }
+
+        List<Component> effectTooltip = new ArrayList<>();
+        for (TransmogEffect effect : effects) {
+            MutableComponent effectText = effect.getTooltip();
+            if (effectText != null) {
+                effectTooltip.add(new TextComponent("✦ ").withStyle(ChatFormatting.AQUA).append(effectText));
+            }
+        }
+
+        if (!effectTooltip.isEmpty()) {
+            toolTip.add(new TextComponent(""));
+            toolTip.add(new TextComponent(type).withStyle(ChatFormatting.GREEN));
+            toolTip.addAll(effectTooltip);
+        }
+    }
 }
