@@ -103,11 +103,11 @@ public class TransmogEffectsConfig extends Config {
 
     public <E extends TransmogEffect> List<E> getEffects(DynamicModel<?> model, Class<E> type) {
         if (model == null) {
-            return List.of();
+            return new ArrayList<>();
         }
         List<TransmogEffect> effectList = effects.get(model);
         if (effectList == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         List<E> effects = new ArrayList<>();
@@ -119,12 +119,21 @@ public class TransmogEffectsConfig extends Config {
         return effects;
     }
 
+    public List<TransmogEffect> getEffects(Player player) {
+        ArmorModel wornModel = ModelUtil.getWornSet(player);
+        List<TransmogEffect> effects = new ArrayList<>(getEffects(wornModel));
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            effects.addAll(getEffects(player.getItemBySlot(slot)));
+        }
+        return effects;
+    }
+
     public List<TransmogEffect> getEffects(ItemStack itemStack) {
         return getEffects(ModelUtil.getDynamicModel(itemStack, false));
     }
 
     public List<TransmogEffect> getEffects(DynamicModel<?> model) {
-        return model == null ? List.of() : new ArrayList<>(effects.getOrDefault(model, List.of()));
+        return model == null ? new ArrayList<>() : new ArrayList<>(effects.getOrDefault(model, List.of()));
     }
 
     @Override
