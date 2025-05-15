@@ -37,7 +37,7 @@ public class AbilitySoundTransmogEffect extends TransmogEffect {
         sound.addProperty("volume", this.sound.volume());
         sound.addProperty("pitch", this.sound.pitch());
         json.add("sound", sound);
-        return null;
+        return json;
     }
 
     @Override

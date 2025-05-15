@@ -33,7 +33,7 @@ public class AttributeTransmogEffect<T> extends TransmogEffect {
         CompoundTag instance = new CompoundTag();
         instance.put("instance", VaultGearAttributeSerializer.serializeTag(this.instance));
         json.addProperty("instance", instance.toString());
-        return null;
+        return json;
     }
 
     @Override
