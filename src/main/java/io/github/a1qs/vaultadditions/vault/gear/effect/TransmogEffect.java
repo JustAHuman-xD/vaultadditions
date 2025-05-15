@@ -11,7 +11,7 @@ import java.util.Set;
 
 public abstract class TransmogEffect {
     private static final Set<TransmogEffect> TYPES = new HashSet<>();
-    protected static void registerType(TransmogEffect type) {
+    protected static void register(TransmogEffect type) {
         TYPES.add(type);
     }
 
@@ -50,5 +50,14 @@ public abstract class TransmogEffect {
             }
         }
         return null;
+    }
+
+    public static void registerTypes() {
+        TYPES.clear();
+        register(new AbilitySoundTransmogEffect(null, null));
+        register(new AttributeTransmogEffect<>(null));
+        register(new ElytraSoundTransmogEffect(null, 0f));
+        register(new HideElytraTransmogEffect());
+        register(new VanillaAttributeArmorTransmogEffect<>(null, null, null, 0));
     }
 }

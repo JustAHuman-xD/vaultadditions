@@ -40,6 +40,10 @@ import java.util.List;
 import java.util.Map;
 
 public class TransmogEffectsConfig extends Config {
+    static {
+        TransmogEffect.registerTypes();
+    }
+
     @Expose
     private final JsonObject transmogEffects = new JsonObject();
     public final Map<DynamicModel<?>, List<TransmogEffect>> effects = new HashMap<>();
