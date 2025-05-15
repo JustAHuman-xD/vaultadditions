@@ -42,7 +42,6 @@ import java.util.Optional;
         bus = Mod.EventBusSubscriber.Bus.FORGE
 )
 public class LegacyManaShieldAbility extends ToggleManaAbility {
-    private static final SoundChoice ENABLE_SOUND = new SoundChoice(ModSounds.MANA_SHIELD, 0.2F, 0.2F);
     private float percentageDamageAbsorbed;
     private float manaPerDamageScalar;
 
@@ -75,7 +74,7 @@ public class LegacyManaShieldAbility extends ToggleManaAbility {
     protected void doToggleSound(SkillContext context) {
         context.getSource().as(ServerPlayer.class).ifPresent(player -> {
             if(!this.isActive()) return;
-            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, ENABLE_SOUND);
+            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.MANA_SHIELD, new SoundChoice(ModSounds.MANA_SHIELD, 0.2F, 0.2F));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
             player.playNotifySound(sound.event(), SoundSource.MASTER, sound.volume(), sound.pitch());
         });

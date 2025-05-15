@@ -10,12 +10,9 @@ import iskallia.vault.skill.base.SkillContext;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(value = SmiteArchonAbility.class, remap = false)
 public class MixinSmiteArchonAbility extends AbstractSmiteAbility {
-    @Unique private static final SoundChoice ACTIVATE = new SoundChoice(ModSounds.SMITE, 0.5F, 1.0F);
-
     @Override
     protected void doToggleSound(SkillContext context) {
         if (!this.isActive()) {
@@ -23,7 +20,7 @@ public class MixinSmiteArchonAbility extends AbstractSmiteAbility {
         }
 
         context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
-            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.SMITE_ARCHON, ACTIVATE);
+            SoundChoice sound = AbilitySoundTransmogEffect.getSound(player, ModAbilities.SMITE_ARCHON, new SoundChoice(ModSounds.SMITE, 0.5F, 1.0F));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
             player.playNotifySound(sound.event(), SoundSource.PLAYERS, sound.volume(), sound.pitch());
         });
