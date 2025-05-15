@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.block;
 
 
 import io.github.a1qs.vaultadditions.block.blockentity.LootStatueBlockEntity;
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.container.LootStatueContainer;
 import io.github.a1qs.vaultadditions.container.RenameContainer;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
@@ -165,12 +165,12 @@ public class LootStatueBlock extends BaseEntityBlock {
                     List<ItemStack> options;
                     switch (pState.getBlock().getRegistryName().toString()) {
                         case "vaultadditions:loot_statue_gift" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
+                                options = Configs.STATUE_LOOT_GIFT.getOptions();
                         case "vaultadditions:loot_statue_gift_mega" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
+                                options = Configs.STATUE_LOOT_MEGA_GIFT.getOptions();
                         case "vaultadditions:loot_statue_arena" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
-                        default -> options = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getOptions();
+                                options = Configs.STATUE_LOOT_ARENA.getOptions();
+                        default -> options = Configs.STATUE_LOOT_VAULT.getOptions();
                     }
 
                     for (ItemStack option : options) {
@@ -205,12 +205,12 @@ public class LootStatueBlock extends BaseEntityBlock {
                     List<ItemStack> options;
                     switch (pState.getBlock().getRegistryName().toString()) {
                         case "vaultadditions:loot_statue_gift" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_GIFT.getOptions();
+                                options = Configs.STATUE_LOOT_GIFT.getOptions();
                         case "vaultadditions:loot_statue_gift_mega" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_MEGA_GIFT.getOptions();
+                                options = Configs.STATUE_LOOT_MEGA_GIFT.getOptions();
                         case "vaultadditions:loot_statue_arena" ->
-                                options = CustomVaultConfigRegistry.STATUE_LOOT_ARENA.getOptions();
-                        default -> options = CustomVaultConfigRegistry.STATUE_LOOT_VAULT.getOptions();
+                                options = Configs.STATUE_LOOT_ARENA.getOptions();
+                        default -> options = Configs.STATUE_LOOT_VAULT.getOptions();
                     }
                     be.setLootItem(options.get(pLevel.random.nextInt(options.size())));
                 }

@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.vault.menu;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.PowerLevelMessage;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
@@ -28,7 +28,7 @@ public class PowerDialog extends SkillDialog<PowerTree, PowerElementContainerScr
     }
 
     protected HashMap<String, SkillStyle> getStyles() {
-        return CustomVaultConfigRegistry.POWERS_GUI.getStyles();
+        return Configs.POWERS_GUI.getStyles();
     }
 
     protected SkillContext getSkillContext() {

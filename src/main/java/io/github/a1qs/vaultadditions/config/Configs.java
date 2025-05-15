@@ -2,7 +2,7 @@ package io.github.a1qs.vaultadditions.config;
 
 import io.github.a1qs.vaultadditions.config.vault.*;
 
-public class CustomVaultConfigRegistry {
+public class Configs {
     public static PowerGUIConfig POWERS_GUI;
     public static PowerConfig POWERS;
     public static VaultStatueLootConfig STATUE_LOOT_VAULT;
@@ -14,6 +14,7 @@ public class CustomVaultConfigRegistry {
     public static NameProviderConfig NAME_PROVIDER_CONFIG;
     public static ExtraVaultChestMeta EXTRA_VAULT_CHEST_META;
     public static ExtraVaultTimeContributionsConfig EXTRA_VAULT_TIME_CONTRIBUTIONS;
+    public static TransmogUnlocksConfig TRANSMOG_UNLOCKS;
 
     public static void registerCustomConfigs() {
         POWERS_GUI = new PowerGUIConfig().readConfig();
@@ -27,5 +28,6 @@ public class CustomVaultConfigRegistry {
         EVENT_CONFIG = new EventConfig().readConfig();
         EXTRA_VAULT_CHEST_META = new ExtraVaultChestMeta().readConfig();
         EXTRA_VAULT_TIME_CONTRIBUTIONS = new ExtraVaultTimeContributionsConfig().readConfig();
+        TRANSMOG_UNLOCKS = new TransmogUnlocksConfig().readConfig();
     }
 }

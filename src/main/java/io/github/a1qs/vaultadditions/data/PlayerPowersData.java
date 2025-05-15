@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.data;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.vault.PlayerAdditionalVaultStats;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
@@ -39,7 +39,7 @@ public class PlayerPowersData extends SavedData {
 
     public PowerTree getPowers(UUID uuid) {
         return this.playerMap.computeIfAbsent(uuid, (uuid1) -> {
-            return CustomVaultConfigRegistry.POWERS.getAll().copy();
+            return Configs.POWERS.getAll().copy();
         });
     }
 
@@ -71,8 +71,8 @@ public class PlayerPowersData extends SavedData {
         if (event.phase == TickEvent.Phase.START) {
             if (event.side.isServer()) {
                 PlayerPowersData data = get((ServerLevel)event.world);
-                if (data.previous != CustomVaultConfigRegistry.POWERS.getAll()) {
-                    data.previous = CustomVaultConfigRegistry.POWERS.getAll();
+                if (data.previous != Configs.POWERS.getAll()) {
+                    data.previous = Configs.POWERS.getAll();
                     data.scheduledMerge.addAll(data.playerMap.keySet());
                 }
             }
@@ -90,7 +90,7 @@ public class PlayerPowersData extends SavedData {
                     PlayerPowersData data = get(player.getLevel());
                     if (data.scheduledMerge.remove(player.getUUID())) {
                         SkillContext context = SkillContext.of(player);
-                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(CustomVaultConfigRegistry.POWERS.getAll().copy(), context));
+                        data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(Configs.POWERS.getAll().copy(), context));
                         SkillContext ctx = MiscUtil.ofPowers(player);
                         PlayerAdditionalVaultStats stats2 = PlayerAdditionalVaultStatData.get((ServerLevel)player.level).getVaultStats(player);
                         stats2.setPowerPoints(ctx.getLearnPoints());

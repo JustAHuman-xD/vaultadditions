@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.mixins.loot_statue;
 
-import io.github.a1qs.vaultadditions.config.CustomVaultConfigRegistry;
+import io.github.a1qs.vaultadditions.config.Configs;
 import iskallia.vault.block.LootStatueBlock;
 import iskallia.vault.block.LootStatueUpperBlock;
 import iskallia.vault.block.entity.LootStatueTileEntity;
@@ -50,7 +50,7 @@ public class MixinLootStatueBlock {
             CompoundTag data = new CompoundTag();
             ListTag itemList = new ListTag();
 
-            List<ItemStack> options = CustomVaultConfigRegistry.STATUE_LOOT_OMEGA.getOptions();
+            List<ItemStack> options = Configs.STATUE_LOOT_OMEGA.getOptions();
             for (ItemStack option : options) {
                 itemList.add(option.serializeNBT());
             }
