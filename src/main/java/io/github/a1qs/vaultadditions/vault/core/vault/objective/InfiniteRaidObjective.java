@@ -92,8 +92,8 @@ public class InfiniteRaidObjective extends Objective {
 
     private Map<UUID, Integer> getPlayerWaves() {
         Map<UUID, Integer> playerWaves = new HashMap<>();
-        long[] uuids = this.get(UUIDS);
-        int[] waves = this.get(WAVES);
+        long[] uuids = this.getOr(UUIDS, new long[0]);
+        int[] waves = this.getOr(WAVES, new int[0]);
         for (int i = 0; i < uuids.length; i += 2) {
             playerWaves.put(new UUID(uuids[i], uuids[i + 1]), waves[playerWaves.size()]);
         }
