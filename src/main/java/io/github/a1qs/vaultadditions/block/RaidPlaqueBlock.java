@@ -5,7 +5,6 @@ import io.github.a1qs.vaultadditions.config.Configs;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.item.RaidPlaqueBlockItem;
 import iskallia.vault.block.SoulPlaqueBlock;
-import iskallia.vault.block.entity.SoulPlaqueTileEntity;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.util.BlockHelper;
 import net.minecraft.core.BlockPos;

@@ -72,7 +72,7 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.STATUE_CAULDRON_BLOCK_ENTITY.get(), StatueCauldronRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
-        BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), SoulPlaqueRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), RaidPlaqueRenderer::new);
     }
 
     @SubscribeEvent
