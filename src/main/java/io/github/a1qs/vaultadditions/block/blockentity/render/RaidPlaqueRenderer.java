@@ -4,7 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.RaidPlaqueTileEntity;
+import io.github.a1qs.vaultadditions.util.MiscUtil;
 import iskallia.vault.block.SoulPlaqueBlock;
 import iskallia.vault.client.util.LightmapUtil;
 import iskallia.vault.entity.model.StatuePlayerModel;
@@ -29,10 +31,12 @@ public class RaidPlaqueRenderer implements BlockEntityRenderer<RaidPlaqueTileEnt
     public RaidPlaqueRenderer(BlockEntityRendererProvider.Context context) {
         this.font = context.getFont();
         this.model = new StatuePlayerModel(context);
+        VaultAdditions.LOGGER.info("RaidPlaqueRenderer initialized");
     }
 
     @Override
     public void render(RaidPlaqueTileEntity entity, float pPartialTick, PoseStack matrices, MultiBufferSource buffer, int pPackedLight, int pPackedOverlay) {
+        MiscUtil.limitedLog("Trying rendering RaidPlaqueRenderer");
         ResourceLocation skinLocation = entity.getSkin().getLocationSkin();
         RenderType renderType = this.model.renderType(skinLocation);
         VertexConsumer vertexBuilder = buffer.getBuffer(renderType);
@@ -49,8 +53,8 @@ public class RaidPlaqueRenderer implements BlockEntityRenderer<RaidPlaqueTileEnt
         matrices.scale(-1.0F, -1.0F, 1.0F);
         this.model.hat.render(matrices, vertexBuilder, pPackedLight, pPackedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
         this.model.head.render(matrices, vertexBuilder, pPackedLight, pPackedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        if (buffer instanceof MultiBufferSource.BufferSource) {
-            ((MultiBufferSource.BufferSource)buffer).endBatch(renderType);
+        if (buffer instanceof MultiBufferSource.BufferSource source) {
+            source.endBatch(renderType);
         }
 
         matrices.pushPose();

@@ -73,12 +73,13 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), RaidPlaqueRenderer::new);
+        LOGGER.info("Registered VaultAdditions Block Entity Renderers");
     }
 
     @SubscribeEvent
     public void registerRenderers(final EntityRenderersEvent.AddLayers event) {
-        LOGGER.info("Registering VaultAdditions renderers");
         GeoArmorRenderer.registerArmorRenderer(VaultArmorItem.class, VaultGeckoArmorRenderer::new);
+        LOGGER.info("Registered VaultAdditions Armor Renderers");
     }
 
     public static ResourceLocation id(String name) {

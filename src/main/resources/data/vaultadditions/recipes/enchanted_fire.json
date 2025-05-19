@@ -1,0 +1,16 @@
+{
+  "type": "create:item_application",
+  "ingredients": [
+    {
+      "tag": "minecraft:soul_fire"
+    },
+    {
+      "item": "the_vault:soul_shard"
+    }
+  ],
+  "results": [
+    {
+      "item": "vaultadditions:enchanted_fire"
+    }
+  ]
+}

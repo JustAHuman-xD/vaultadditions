@@ -24,6 +24,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class RaidPlaqueBlock extends SoulPlaqueBlock {
     @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get().create(pPos, pState);
+    }
+
+    @Override
     public void setPlacedBy(@NotNull Level world, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         if (!world.isClientSide) {
             int tier = RaidPlaqueBlockItem.getTier(stack).orElseGet(() -> {

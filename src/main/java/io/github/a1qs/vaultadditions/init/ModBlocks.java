@@ -194,7 +194,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> VELVET_BED_RED = registerBlock("colored_velvet_bed_red", () -> bed(DyeColor.RED), false);
     public static final RegistryObject<Block> VELVET_BED_BLACK = registerBlock("colored_velvet_bed_black", () -> bed(DyeColor.BLACK), false);
 
-    public static final RegistryObject<Block> RAID_PLAQUE = registerBlock("raid_plaque", RaidPlaqueBlock::new, false);
+    public static final RegistryObject<Block> ENCHANTED_FIRE = registerBlock("enchanted_fire",
+            () -> new FireBlock(BlockBehaviour.Properties.of(Material.FIRE, MaterialColor.COLOR_PURPLE).noCollission().instabreak()
+                    .lightLevel(state -> 15).sound(SoundType.WOOL)), false);
+
+    public static final RegistryObject<RaidPlaqueBlock> RAID_PLAQUE = registerBlock("raid_plaque", RaidPlaqueBlock::new, false);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, boolean createBlockItem) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
