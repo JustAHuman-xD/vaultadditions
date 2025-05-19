@@ -13,6 +13,8 @@
     "MixinDynamicModelRegistries",
     "MixinMultiJumpTrinket",
     "MixinPlayerTabNameEvent",
+    "MixinRaidChallengeManager",
+    "MixinRaidCrystalObjective",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinVaultChestBlock",

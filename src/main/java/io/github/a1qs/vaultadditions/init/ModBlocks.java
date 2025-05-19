@@ -194,7 +194,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> VELVET_BED_RED = registerBlock("colored_velvet_bed_red", () -> bed(DyeColor.RED), false);
     public static final RegistryObject<Block> VELVET_BED_BLACK = registerBlock("colored_velvet_bed_black", () -> bed(DyeColor.BLACK), false);
 
-
+    public static final RegistryObject<Block> RAID_PLAQUE = registerBlock("raid_plaque", RaidPlaqueBlock::new, false);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, boolean createBlockItem) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
