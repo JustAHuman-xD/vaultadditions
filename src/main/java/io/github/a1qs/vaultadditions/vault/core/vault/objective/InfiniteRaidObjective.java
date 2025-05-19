@@ -100,6 +100,11 @@ public class InfiniteRaidObjective extends Objective {
     }
 
     @Override
+    public FieldRegistry getFields() {
+        return FIELDS;
+    }
+
+    @Override
     public SupplierKey<Objective> getKey() {
         return KEY;
     }
