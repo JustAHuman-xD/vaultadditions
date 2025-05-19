@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class InfiniteRaidObjective extends Objective {
-    public static final SupplierKey<Objective> KEY = SupplierKey.of("ascension", Objective.class).with(Version.v1_21, InfiniteRaidObjective::new);
+    public static final SupplierKey<Objective> KEY = SupplierKey.of("infinite_raid", Objective.class).with(Version.v1_21, InfiniteRaidObjective::new);
     public static final FieldRegistry FIELDS = Objective.FIELDS.merge(new FieldRegistry());
     public static final FieldKey<long[]> UUIDS = FieldKey.of("player_uuids", long[].class).with(Version.v1_21, Adapters.LONG_ARRAY, DISK.all()).register(FIELDS);
     public static final FieldKey<int[]> WAVES = FieldKey.of("player_waves", int[].class).with(Version.v1_21, Adapters.INT_ARRAY, DISK.all()).register(FIELDS);
