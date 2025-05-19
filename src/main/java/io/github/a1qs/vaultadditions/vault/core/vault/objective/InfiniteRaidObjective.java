@@ -2,6 +2,7 @@ package io.github.a1qs.vaultadditions.vault.core.vault.objective;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.events.VaultCommonEvents;
 import io.github.a1qs.vaultadditions.item.RaidPlaqueBlockItem;
 import iskallia.vault.core.Version;
@@ -31,33 +32,43 @@ public class InfiniteRaidObjective extends Objective {
     @Override
     public void initServer(VirtualWorld world, Vault vault) {
         VaultCommonEvents.RAID_WAVE_COMPLETED.register(this, data -> {
+            VaultAdditions.LOGGER.info("Raid wave completed: " + data);
             if (data.world() == world) {
+                VaultAdditions.LOGGER.info("Raid wave completed for tracked vault");
                 Map<UUID, Integer> playerWaves = this.getPlayerWaves();
                 playerWaves.compute(data.player().getUUID(), (uuid, waves) -> waves == null ? 1 : waves + 1);
                 this.setPlayerWaves(playerWaves);
+                VaultAdditions.LOGGER.info("Player {} has completed {} waves", data.player().getUUID(), playerWaves.get(data.player().getUUID()));
             }
         });
         CommonEvents.LISTENER_LEAVE.register(this, data -> {
+            VaultAdditions.LOGGER.info("Raid objective leaving");
             if (data.getVault() != vault) {
+                VaultAdditions.LOGGER.info("Raid objective leaving for non-tracked vault");
                 return;
             }
 
             ServerPlayer player = data.getListener().getPlayer().orElse(null);
             if (player == null) {
+                VaultAdditions.LOGGER.info("Raid objective leaving for non-player");
                 return;
             }
 
             Map<UUID, Integer> playerWaves = this.getPlayerWaves();
             Integer waves = playerWaves.remove(player.getUUID());
             if (waves == null) {
+                VaultAdditions.LOGGER.info("Player {} has not completed any waves", player.getUUID());
                 return;
             }
 
             vault.ifPresent(Vault.STATS, stats -> {
+                VaultAdditions.LOGGER.info("Player {} has completed {} waves", player.getUUID(), waves);
                 StatCollector stat = stats.get(data.getListener());
                 if (stat != null) {
+                    VaultAdditions.LOGGER.info("StatCollector found for player {}", player.getUUID());
                     ItemStack plaque = RaidPlaqueBlockItem.create(player.getUUID(), player.getGameProfile().getName(), waves);
                     if (!plaque.isEmpty()) {
+                        VaultAdditions.LOGGER.info("Adding plaque to player {}'s stats", player.getUUID());
                         stat.get(StatCollector.REWARD).add(plaque);
                     }
                 }
