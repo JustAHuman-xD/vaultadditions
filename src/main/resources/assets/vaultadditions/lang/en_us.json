@@ -60,12 +60,13 @@
   "block.vaultadditions.colored_velvet_bed_red": "Red Velvet Bed",
   "block.vaultadditions.colored_velvet_bed_black": "Black Velvet Bed",
 
-
+  "block.vaultadditions.raid_plaque": "Raid Plaque",
 
   "item.vaultadditions.power_crystal": "Power Crystal",
   "item.vaultadditions.power_orb": "Power Orb",
   "item.vaultadditions.damage_core": "Damage Core",
   "item.vaultadditions.fracture_core": "Fracture Core",
+  "item.vaultadditions.raid_plaque": "Raid Plaque",
   "item.vaultadditions.shield": "[DISPLAY] Shield",
   "item.vaultadditions.colored_velvet_bed_white": "White Velvet Bed",
   "item.vaultadditions.colored_velvet_bed_orange": "Orange Velvet Bed",
