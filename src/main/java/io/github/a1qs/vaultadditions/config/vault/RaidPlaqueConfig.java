@@ -18,8 +18,8 @@ public class RaidPlaqueConfig extends Config {
 
     @Override
     protected void reset() {
-        for(int i = 0; i < 8; ++i) {
-            this.scoreToTier.put(i, Math.max(1, i * 5));
+        for (int i = 0; i < 8; ++i) {
+            this.scoreToTier.put(Math.max(1, i * 5), i);
         }
     }
 
