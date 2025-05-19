@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.raid_plaques;
 
 import io.github.a1qs.vaultadditions.vault.core.vault.objective.InfiniteRaidObjective;
 import iskallia.vault.core.random.RandomSource;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RaidCrystalObjective.class)
 public class MixinRaidCrystalObjective {
-    @Inject(method = "configure", at = @At("TAIL"))
+    @Inject(method = "configure", at = @At("TAIL"), remap = false)
     public void configure(Vault vault, RandomSource random, CallbackInfo ci) {
         vault.ifPresent(Vault.OBJECTIVES, objectives -> objectives.add(new InfiniteRaidObjective()));
     }

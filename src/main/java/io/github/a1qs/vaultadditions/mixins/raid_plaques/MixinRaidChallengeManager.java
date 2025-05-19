@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.raid_plaques;
 
 import io.github.a1qs.vaultadditions.events.VaultCommonEvents;
 import iskallia.vault.block.entity.challenge.ChallengeManager;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Mixin(RaidChallengeManager.class)
 public class MixinRaidChallengeManager extends ChallengeManager {
-    @Inject(method = "onTick", at = @At(value = "INVOKE", target = "Liskallia/vault/block/entity/challenge/raid/RaidSpawner;onCompleteWave()V"))
+    @Inject(method = "onTick", at = @At(value = "INVOKE", target = "Liskallia/vault/block/entity/challenge/raid/RaidSpawner;onCompleteWave()V"), remap = false)
     public void callWaveCompletedEvent(ServerLevel world, CallbackInfo ci) {
         PlayerList playerList = ServerLifecycleHooks.getCurrentServer().getPlayerList();
         for (UUID uuid : this.players) {
