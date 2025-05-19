@@ -1,10 +1,11 @@
 package io.github.a1qs.vaultadditions.block;
 
+import io.github.a1qs.vaultadditions.block.blockentity.RaidPlaqueTileEntity;
 import io.github.a1qs.vaultadditions.config.Configs;
+import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.item.RaidPlaqueBlockItem;
 import iskallia.vault.block.SoulPlaqueBlock;
 import iskallia.vault.block.entity.SoulPlaqueTileEntity;
-import iskallia.vault.init.ModBlocks;
 import iskallia.vault.init.ModConfigs;
 import iskallia.vault.util.BlockHelper;
 import net.minecraft.core.BlockPos;
@@ -35,7 +36,7 @@ public class RaidPlaqueBlock extends SoulPlaqueBlock {
     }
 
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return BlockHelper.getTicker(pBlockEntityType, ModBlocks.SOUL_PLAQUE_TILE_ENTITY, (level, pos, state, tile) -> {
+        return BlockHelper.getTicker(pBlockEntityType, ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), (level, pos, state, tile) -> {
             int tier = Configs.RAID_PLAQUE_CONFIG.getTier(tile.getScore());
             if (state.getValue(TIER) != tier) {
                 level.setBlock(pos, state.setValue(TIER, tier), 2);
@@ -48,7 +49,7 @@ public class RaidPlaqueBlock extends SoulPlaqueBlock {
         if (!world.isClientSide && !player.isCreative()) {
             BlockEntity tileEntity = world.getBlockEntity(pos);
             ItemStack stack;
-            if (tileEntity instanceof SoulPlaqueTileEntity plaque) {
+            if (tileEntity instanceof RaidPlaqueTileEntity plaque) {
                 stack = RaidPlaqueBlockItem.create(plaque.getUuid(), plaque.getSkin().getLatestNickname(), plaque.getScore());
             } else {
                 stack = new ItemStack(this);
