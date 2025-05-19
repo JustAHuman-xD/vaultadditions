@@ -4,13 +4,13 @@ import iskallia.vault.core.event.Event;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ChestPowerCrystalGenerationEvent extends Event<ChestPowerCrystalGenerationEvent, ChestPowerCrystalGenerationEvent.Data> {
-    public ChestPowerCrystalGenerationEvent() {
-    }
+    public ChestPowerCrystalGenerationEvent() {}
 
     protected ChestPowerCrystalGenerationEvent(ChestPowerCrystalGenerationEvent parent) {
         super(parent);
     }
 
+    @Override
     public ChestPowerCrystalGenerationEvent createChild() {
         return new ChestPowerCrystalGenerationEvent(this);
     }

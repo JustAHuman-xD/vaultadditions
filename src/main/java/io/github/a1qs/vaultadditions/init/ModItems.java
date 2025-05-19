@@ -5,7 +5,7 @@ import io.github.a1qs.vaultadditions.item.ColoredVelvetBedItem;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
 import io.github.a1qs.vaultadditions.item.PowerOrb;
-import iskallia.vault.item.BasicItem;
+import io.github.a1qs.vaultadditions.item.RaidPlaqueBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
@@ -42,6 +42,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> SHIELD = ModItems.ITEMS.register("shield",
             () -> new Item(new Item.Properties().tab(VaultAdditions.VAULT_ADDITIONS_TAB)));
+
+    public static final RegistryObject<Item> RAID_PLAQUE_BLOCK_ITEM = ITEMS.register("raid_plaque",
+            () -> new RaidPlaqueBlockItem(ModBlocks.RAID_PLAQUE.get()));
 
     public static final RegistryObject<Item> VELVET_BED_ITEM_WHITE = registerBedItem("colored_velvet_bed_white", ModBlocks.VELVET_BED_WHITE);
     public static final RegistryObject<Item> VELVET_BED_ITEM_ORANGE = registerBedItem("colored_velvet_bed_orange", ModBlocks.VELVET_BED_ORANGE);

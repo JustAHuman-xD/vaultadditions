@@ -3,7 +3,6 @@ package io.github.a1qs.vaultadditions.init;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -25,7 +24,8 @@ public class ModBlockEntities {
                     ModBlocks.LOOT_STATUE_GIFT_MEGA.get()
                     ).build(null));
 
-
+    public static final RegistryObject<BlockEntityType<RaidPlaqueTileEntity>> RAID_PLAQUE_BLOCK_ENTITY = BLOCK_ENTITIES.register("raid_plaque_block_entity",
+            () -> BlockEntityType.Builder.of(RaidPlaqueTileEntity::new, ModBlocks.RAID_PLAQUE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<StatueCauldronBlockEntity>> STATUE_CAULDRON_BLOCK_ENTITY = BLOCK_ENTITIES.register("statue_cauldron_block_entity",
             () -> BlockEntityType.Builder.of(StatueCauldronBlockEntity::new, ModBlocks.STATUE_CAULDRON.get()).build(null));

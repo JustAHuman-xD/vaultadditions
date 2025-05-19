@@ -4,23 +4,20 @@ import com.mojang.logging.LogUtils;
 import io.github.a1qs.vaultadditions.block.blockentity.render.*;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
+import io.github.a1qs.vaultadditions.vault.core.vault.objective.InfiniteRaidObjective;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
 import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
+import iskallia.vault.block.render.SoulPlaqueRenderer;
+import iskallia.vault.core.vault.VaultRegistry;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +26,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
@@ -64,6 +60,7 @@ public class VaultAdditions {
     public void commonSetup(final FMLCommonSetupEvent event) {
         ModNetwork.initialize();
         ArmorEffectRegistry.registerArmorSetEffects();
+        VaultRegistry.OBJECTIVE.add(InfiniteRaidObjective.KEY);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
@@ -75,6 +72,7 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.STATUE_CAULDRON_BLOCK_ENTITY.get(), StatueCauldronRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), RaidPlaqueRenderer::new);
     }
 
     @SubscribeEvent
