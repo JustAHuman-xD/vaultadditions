@@ -29,8 +29,7 @@ public class UsernameProvider {
         if (minecraft.getConnection() != null) {
             for (PlayerInfo playerInfo : minecraft.getConnection().getOnlinePlayers()) {
                 if (playerInfo.getProfile().getId().equals(uuid)) {
-                    String name = playerInfo.getProfile().getName();
-                    return name;
+                    return playerInfo.getProfile().getName();
                 }
             }
         }

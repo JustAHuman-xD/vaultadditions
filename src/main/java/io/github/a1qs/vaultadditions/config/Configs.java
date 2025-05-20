@@ -16,6 +16,7 @@ public class Configs {
     public static ExtraVaultTimeContributionsConfig EXTRA_VAULT_TIME_CONTRIBUTIONS;
     public static TransmogUnlocksConfig TRANSMOG_UNLOCKS;
     public static RaidPlaqueConfig RAID_PLAQUE_CONFIG;
+    public static TransmogEffectsConfig TRANSMOG_EFFECTS_CONFIG;
 
     public static void registerCustomConfigs() {
         POWERS_GUI = new PowerGUIConfig().readConfig();
@@ -31,5 +32,6 @@ public class Configs {
         EXTRA_VAULT_TIME_CONTRIBUTIONS = new ExtraVaultTimeContributionsConfig().readConfig();
         TRANSMOG_UNLOCKS = new TransmogUnlocksConfig().readConfig();
         RAID_PLAQUE_CONFIG = new RaidPlaqueConfig().readConfig();
+        TRANSMOG_EFFECTS_CONFIG = new TransmogEffectsConfig().readConfig();
     }
 }

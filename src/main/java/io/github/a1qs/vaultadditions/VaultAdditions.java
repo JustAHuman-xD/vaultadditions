@@ -6,8 +6,6 @@ import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.*;
 import io.github.a1qs.vaultadditions.vault.core.vault.objective.InfiniteRaidObjective;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
-import io.github.a1qs.vaultadditions.vault.gear.seteffect.ArmorEffectRegistry;
-import iskallia.vault.block.render.SoulPlaqueRenderer;
 import iskallia.vault.core.vault.VaultRegistry;
 import iskallia.vault.item.gear.VaultArmorItem;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -59,7 +57,6 @@ public class VaultAdditions {
 
     public void commonSetup(final FMLCommonSetupEvent event) {
         ModNetwork.initialize();
-        ArmorEffectRegistry.registerArmorSetEffects();
         VaultRegistry.OBJECTIVE.add(InfiniteRaidObjective.KEY);
     }
 

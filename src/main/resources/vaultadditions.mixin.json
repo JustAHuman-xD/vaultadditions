@@ -46,6 +46,7 @@
   "client": [
     "MixinVaultBarOverlay",
     "armor_effects.MixinElytraLayer",
+    "armor_effects.sound.AbstractSoundInstanceAccessor",
     "armor_effects.sound.MixinLocalPlayer",
     "vault_gecko_compat.MixinItem",
     "vault_gecko_compat.MixinModDynamicModels",

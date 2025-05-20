@@ -60,8 +60,33 @@ public enum ModelType {
         return geckoModelFactory.create(id, type, displayName, animationName, transitionTicks);
     }
 
+    public DynamicModelRegistry<?> getRegistry() {
+        return registry;
+    }
+
     public void register(DynamicModel<?> model) {
         registry.register(forceCast(model));
+    }
+
+    public static ModelType getValue(String value) {
+        if (value != null) {
+            return switch (value) {
+                case "sword", "swords" -> SWORD;
+                case "axe", "axes" -> AXE;
+                case "battlestaff", "battlestaffs" -> BATTLESTAFF;
+                case "trident", "tridents" -> TRIDENT;
+                case "shield", "shields" -> SHIELD;
+                case "focus", "focuses" -> FOCUS;
+                case "wand", "wands" -> WAND;
+                case "magnet", "magnets" -> MAGNETS;
+                case "wendarr", "wendarr_idol" -> WENDARR_IDOL;
+                case "idona", "idona_idol" -> IDONA_IDOL;
+                case "velara", "velara_idol" -> VELARA_IDOL;
+                case "tenos", "tenos_idol" -> TENOS_IDOL;
+                default -> null;
+            };
+        }
+        return null;
     }
 
     @FunctionalInterface

@@ -4,17 +4,13 @@ import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.block.blockentity.render.ColoredVelvetBedRenderer;
 import io.github.a1qs.vaultadditions.util.ModelType;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.GeckoArmorModel;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
 import io.github.a1qs.vaultadditions.vault.gear.model.armor.layers.*;
 import iskallia.vault.VaultMod;
 import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.dynamodel.DynamicModelProperties;
 import iskallia.vault.dynamodel.model.armor.ArmorLayers;
+import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import iskallia.vault.init.ModDynamicModels;
-import iskallia.vault.skill.ability.effect.DashAbility;
-import iskallia.vault.skill.ability.effect.ManaShieldAbility;
-import iskallia.vault.skill.ability.effect.SmiteArchonAbility;
-import iskallia.vault.skill.ability.effect.spi.AbstractSmiteAbility;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -30,8 +26,8 @@ import java.util.Set;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModModels {
-    public static final Set<AdditionalArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.GROGU.model);
-    public static final Set<AdditionalArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
+    public static final Set<ArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.GROGU.model);
+    public static final Set<ArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
 
     static {
         for (Armor armor : Armor.values()) {
@@ -64,24 +60,6 @@ public class ModModels {
         }
     }
 
-    public static void registerSounds() {
-        for (AdditionalArmorModel model : HOY_ARMOR) {
-            model.abilitySound(SmiteArchonAbility.class, ModSounds.HOY_ACTIVATE_ARCHON.get());
-            model.abilitySound(AbstractSmiteAbility.class, ModSounds.HOY_ARCHON_BOLT.get());
-            model.abilitySound(DashAbility.class, ModSounds.HOY_DASH.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_ACTIVATE_MANASHIELD.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.HOY_MANASHIELD_HIT.get());
-            model.elytraSound(ModSounds.HOY_ELYTRA_GLIDE.get(), 0.2F);
-        }
-
-        for (AdditionalArmorModel model : HOKAGE_ARMOR) {
-            model.abilitySound(SmiteArchonAbility.class, ModSounds.TIGER_ACTIVATE_ARCHON.get(), 0.2F, 1F);
-            model.abilitySound(AbstractSmiteAbility.class, ModSounds.TIGER_ARCHON_BOLT.get());
-            model.abilitySound(DashAbility.class, ModSounds.TIGER_DASH.get());
-            model.abilitySound(ManaShieldAbility.class, ModSounds.TIGER_ACTIVATE_MANASHIELD.get());
-        }
-    }
-
     public enum Armor {
         HOY_82("hoy", "Beskar", new HoyArmorLayers()),
         HOY_82_GROGU("hoy_with_grogu", "Beskar & Grogu", new HoyGroguArmorLayers()),
@@ -89,22 +67,22 @@ public class ModModels {
         HOKAGE_ROBES("hokage_robes", "Hokage Robes", new HokageRobesArmorLayers()),
         HOKAGE_ROBES_MASKLESS("hokage_robes_maskless", "Hokage Robes Maskless", new HokageRobesMasklessArmorLayers()),
         CELESTIAL("celestial", "Celestial", new CelestialArmorLayers()),
-        VIKING("viking", "Viking", new VikingArmorLayers(), true, false),
+        VIKING("viking", "Viking", new VikingArmorLayers(), true),
         BOKATAN("bokatan", "Bokatan", new BokatanArmorLayers()),
         SPACE_MARINE("spacemarine", "Space Marine", new SpaceMarineArmorLayers());
 
-        private final AdditionalArmorModel model;
+        private final ArmorModel model;
 
         Armor(String id, String displayName, ArmorLayers layers) {
-            this(id, displayName, layers, true, true);
+            this(id, displayName, layers, true);
         }
 
-        Armor(String id, String displayName, ArmorLayers layers, boolean discoverOnRoll, boolean hideElytra) {
-            this(id, displayName, layers, discoverOnRoll, hideElytra, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        Armor(String id, String displayName, ArmorLayers layers, boolean discoverOnRoll) {
+            this(id, displayName, layers, discoverOnRoll, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         }
 
-        Armor(String id, String displayName, ArmorLayers layers, boolean discoverOnRoll, boolean hideElytra, EquipmentSlot... slots) {
-            this.model = new AdditionalArmorModel(VaultMod.id("gear/armor/" + id), displayName, hideElytra);
+        Armor(String id, String displayName, ArmorLayers layers, boolean discoverOnRoll, EquipmentSlot... slots) {
+            this.model = new ArmorModel(VaultMod.id("gear/armor/" + id), displayName);
             this.model.properties(new DynamicModelProperties().allowTransmogrification());
             this.model.usingLayers(layers);
             if (discoverOnRoll) {
@@ -115,26 +93,26 @@ public class ModModels {
             }
         }
 
-        public AdditionalArmorModel getModel() {
+        public ArmorModel getModel() {
             return this.model;
         }
     }
 
     public enum GeckoArmor {
-        GROGU("grogu", "Beskar & Grogu+Ball", "grogu", 20, false, true),
-        ELDRITCH("eldritch", "Eldritch", "tenticle1", 20, false, true);
+        GROGU("grogu", "Beskar & Grogu+Ball", "grogu", 20, false),
+        ELDRITCH("eldritch", "Eldritch", "tenticle1", 20, false);
         private final GeckoArmorModel model;
 
         GeckoArmor(String id, String displayName, String animationName, int transitionTicks) {
-            this(id, displayName, animationName, transitionTicks, true, true);
+            this(id, displayName, animationName, transitionTicks, true);
         }
 
-        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll, boolean hideElytra) {
-            this(id, displayName, animationName, transitionTicks, discoverOnRoll, hideElytra, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll) {
+            this(id, displayName, animationName, transitionTicks, discoverOnRoll, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         }
 
-        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll, boolean hideElytra, EquipmentSlot... slots) {
-            this.model = new GeckoArmorModel(id, displayName, animationName, transitionTicks, hideElytra);
+        GeckoArmor(String id, String displayName, String animationName, int transitionTicks, boolean discoverOnRoll, EquipmentSlot... slots) {
+            this.model = new GeckoArmorModel(id, displayName, animationName, transitionTicks);
             this.model.properties(new DynamicModelProperties().allowTransmogrification());
             this.model.usingLayers(new DummyArmorLayers());
             if (discoverOnRoll) {

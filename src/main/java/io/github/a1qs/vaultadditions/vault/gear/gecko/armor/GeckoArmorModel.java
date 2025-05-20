@@ -1,13 +1,13 @@
 package io.github.a1qs.vaultadditions.vault.gear.gecko.armor;
 
 import io.github.a1qs.vaultadditions.vault.gear.gecko.VaultGeckoModel;
-import io.github.a1qs.vaultadditions.vault.gear.model.armor.AdditionalArmorModel;
 import iskallia.vault.VaultMod;
+import iskallia.vault.dynamodel.model.armor.ArmorModel;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.builder.ILoopType;
 
-public class GeckoArmorModel extends AdditionalArmorModel implements VaultGeckoModel {
+public class GeckoArmorModel extends ArmorModel implements VaultGeckoModel {
     private final ResourceLocation modelPath;
     private final ResourceLocation texturePath;
     private final ResourceLocation animationPath;
@@ -15,8 +15,8 @@ public class GeckoArmorModel extends AdditionalArmorModel implements VaultGeckoM
     private final AnimationBuilder animation;
     private final float transitionTicks;
 
-    public GeckoArmorModel(String id, String displayName, String animationName, float transitionTicks, boolean hidesElytra) {
-        super(VaultMod.id("gear/armor/" + id), displayName, hidesElytra);
+    public GeckoArmorModel(String id, String displayName, String animationName, float transitionTicks) {
+        super(VaultMod.id("gear/armor/" + id), displayName);
 
         this.modelPath = VaultMod.id("geo/armor/" + id + ".geo.json");
         this.texturePath = VaultMod.id("textures/item/gear/armor/" + id + "/texture.png");
