@@ -40,6 +40,7 @@
     "registry.MixinSkillAdapter",
     "registry.MixinVaultModifierTypeRegistry",
     "registry.MixinVaultRegistry",
+    "rotateable_fools_gold.AccessorMappedRegistry",
     "rotateable_fools_gold.AccessorModBlocks",
     "rotateable_fools_gold.MixinModBlocks"
   ],
@@ -47,7 +48,7 @@
   "client": [
     "MixinVaultBarOverlay",
     "armor_effects.MixinElytraLayer",
-    "armor_effects.sound.AbstractSoundInstanceAccessor",
+    "armor_effects.sound.AccessorAbstractSoundInstance",
     "armor_effects.sound.MixinLocalPlayer",
     "vault_gecko_compat.MixinItem",
     "vault_gecko_compat.MixinModDynamicModels",

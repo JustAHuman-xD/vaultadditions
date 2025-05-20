@@ -1,6 +1,6 @@
 package io.github.a1qs.vaultadditions.client.sound;
 
-import io.github.a1qs.vaultadditions.mixins.armor_effects.sound.AbstractSoundInstanceAccessor;
+import io.github.a1qs.vaultadditions.mixins.armor_effects.sound.AccessorAbstractSoundInstance;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.ElytraOnPlayerSoundInstance;
 import net.minecraft.sounds.SoundEvent;
@@ -13,7 +13,7 @@ public class CustomElytraSoundInstance extends ElytraOnPlayerSoundInstance {
 
     public CustomElytraSoundInstance(LocalPlayer pPlayer, SoundEvent sound, float volumeModifier) {
         super(pPlayer);
-        ((AbstractSoundInstanceAccessor) this).setLocation(sound.getLocation());
+        ((AccessorAbstractSoundInstance) this).setLocation(sound.getLocation());
         this.volumeModifier = volumeModifier;
     }
 

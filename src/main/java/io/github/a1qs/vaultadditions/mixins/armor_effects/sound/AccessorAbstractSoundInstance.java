@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(AbstractSoundInstance.class)
-public interface AbstractSoundInstanceAccessor {
+public interface AccessorAbstractSoundInstance {
     @Mutable @Accessor()
     void setLocation(ResourceLocation location);
 }
