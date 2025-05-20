@@ -72,7 +72,7 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), RaidPlaqueRenderer::new);
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.FOOLS_GOLD.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ENCHANTED_FIRE.get(), RenderType.cutout());
         LOGGER.info("Registered VaultAdditions Block Entity Renderers");
     }
 
