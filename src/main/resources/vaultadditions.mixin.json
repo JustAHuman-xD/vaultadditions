@@ -40,7 +40,6 @@
     "registry.MixinSkillAdapter",
     "registry.MixinVaultModifierTypeRegistry",
     "registry.MixinVaultRegistry",
-    "rotateable_fools_gold.AccessorMappedRegistry",
     "rotateable_fools_gold.AccessorModBlocks",
     "rotateable_fools_gold.MixinModBlocks"
   ],
