@@ -16,7 +16,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-
 import java.util.function.Supplier;
 
 public class ModBlocks {
@@ -195,8 +194,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> VELVET_BED_BLACK = registerBlock("colored_velvet_bed_black", () -> bed(DyeColor.BLACK), false);
 
     public static final RegistryObject<Block> ENCHANTED_FIRE = registerBlock("enchanted_fire",
-            () -> new FireBlock(BlockBehaviour.Properties.of(Material.FIRE, MaterialColor.COLOR_PURPLE).noCollission().instabreak()
-                    .lightLevel(state -> 15).sound(SoundType.WOOL)), false);
+            () -> new EnchantedFireBlock(BlockBehaviour.Properties.of(Material.FIRE, MaterialColor.COLOR_PURPLE).noCollission().instabreak()
+                    .lightLevel(state -> 7).sound(SoundType.WOOL)), false);
 
     public static final RegistryObject<RaidPlaqueBlock> RAID_PLAQUE = registerBlock("raid_plaque", RaidPlaqueBlock::new, false);
 
