@@ -36,6 +36,11 @@ public abstract class TransmogEffect {
         return json;
     }
 
+    @Override
+    public String toString() {
+        return serialize().toString();
+    }
+
     public static TransmogEffect deserializeEffect(JsonElement json) {
         for (TransmogEffect type : TYPES) {
             if (type.isType(json)) {
