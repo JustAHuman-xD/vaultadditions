@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(value = MappedRegistry.class, remap = false)
+@Mixin(MappedRegistry.class)
 public interface AccessorMappedRegistry<T> {
     @Accessor Map<T, Holder.Reference<T>> getIntrusiveHolderCache();
 }
