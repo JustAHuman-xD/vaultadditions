@@ -7,7 +7,6 @@ import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = ModDynamicModels.class, remap = false)
 public abstract class MixinModDynamicModels {
     @Redirect(method = "lambda$bakeModels$4", at = @At(value = "INVOKE", target = "Liskallia/vault/init/ModDynamicModels;jsonModelExists(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/resources/ResourceLocation;)Z"))
-    private static boolean forceBakeGeckoModels(ResourceManager manager, ResourceLocation id, @Local(argsOnly = true) DynamicModel<?> dynamicModel) {
+    private static boolean geckoItemModelJank(ResourceManager manager, ResourceLocation id, @Local(argsOnly = true) DynamicModel<?> dynamicModel) {
         if (ModelUtil.getGeckoModel(dynamicModel) != null) {
             ResourceLocation model = DynamicModel.prependToId("models/item/", dynamicModel.getId());
             ResourceLocation jsonModel = DynamicModel.appendToId(model, ".json");
@@ -26,10 +25,9 @@ public abstract class MixinModDynamicModels {
             string = string.substring(0, string.lastIndexOf("/"));
             VaultAdditions.LOGGER.info("Looking for resources under : {}", string);
             for (ResourceLocation resource : manager.listResources(string, s -> true)) {
-                VaultAdditions.LOGGER.info("found `{}`, equals={}, stringequals={}, trimequals={}", resource,
-                        resource.equals(jsonModel),
-                        resource.toString().equals(jsonModel.toString()),
-                        resource.toString().trim().equals(jsonModel.toString().trim()));
+                if (resource.equals(jsonModel)) {
+                    VaultAdditions.LOGGER.info("Found resource: {}", resource);
+                }
             }
         }
         return jsonModelExists(manager, id);
