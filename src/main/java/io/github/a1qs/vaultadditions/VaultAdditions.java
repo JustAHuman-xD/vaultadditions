@@ -8,6 +8,8 @@ import io.github.a1qs.vaultadditions.vault.core.vault.objective.InfiniteRaidObje
 import io.github.a1qs.vaultadditions.vault.gear.gecko.armor.VaultGeckoArmorRenderer;
 import iskallia.vault.core.vault.VaultRegistry;
 import iskallia.vault.item.gear.VaultArmorItem;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -70,6 +72,7 @@ public class VaultAdditions {
         BlockEntityRenderers.register(ModBlockEntities.PLAYER_TRADER_BLOCK_ENTITY.get(), PlayerTraderBlockRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.COLORED_VELVET_BED_BLOCK_ENTITY.get(), ColoredVelvetBedRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.RAID_PLAQUE_BLOCK_ENTITY.get(), RaidPlaqueRenderer::new);
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.FOOLS_GOLD.get(), RenderType.cutout());
         LOGGER.info("Registered VaultAdditions Block Entity Renderers");
     }
 
