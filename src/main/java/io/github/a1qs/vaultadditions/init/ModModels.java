@@ -39,9 +39,10 @@ public class ModModels {
         for (Item item : Item.values()) {
             item.getType().register(item.model);
         }
-        for (GeckoItem item : GeckoItem.values()) {
-            item.getType().register(item.model);
-        }
+// TODO: Figure out why the gecko model issues are occuring, until then, don't use them
+//        for (GeckoItem item : GeckoItem.values()) {
+//            item.getType().register(item.model);
+//        }
     }
 
     @SubscribeEvent @OnlyIn(Dist.CLIENT)

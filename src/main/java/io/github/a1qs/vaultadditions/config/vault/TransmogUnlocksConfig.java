@@ -79,8 +79,8 @@ public class TransmogUnlocksConfig extends Config {
                 ModModels.Armor.HOY_82_GROGU.getModel().getId().toString(),
                 ModModels.Armor.DINDJARIN.getModel().getId().toString(),
                 ModModels.GeckoArmor.GROGU.getModel().getId().toString(),
-                ModModels.Item.DARKSABER.getModel().getId().toString(),
-                ModModels.GeckoItem.DARKSABER2.getModel().getId().toString()
+                ModModels.Item.DARKSABER.getModel().getId().toString()
+//                ModModels.GeckoItem.DARKSABER2.getModel().getId().toString()
         ));
         // Tiger Unlocks
         unlocks.put("8561dac7-e879-4d98-a92f-c379614eaa4e", List.of(
