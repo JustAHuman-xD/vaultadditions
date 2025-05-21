@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.config.vault;
 
 import com.google.gson.annotations.Expose;
+import com.mojang.datafixers.util.Pair;
 import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.init.ModModels;
 import iskallia.vault.config.Config;
@@ -8,6 +9,7 @@ import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -29,12 +31,12 @@ public class TransmogUnlocksConfig extends Config {
     @Override
     protected void onLoad(@Nullable Config oldConfigInstance) {
         for (Map.Entry<String, List<String>> entry : unlocks.entrySet()) {
-            DynamicModel<?> model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(entry.getKey())).orElse(null);
+            Pair<? extends DynamicModel<? extends DynamicModel<?>>, Item> model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(entry.getKey())).orElse(null);
             if (model != null) {
                 for (String playerId : entry.getValue()) {
                     try {
                         UUID uuid = UUID.fromString(playerId);
-                        DynamicModel<?> finalModel = model;
+                        DynamicModel<?> finalModel = model.getFirst();
                         transmogUnlocks.compute(uuid, (id, models) -> {
                             if (models == null) {
                                 models = new ArrayList<>();
@@ -59,12 +61,12 @@ public class TransmogUnlocksConfig extends Config {
 
             List<DynamicModel<?>> transmogs = new ArrayList<>();
             for (String modelId : entry.getValue()) {
-                model = ModDynamicModels.REGISTRIES.getModelByResourceLocation(ResourceLocation.tryParse(modelId)).orElse(null);
+                model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(modelId)).orElse(null);
                 if (model == null) {
                     VaultAdditions.LOGGER.warn("[Transmog Unlocks Config] Invalid transmog model {} under uuid {}, skipping", modelId, entry.getKey());
                     continue;
                 }
-                transmogs.add(model);
+                transmogs.add(model.getFirst());
             }
 
             transmogUnlocks.put(uuid, transmogs);
