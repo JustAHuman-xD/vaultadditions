@@ -198,7 +198,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> ENCHANTED_FIRE = registerBlock("enchanted_fire",
             () -> new EnchantedFireBlock(BlockBehaviour.Properties.of(Material.FIRE, MaterialColor.COLOR_PURPLE).noCollission().instabreak()
-                    .lightLevel(state -> 7).sound(SoundType.WOOL)), false);
+                    .lightLevel(state -> 7).sound(SoundType.WOOL).noDrops()), true);
 
     public static final RegistryObject<RaidPlaqueBlock> RAID_PLAQUE = registerBlock("raid_plaque", RaidPlaqueBlock::new, false);
 
