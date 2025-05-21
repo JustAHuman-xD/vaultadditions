@@ -1,6 +1,5 @@
 package io.github.a1qs.vaultadditions.mixins.vault_gecko_compat;
 
-import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.vault.gear.gecko.item.GeckoItemRenderProperties;
 import iskallia.vault.gear.item.VaultGearItem;
 import iskallia.vault.item.gear.VaultArmorItem;
@@ -18,7 +17,7 @@ import java.util.function.Consumer;
 
 @Mixin(Item.class)
 public class MixinItem {
-    @Shadow private Object renderProperties;
+    @Shadow(remap = false) private Object renderProperties;
 
     @ModifyArg(method = "initClient", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item;initializeClient(Ljava/util/function/Consumer;)V"), remap = false)
     public Consumer<IItemRenderProperties> wrapCustomItemRenderer(Consumer<IItemRenderProperties> consumer) {

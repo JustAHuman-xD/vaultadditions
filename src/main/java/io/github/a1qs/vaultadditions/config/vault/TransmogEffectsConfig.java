@@ -31,7 +31,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -142,7 +141,7 @@ public class TransmogEffectsConfig extends Config {
     protected void onLoad(@Nullable Config oldConfigInstance) {
         for (String key : transmogEffects.keySet()) {
             ResourceLocation id = ResourceLocation.tryParse(key);
-            Pair<? extends DynamicModel<?>, Item> model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(id).orElse(null);
+            var model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(id).map(Pair::getFirst).orElse(null);
             if (id == null || model == null) {
                 VaultAdditions.LOGGER.warn("Invalid transmog identifier: {}", key);
                 continue;
@@ -168,7 +167,7 @@ public class TransmogEffectsConfig extends Config {
             }
 
             if (!effects.isEmpty()) {
-                this.effects.put(model.getFirst(), Collections.unmodifiableList(effects));
+                this.effects.put(model, Collections.unmodifiableList(effects));
             }
         }
     }

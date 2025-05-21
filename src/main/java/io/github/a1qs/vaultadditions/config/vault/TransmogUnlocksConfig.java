@@ -9,7 +9,6 @@ import iskallia.vault.dynamodel.DynamicModel;
 import iskallia.vault.init.ModDynamicModels;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -31,12 +30,12 @@ public class TransmogUnlocksConfig extends Config {
     @Override
     protected void onLoad(@Nullable Config oldConfigInstance) {
         for (Map.Entry<String, List<String>> entry : unlocks.entrySet()) {
-            Pair<? extends DynamicModel<? extends DynamicModel<?>>, Item> model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(entry.getKey())).orElse(null);
+            var model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(entry.getKey())).map(Pair::getFirst).orElse(null);
             if (model != null) {
                 for (String playerId : entry.getValue()) {
                     try {
                         UUID uuid = UUID.fromString(playerId);
-                        DynamicModel<?> finalModel = model.getFirst();
+                        DynamicModel<?> finalModel = model;
                         transmogUnlocks.compute(uuid, (id, models) -> {
                             if (models == null) {
                                 models = new ArrayList<>();
@@ -61,12 +60,12 @@ public class TransmogUnlocksConfig extends Config {
 
             List<DynamicModel<?>> transmogs = new ArrayList<>();
             for (String modelId : entry.getValue()) {
-                model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(modelId)).orElse(null);
+                model = ModDynamicModels.REGISTRIES.getModelAndAssociatedItem(ResourceLocation.tryParse(modelId)).map(Pair::getFirst).orElse(null);
                 if (model == null) {
                     VaultAdditions.LOGGER.warn("[Transmog Unlocks Config] Invalid transmog model {} under uuid {}, skipping", modelId, entry.getKey());
                     continue;
                 }
-                transmogs.add(model.getFirst());
+                transmogs.add(model);
             }
 
             transmogUnlocks.put(uuid, transmogs);

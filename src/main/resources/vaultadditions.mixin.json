@@ -47,7 +47,6 @@
     "armor_effects.MixinElytraLayer",
     "armor_effects.sound.AccessorAbstractSoundInstance",
     "armor_effects.sound.MixinLocalPlayer",
-    "vault_gecko_compat.MixinItem",
     "vault_gecko_compat.MixinModDynamicModels",
     "vault_gecko_compat.MixinVaultArmorItem",
     "vault_gecko_compat.MixinVaultArmorRenderProperties",
