@@ -5,7 +5,7 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.network.chat.MutableComponent;
 
 public class HideElytraTransmogEffect extends TransmogEffect {
-    public static final HideElytraTransmogEffect INSTANCE = new HideElytraTransmogEffect();
+    public static final HideElytraTransmogEffect TYPE = new HideElytraTransmogEffect();
     private HideElytraTransmogEffect() {}
 
     @Override

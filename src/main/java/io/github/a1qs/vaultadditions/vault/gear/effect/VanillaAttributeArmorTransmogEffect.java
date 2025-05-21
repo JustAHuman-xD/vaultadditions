@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class VanillaAttributeArmorTransmogEffect<T> extends AttributeTransmogEffect<T> {
+    public static final VanillaAttributeArmorTransmogEffect<?> TYPE = new VanillaAttributeArmorTransmogEffect<>(null, null, null, 0);
     private final Attribute attribute;
     private final AttributeModifier.Operation operation;
     private final double value;

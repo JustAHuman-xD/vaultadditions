@@ -59,10 +59,10 @@ public abstract class TransmogEffect {
 
     public static void registerTypes() {
         TYPES.clear();
-        register(new AbilitySoundTransmogEffect(null, null));
-        register(new AttributeTransmogEffect<>(null));
-        register(new ElytraSoundTransmogEffect(null, 0f));
-        register(HideElytraTransmogEffect.INSTANCE);
-        register(new VanillaAttributeArmorTransmogEffect<>(null, null, null, 0));
+        register(AbilitySoundTransmogEffect.TYPE);
+        register(AttributeTransmogEffect.TYPE);
+        register(ElytraSoundTransmogEffect.TYPE);
+        register(HideElytraTransmogEffect.TYPE);
+        register(VanillaAttributeArmorTransmogEffect.TYPE);
     }
 }

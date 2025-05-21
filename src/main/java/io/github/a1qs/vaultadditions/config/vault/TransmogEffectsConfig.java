@@ -175,7 +175,7 @@ public class TransmogEffectsConfig extends Config {
     protected void reset() {
         for (ArmorModel model : ModModels.HOKAGE_ARMOR) {
             JsonArray effects = new JsonArray();
-            effects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+            effects.add(HideElytraTransmogEffect.TYPE.serialize());
             effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage(ModAbilities.EMPOWER, -0.25F)).serialize());
             effects.add(new VanillaAttributeArmorTransmogEffect<>(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.1F).serialize());
             effects.add(new AbilitySoundTransmogEffect(ModAbilities.SMITE_ARCHON, new SoundChoice(ModSounds.TIGER_ACTIVATE_ARCHON.get())).serialize());
@@ -187,7 +187,7 @@ public class TransmogEffectsConfig extends Config {
 
         for (ArmorModel model : ModModels.HOY_ARMOR) {
             JsonArray effects = new JsonArray();
-            effects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+            effects.add(HideElytraTransmogEffect.TYPE.serialize());
             effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage("Mana_Shield_Legacy", -0.25F)).serialize());
             effects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage(ModAbilities.SMITE_ARCHON, -0.25F)).serialize());
             effects.add(new ElytraSoundTransmogEffect(ModSounds.HOY_ELYTRA_GLIDE.get(), 0.2F).serialize());
@@ -205,14 +205,14 @@ public class TransmogEffectsConfig extends Config {
         transmogEffects.add(ModModels.Armor.VIKING.getModel().getId().toString(), vikingEffects);
 
         JsonArray celestialEffects = new JsonArray();
-        celestialEffects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+        celestialEffects.add(HideElytraTransmogEffect.TYPE.serialize());
         celestialEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage(ModAbilities.EMPOWER, -0.25F)).serialize());
         celestialEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityCooldownPercentage(ModAbilities.GHOST_WALK, -0.5F)).serialize());
         celestialEffects.add(new VanillaAttributeArmorTransmogEffect<>(Attributes.MOVEMENT_SPEED, AttributeModifier.Operation.MULTIPLY_BASE, 0.1F).serialize());
         transmogEffects.add(ModModels.Armor.CELESTIAL.getModel().getId().toString(), celestialEffects);
 
         JsonArray spaceMarineEffects = new JsonArray();
-        spaceMarineEffects.add(HideElytraTransmogEffect.INSTANCE.serialize());
+        spaceMarineEffects.add(HideElytraTransmogEffect.TYPE.serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityManaCostPercentage(ModAbilities.DASH, -0.25F)).serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.abilityLevel(ModAbilities.DASH, 1)).serialize());
         spaceMarineEffects.add(new AttributeTransmogEffect<>(VaultGearAttributeHelper.potionEffect(MobEffects.DAMAGE_BOOST, 10)).serialize());

@@ -12,6 +12,7 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.MutableComponent;
 
 public class AttributeTransmogEffect<T> extends TransmogEffect {
+    public static final AttributeTransmogEffect<?> TYPE = new AttributeTransmogEffect<>(null);
     private final VaultGearAttributeInstance<T> instance;
 
     public AttributeTransmogEffect(VaultGearAttributeInstance<T> instance) {

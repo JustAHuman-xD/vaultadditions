@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ElytraSoundTransmogEffect extends TransmogEffect {
+    public static final ElytraSoundTransmogEffect TYPE = new ElytraSoundTransmogEffect(null, 0);
     private final SoundEvent elytraSound;
     private final float elytraVolumeModifier;
 

@@ -15,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 
 public class AbilitySoundTransmogEffect extends TransmogEffect {
+    public static final AbilitySoundTransmogEffect TYPE = new AbilitySoundTransmogEffect(null, null);
     private final String ability;
     private final SoundChoice sound;
 

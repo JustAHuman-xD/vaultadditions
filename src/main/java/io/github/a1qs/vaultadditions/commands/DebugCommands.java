@@ -1,9 +1,13 @@
 package io.github.a1qs.vaultadditions.commands;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.a1qs.vaultadditions.vault.gear.effect.AttributeTransmogEffect;
+import iskallia.vault.gear.attribute.VaultGearModifier;
+import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.mana.Mana;
 import iskallia.vault.mana.ManaAction;
 import iskallia.vault.skill.ability.effect.spi.core.Ability;
@@ -17,6 +21,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 
@@ -39,6 +44,8 @@ public class DebugCommands {
                                         .executes(this::configureWorldBorders)
                                 )
                         )
+                        .then(Commands.literal("serializeHeldModifiers")
+                                .executes(this::serializeHeldModifiers))
                 )
         );
     }
@@ -47,8 +54,7 @@ public class DebugCommands {
         ServerPlayer player = context.getSource().getPlayerOrException();
         Mana.increase(player, ManaAction.PLAYER_ACTION, Integer.MAX_VALUE);
         context.getSource().sendSuccess(new TextComponent("Added " + Integer.MAX_VALUE + " Mana!").withStyle(ChatFormatting.AQUA), true);
-
-        return 0;
+        return Command.SINGLE_SUCCESS;
     }
 
     private int resetCooldowns(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -64,7 +70,7 @@ public class DebugCommands {
 
         abilityTree.sync(SkillContext.of(player));
         context.getSource().sendSuccess(new TextComponent("Reset the Cooldown of player: " + player.getName().getString() + "!"), true);
-        return 0;
+        return Command.SINGLE_SUCCESS;
     }
 
     private int configureWorldBorders(CommandContext<CommandSourceStack> context) {
@@ -78,7 +84,25 @@ public class DebugCommands {
         }
 
         context.getSource().sendSuccess(new TranslatableComponent("commands.worldborder.set.immediate", String.format(Locale.ROOT, "%.1f", amount)), true);
-        return 0;
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private int serializeHeldModifiers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ItemStack stack = player.getMainHandItem();
+        if (stack.isEmpty() || !VaultGearData.hasData(stack)) {
+            context.getSource().sendFailure(new TextComponent("Held item has no modifiers!"));
+            return 0;
+        }
+        context.getSource().sendSuccess(new TextComponent("Serialized Modifiers:"), true);
+        VaultGearData data = VaultGearData.read(stack);
+        for (VaultGearModifier.AffixType type : VaultGearModifier.AffixType.values()) {
+            for (VaultGearModifier<?> modifier : data.getModifiers(type)) {
+                context.getSource().sendSuccess(new TextComponent(" "), true);
+                context.getSource().sendSuccess(new TextComponent(new AttributeTransmogEffect<>(modifier).toString()), true);
+            }
+        }
+        return Command.SINGLE_SUCCESS;
     }
 
     public int getRequiredPermissionLevel() {

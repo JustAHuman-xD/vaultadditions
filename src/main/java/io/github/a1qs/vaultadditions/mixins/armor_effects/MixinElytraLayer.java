@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinElytraLayer<T extends LivingEntity, M extends EntityModel<T>> {
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true, remap = false)
     public void shouldRender(ItemStack stack, T entity, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof Player player && Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(player, HideElytraTransmogEffect.INSTANCE)) {
+        if (entity instanceof Player player && Configs.TRANSMOG_EFFECTS_CONFIG.hasEffect(player, HideElytraTransmogEffect.TYPE)) {
             cir.setReturnValue(false);
         }
     }
