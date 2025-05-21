@@ -132,6 +132,7 @@ dependencies {
     implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
     implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
     implementation fg.deobf("curse.maven:create-328085:5797603")
+    implementation fg.deobf("curse.maven:cagerium-709608:4435767")
     compileOnly fg.deobf("curse.maven:wolds-vaults-standalone-1132404:6013909")
 
     runtimeOnly fg.deobf("curse.maven:observable-509575:3745494")
