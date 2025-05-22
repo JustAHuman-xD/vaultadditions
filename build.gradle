@@ -117,7 +117,6 @@ repositories {
 }
 
 dependencies {
-
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:6477559")
 
@@ -145,8 +144,6 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
         jarJar.ranged(it, "[0.4.1,)")
     }
-
-
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
