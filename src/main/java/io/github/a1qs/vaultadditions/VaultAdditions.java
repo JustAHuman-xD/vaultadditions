@@ -58,6 +58,7 @@ public class VaultAdditions {
     }
 
     public void commonSetup(final FMLCommonSetupEvent event) {
+        ModModels.register();
         ModNetwork.initialize();
         VaultRegistry.OBJECTIVE.add(InfiniteRaidObjective.KEY);
     }
