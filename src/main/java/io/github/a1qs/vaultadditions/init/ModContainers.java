@@ -30,9 +30,7 @@ public class ModContainers {
         POWERS_TAB_CONTAINER = IForgeMenuType.create((windowId, inventory, buffer) -> {
             PowerTree expertiseTree = new PowerTree();
             expertiseTree.readBits(ArrayBitBuffer.backing(buffer.readLongArray(), 0));
-            return new NBTElementContainer(() -> {
-                return POWERS_TAB_CONTAINER;
-            }, windowId, inventory.player, expertiseTree);
+            return new NBTElementContainer<>(() -> POWERS_TAB_CONTAINER, windowId, inventory.player, expertiseTree);
         });
 
         LOOT_STATUE_CONTAINER = IForgeMenuType.create((windowId, inventory, buffer) -> {

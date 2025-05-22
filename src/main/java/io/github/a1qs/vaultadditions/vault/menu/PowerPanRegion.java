@@ -29,6 +29,7 @@ public class PowerPanRegion extends SkillPanRegion<PowerTree, PowerElementContai
         }
     }
 
+    @Override
     protected HashMap<String, SkillStyle> getStyles() {
         return Configs.POWERS_GUI.getStyles();
     }

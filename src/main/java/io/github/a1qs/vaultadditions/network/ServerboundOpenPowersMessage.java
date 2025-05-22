@@ -39,7 +39,7 @@ public class ServerboundOpenPowersMessage {
         context.enqueueWork(() -> {
             ServerPlayer sender = context.getSender();
             if (sender != null) {
-                PlayerPowersData playerPowersData = PlayerPowersData.get((ServerLevel)sender.level);
+                PlayerPowersData playerPowersData = PlayerPowersData.get(sender.getLevel());
                 final PowerTree powerTree = playerPowersData.getPowers(sender);
                 NetworkHooks.openGui(sender, new MenuProvider() {
                     @Nonnull
@@ -49,9 +49,7 @@ public class ServerboundOpenPowersMessage {
 
                     @ParametersAreNonnullByDefault
                     public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
-                        return new NBTElementContainer<>(() -> {
-                            return ModContainers.POWERS_TAB_CONTAINER;
-                        }, i, playerInventory.player, powerTree);
+                        return new NBTElementContainer<>(() -> ModContainers.POWERS_TAB_CONTAINER, i, playerInventory.player, powerTree);
                     }
                 }, (buffer) -> {
                     ArrayBitBuffer buffer1 = ArrayBitBuffer.empty();

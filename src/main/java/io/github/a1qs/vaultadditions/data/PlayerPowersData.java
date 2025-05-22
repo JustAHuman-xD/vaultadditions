@@ -41,11 +41,7 @@ public class PlayerPowersData extends SavedData {
     }
 
     public PowerTree getPowers(UUID uuid) {
-        return this.playerMap.computeIfAbsent(uuid, (id) -> Configs.POWERS.getTree().copy());
-    }
-
-    public void scheduleMerge() {
-        this.scheduledMerge.addAll(this.playerMap.keySet());
+        return this.playerMap.computeIfAbsent(uuid, id -> Configs.POWERS.getTree().copy());
     }
 
     public void resetPowers(ServerPlayer player) {
@@ -127,6 +123,10 @@ public class PlayerPowersData extends SavedData {
     }
 
     public static PlayerPowersData get(MinecraftServer srv) {
-        return srv.overworld().getDataStorage().computeIfAbsent(PlayerPowersData::create, PlayerPowersData::new, DATA_NAME);
+        PlayerPowersData data = srv.overworld().getDataStorage().computeIfAbsent(PlayerPowersData::create, PlayerPowersData::new, DATA_NAME);
+        if (Configs.POWERS.isMergeScheduled()) {
+            data.scheduledMerge.addAll(data.playerMap.keySet());
+        }
+        return data;
     }
 }

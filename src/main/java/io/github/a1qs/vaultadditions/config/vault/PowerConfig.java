@@ -13,25 +13,31 @@ public class PowerConfig extends Config {
     @Expose
     private PowerTree tree;
 
+    private boolean mergeScheduled = false;
+
     @Override
     protected void onLoad(@Nullable Config oldConfigInstance) {
         if (this.tree == null) {
             VaultAdditions.LOGGER.warn("[PowerConfig] No tree found, creating a new one.");
             this.tree = new PowerTree();
         }
-
-        DistExecutor.safeCallWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
-            PlayerPowersData.getServer().scheduleMerge();
-            return null;
-        });
+        mergeScheduled = true;
     }
 
-    public String getName() {
-        return "vaultadditions_power";
+    public boolean isMergeScheduled() {
+        if (mergeScheduled) {
+            mergeScheduled = false;
+            return true;
+        }
+        return false;
     }
 
     public PowerTree getTree() {
         return this.tree;
+    }
+
+    public String getName() {
+        return "vaultadditions_power";
     }
 
     @Override
