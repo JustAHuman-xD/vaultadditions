@@ -1,6 +1,7 @@
 package io.github.a1qs.vaultadditions.config.vault;
 
 import com.google.gson.annotations.Expose;
+import io.github.a1qs.vaultadditions.VaultAdditions;
 import io.github.a1qs.vaultadditions.data.PlayerPowersData;
 import io.github.a1qs.vaultadditions.vault.menu.PowerTree;
 import iskallia.vault.config.Config;
@@ -15,6 +16,7 @@ public class PowerConfig extends Config {
     @Override
     protected void onLoad(@Nullable Config oldConfigInstance) {
         if (this.tree == null) {
+            VaultAdditions.LOGGER.warn("[PowerConfig] No tree found, creating a new one.");
             this.tree = new PowerTree();
         }
 
