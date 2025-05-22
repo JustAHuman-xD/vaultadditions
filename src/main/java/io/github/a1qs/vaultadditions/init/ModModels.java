@@ -29,6 +29,9 @@ public class ModModels {
     private static boolean registered = false;
     public static final Set<ArmorModel> HOY_ARMOR = Set.of(Armor.HOY_82.model, Armor.HOY_82_GROGU.model, Armor.DINDJARIN.model, Armor.BOKATAN.model, GeckoArmor.GROGU.model);
     public static final Set<ArmorModel> HOKAGE_ARMOR = Set.of(Armor.HOKAGE_ROBES.model, Armor.HOKAGE_ROBES_MASKLESS.model);
+    static {
+        register();
+    }
 
     public static void register() {
         if (registered) {
