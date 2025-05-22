@@ -28,19 +28,6 @@ public class ThornedFrenzyAbility extends InstantManaAbility {
     private int damageTickDelay;
     private float thornsMultiplier;
 
-    public ThornedFrenzyAbility() {
-    }
-
-    public ThornedFrenzyAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCost, int durationTicks, float radius, int damageTickDelay, float thornsMultiplier) {
-        super(unlockLevel, learnPointCost, regretPointCost, cooldownTicks, manaCost);
-        this.durationTicks = durationTicks;
-        this.radius = radius;
-        this.damageTickDelay = damageTickDelay;
-        this.thornsMultiplier = thornsMultiplier;
-    }
-
-
-
     private float getThornsDamage(ServerPlayer player) {
         float reflectedDamage = 0.0F;
         float dmg = (float)player.getAttributeValue(Attributes.ATTACK_DAMAGE);

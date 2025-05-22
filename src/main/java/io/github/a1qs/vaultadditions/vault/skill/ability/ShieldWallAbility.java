@@ -46,14 +46,6 @@ import java.util.Optional;
 public class ShieldWallAbility extends InstantManaAbility {
     private int durationTicks;
 
-    public ShieldWallAbility(int unlockLevel, int learnPointCost, int regretPointCost, int cooldownTicks, float manaCost, int durationTicks) {
-        super(unlockLevel, learnPointCost, regretPointCost, cooldownTicks, manaCost);
-        this.durationTicks = durationTicks;
-    }
-
-    public ShieldWallAbility() {
-    }
-
     protected MobEffect getEffect() {
         return ModEffects.SHIELD_WALL;
     }
@@ -82,27 +74,19 @@ public class ShieldWallAbility extends InstantManaAbility {
         });
     }
 
-
-
-    @SubscribeEvent(
-            priority = EventPriority.LOW
-    )
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onHurt(LivingHurtEvent event) {
         if (canBlock(event.getEntityLiving(), event.getSource())) {
             event.setCanceled(true);
         }
-
     }
 
-    @SubscribeEvent(
-            priority = EventPriority.LOW
-    )
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void onAttack(LivingAttackEvent event) {
         if (canBlock(event.getEntityLiving(), event.getSource())) {
-            event.getEntityLiving().playSound( SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + event.getEntityLiving().level.random.nextFloat() * 0.4F);
+            event.getEntityLiving().playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + event.getEntityLiving().level.random.nextFloat() * 0.4F);
             event.setCanceled(true);
         }
-
     }
 
     public static boolean canBlock(@Nullable LivingEntity entity, @Nullable DamageSource source) {
@@ -176,13 +160,11 @@ public class ShieldWallAbility extends InstantManaAbility {
             this.setRegistryName(id);
         }
 
-        @Override
-        @ParametersAreNonnullByDefault
+        @Override @ParametersAreNonnullByDefault
         public void removeAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
             if (livingEntity instanceof ServerPlayer player) {
                 PlayerAbilitiesData.setAbilityOnCooldown(player, ShieldWallAbility.class);
             }
-
             super.removeAttributeModifiers(livingEntity, attributeMap, amplifier);
         }
     }
