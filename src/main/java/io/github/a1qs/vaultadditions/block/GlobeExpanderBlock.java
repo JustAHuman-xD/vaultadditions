@@ -10,9 +10,7 @@ import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
 import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.init.ModItems;
 import io.github.a1qs.vaultadditions.item.PowerCrystal;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
 import io.github.a1qs.vaultadditions.util.TimeUtil;
-import iskallia.vault.init.ModAttributes;
 import iskallia.vault.util.InventoryUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -25,7 +23,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -44,8 +41,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,10 +51,10 @@ import java.util.stream.Stream;
 public class GlobeExpanderBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Shapes.box(.1, .1, .1, .9, .9, .9);
 
-
     public GlobeExpanderBlock(Properties properties) {
         super(properties);
     }
+
     @Override
     public void appendHoverText(@NotNull ItemStack pStack, @javax.annotation.Nullable BlockGetter pLevel, List<Component> pTooltip, @NotNull TooltipFlag pFlag) {
         pTooltip.add(new TextComponent("Upon clicking with a Power Crystal:").withStyle(ChatFormatting.YELLOW));
@@ -71,7 +68,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        if (pLevel.isClientSide() || pHand != InteractionHand.MAIN_HAND) {
+        if (pLevel.isClientSide() || pHand != InteractionHand.MAIN_HAND || !(pPlayer instanceof ServerPlayer player)) {
             return InteractionResult.PASS;
         }
 
@@ -88,7 +85,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         boolean isActiveBorderEvent = false;
         if(data.isEventActive()) isActiveBorderEvent = data.getActiveEvent().isCrystalSubmissionEvent() || data.getActiveEvent().getEventId().equals(VaultAdditionsEvent.BORDER_EXPANSION_ENABLED);
 
-        // If its past the configured date AND if theres NOT an active crystal submission event AND Config option returns true
+        // If it's past the configured date AND if there's NOT an active crystal submission event AND Config option returns true
         if((TimeUtil.pastDate() && !isActiveBorderEvent) && ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) {
             pPlayer.displayClientMessage(new TextComponent("Nothing happened...").withStyle(ChatFormatting.RED), true);
             return InteractionResult.PASS;
@@ -100,15 +97,14 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 srv.getLevel(Level.END)
         ).filter(Objects::nonNull).toList();
 
-
-        if(blockEntity instanceof GlobeExpanderBlockEntity expanderEntity) {
+        if (blockEntity instanceof GlobeExpanderBlockEntity expanderEntity) {
             if(expanderEntity.shouldAnimate()) {
                 return InteractionResult.PASS;
             }
 
             boolean consumedCrystals = false;
-            if(pPlayer.isSecondaryUseActive()) {
-                consumedCrystals = useAllFoundCrystals(pPlayer, isActiveBorderEvent, data, validDimensions, expanderEntity);
+            if (pPlayer.isSecondaryUseActive()) {
+                consumedCrystals = useAllFoundCrystals(player, isActiveBorderEvent, data, validDimensions, expanderEntity);
             }
 
             if(pPlayer.getMainHandItem().getItem() == ModItems.POWER_CRYSTAL.get() && !pPlayer.isSecondaryUseActive()) {
@@ -137,9 +133,8 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                         pPlayer.getMainHandItem().setCount(0);
                     }
 
-                    PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, handCount);
-                    addCrystalContributionGrowPlayer(pPlayer, handCount);
-
+                    PlayerAdditionalVaultStatData.get(srv).addPowerPoints(player, handCount);
+                    PowerCrystalData.getServer().addContribution(player, handCount);
                 } else {
                     if(!data.getActiveEvent().isModifierActive()) {
                         int consumed = Math.min(handCount,  data.getActiveEvent().getRequiredCrystals() - data.getActiveEvent().getCrystalsSubmitted());
@@ -147,8 +142,8 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                         if(data.getActiveEvent().isModifierActive()) {
                             srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
                         }
-                        PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, consumed);
-                        addCrystalContributionGrowPlayer(pPlayer, consumed);
+                        PlayerAdditionalVaultStatData.get(srv).addPowerPoints(player, consumed);
+                        PowerCrystalData.getServer().addContribution(player, consumed);
 
                         if (!pPlayer.getAbilities().instabuild) {
                             pPlayer.getMainHandItem().shrink(consumed);
@@ -171,8 +166,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    @Nullable
-    @Override
+    @Override @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         if (pLevel.isClientSide && pBlockEntityType == ModBlockEntities.GLOBE_EXPANDER_ENTITY.get()) {
             return GlobeExpanderBlockEntity::clientTick;
@@ -180,14 +174,13 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         return pLevel.isClientSide() ? GlobeExpanderBlockEntity::clientTick : GlobeExpanderBlockEntity::serverTick;
     }
 
-    @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new GlobeExpanderBlockEntity(blockPos, blockState);
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState pState) {
         return RenderShape.MODEL;
     }
 
@@ -207,30 +200,7 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
         player.displayClientMessage(new TextComponent("Current World Border size diameter: " + worldBorderSize), true);
     }
 
-    private void addCrystalContributionGrowPlayer(Player player, int handCount) {
-
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        PowerCrystalData crystalData = PowerCrystalData.get(server);
-
-        crystalData.addCrystalContribution(player.getUUID(), handCount);
-
-        if(ServerConfigs.GROW_PLAYER_ON_GEMSTONE_SUBMIT.get()) {
-            var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
-
-            if (sizeScaleAttribute != null) {
-                double growthAmount = crystalData.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
-                growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
-
-                AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-                if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
-
-                sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
-            }
-        }
-
-    }
-
-    private boolean useAllFoundCrystals(Player pPlayer, boolean isActiveBorderEvent, EventData data, List<ServerLevel> validDimensions, GlobeExpanderBlockEntity expanderEntity) {
+    private boolean useAllFoundCrystals(ServerPlayer pPlayer, boolean isActiveBorderEvent, EventData data, List<ServerLevel> validDimensions, GlobeExpanderBlockEntity expanderEntity) {
         MinecraftServer srv = ServerLifecycleHooks.getCurrentServer();
         int powerCrystalCount = 0;
         int powerCrystalIncrease = ServerConfigs.POWER_CRYSTAL_INCREASE.get();
@@ -269,9 +239,8 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 }
             }
 
-            PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, powerCrystalCount);
-            addCrystalContributionGrowPlayer(pPlayer, powerCrystalCount);
-
+            PlayerAdditionalVaultStatData.get(srv).addPowerPoints(pPlayer, powerCrystalCount);
+            PowerCrystalData.get(srv).addContribution(pPlayer, powerCrystalCount);
         } else if(!data.getActiveEvent().isModifierActive()) {
             int crystalsNeeded = data.getActiveEvent().getRequiredCrystals() - data.getActiveEvent().getCrystalsSubmitted();
             int crystalsToConsume = Math.min(powerCrystalCount, crystalsNeeded);
@@ -283,8 +252,8 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                 srv.getPlayerList().broadcastMessage(data.getActiveEvent().getEventEnabledMessage(), ChatType.SYSTEM, Util.NIL_UUID);
             }
 
-            PlayerAdditionalVaultStatData.get(srv).addPowerPoints((ServerPlayer) pPlayer, crystalsToConsume);
-            addCrystalContributionGrowPlayer(pPlayer, crystalsToConsume);
+            PlayerAdditionalVaultStatData.get(srv).addPowerPoints(pPlayer, crystalsToConsume);
+            PowerCrystalData.get(srv).addContribution(pPlayer, crystalsToConsume);
 
             if (!pPlayer.getAbilities().instabuild) {
                 int remainingToConsume = crystalsToConsume;
@@ -298,7 +267,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
                     } else {
                         stack.shrink(remainingToConsume);
                         item.setStack(stack);
-                        remainingToConsume = 0;
                         break;
                     }
                 }
@@ -308,8 +276,6 @@ public class GlobeExpanderBlock extends BaseEntityBlock {
     }
 
     public static boolean isCurrentlyInUse() {
-        if(!ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get()) return true;
-
-        return !TimeUtil.pastDate() || EventData.getServer().globeExpanderRequired();
+        return !ServerConfigs.LIMIT_TIME_FOR_EXPANSION.get() || !TimeUtil.pastDate() || EventData.getServer().globeExpanderRequired();
     }
 }

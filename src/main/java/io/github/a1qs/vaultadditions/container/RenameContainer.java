@@ -4,6 +4,7 @@ import io.github.a1qs.vaultadditions.init.ModContainers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.jetbrains.annotations.NotNull;
 
 public class RenameContainer extends AbstractContainerMenu {
     private final CompoundTag nbt;
@@ -13,7 +14,7 @@ public class RenameContainer extends AbstractContainerMenu {
         this.nbt = nbt.getCompound("Data");
     }
 
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return true;
     }
 

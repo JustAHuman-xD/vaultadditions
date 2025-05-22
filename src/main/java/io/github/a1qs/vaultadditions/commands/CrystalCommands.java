@@ -7,8 +7,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.data.PowerCrystalData;
-import io.github.a1qs.vaultadditions.util.MiscUtil;
-import iskallia.vault.init.ModAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -17,7 +15,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.List;
@@ -88,17 +85,8 @@ public class CrystalCommands {
     private int resetContributions(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         PowerCrystalData data = PowerCrystalData.get(ServerLifecycleHooks.getCurrentServer());
-        data.resetContributionsForPlayer(player.getUUID());
-
-        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
-        if (sizeScaleAttribute != null) {
-            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
-        }
-
-
+        data.resetContributions(player);
         context.getSource().sendSuccess(new TextComponent("Reset Contributions for " + player.getName().getString()), true);
-
         return 0;
     }
 
@@ -106,24 +94,7 @@ public class CrystalCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         float percentage = FloatArgumentType.getFloat(context, "percentage");
         PowerCrystalData data = PowerCrystalData.get(ServerLifecycleHooks.getCurrentServer());
-
-        data.setPlayerContributedCrystals(player.getUUID(), (int) (data.getPlayerContributedCrystals(player.getUUID()) * percentage));
-
-
-        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
-
-        if (sizeScaleAttribute != null) {
-            // Update the player size
-            double growthAmount = data.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
-            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
-
-            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
-
-            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
-        }
-
-
+        data.setContributed(player, (int) (data.getPlayerContributedCrystals(player.getUUID()) * percentage));
         context.getSource().sendSuccess(new TextComponent("Modified Contributions of player '" + player.getName().getString() + "' to: " + data.getPlayerContributedCrystals(player.getUUID())), true);
         return 0;
     }
@@ -132,23 +103,7 @@ public class CrystalCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         int amount = IntegerArgumentType.getInteger(context, "amount");
         PowerCrystalData data = PowerCrystalData.get(ServerLifecycleHooks.getCurrentServer());
-
-        data.addCrystalContribution(player.getUUID(), amount);
-
-
-        var sizeScaleAttribute = player.getAttribute(ModAttributes.SIZE_SCALE);
-
-        if (sizeScaleAttribute != null) {
-            // Update the player size
-            double growthAmount = data.getPlayerContributedCrystals(player.getUUID()) * ServerConfigs.GROW_PLAYER_AMOUNT.get();
-            growthAmount = Math.min(growthAmount, ServerConfigs.GROW_PLAYER_CAP.get());
-
-            AttributeModifier existingModifier = sizeScaleAttribute.getModifier(MiscUtil.sizeScaleModifierUUID);
-            if (existingModifier != null) sizeScaleAttribute.removeModifier(existingModifier);
-
-            sizeScaleAttribute.addPermanentModifier(new AttributeModifier(MiscUtil.sizeScaleModifierUUID, "PowerCrystalSizeScale", growthAmount, AttributeModifier.Operation.ADDITION));
-        }
-
+        data.addContribution(player, amount);
         context.getSource().sendSuccess(new TextComponent("Modified Contributions of player '" + player.getName().getString() + "' to: " + data.getPlayerContributedCrystals(player.getUUID())), true);
         return 0;
     }

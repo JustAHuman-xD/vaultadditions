@@ -18,7 +18,6 @@ public class VaultAdditionsEvent {
     private int requiredCrystals;
     private int crystalsSubmitted;
 
-
     public VaultAdditionsEvent(int configIndex, int requiredCrystals, int crystalsSubmitted) {
         this.configIndex = configIndex;
         this.requiredCrystals = requiredCrystals;

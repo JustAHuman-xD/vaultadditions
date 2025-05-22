@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.jetbrains.annotations.NotNull;
 
 public class LootStatueContainer extends AbstractContainerMenu {
     private final CompoundTag data;
@@ -14,7 +15,7 @@ public class LootStatueContainer extends AbstractContainerMenu {
         this.data = nbt;
     }
 
-    public boolean stillValid(Player playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return true;
     }
 

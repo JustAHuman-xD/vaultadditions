@@ -1,10 +1,10 @@
 package io.github.a1qs.vaultadditions.container.slot;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class GhostSlot extends Slot {
     public GhostSlot(Container pContainer, int pIndex, int pX, int pY) {
@@ -12,12 +12,12 @@ public class GhostSlot extends Slot {
     }
 
     @Override
-    public boolean mayPlace(ItemStack stack) {
+    public boolean mayPlace(@NotNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public boolean mayPickup(Player player) {
+    public boolean mayPickup(@NotNull Player player) {
         return true;
     }
 
@@ -34,7 +34,7 @@ public class GhostSlot extends Slot {
     }
 
     @Override
-    public void onTake(Player pPlayer, ItemStack pStack) {
+    public void onTake(@NotNull Player pPlayer, ItemStack pStack) {
         pStack.setCount(0);
         super.onTake(pPlayer, pStack);
     }
@@ -46,7 +46,7 @@ public class GhostSlot extends Slot {
     }
 
     @Override
-    public int getMaxStackSize(ItemStack stack) {
+    public int getMaxStackSize(@NotNull ItemStack stack) {
         // Limit the stack size to 1 for filtering
         return 1;
     }

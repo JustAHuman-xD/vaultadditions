@@ -21,6 +21,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -166,11 +167,9 @@ public class EventData extends SavedData {
     // Load-Save methods
     public static EventData load(CompoundTag nbt) {
         EventData data = new EventData();
-
         ListTag scheduledEventTag = nbt.getList("ScheduledEvents", Tag.TAG_STRING);
         for (int i = 0; i < scheduledEventTag.size(); i++) {
             String time = scheduledEventTag.getString(i);
-
             if (!time.isEmpty()) {
                 data.scheduledEvents.add(time);
             }
@@ -178,15 +177,12 @@ public class EventData extends SavedData {
 
         data.isActive = nbt.getBoolean("IsActive");
         data.eventDuration = nbt.getLong("EventDuration");
-        if(data.isActive) data.activeEvent = VaultAdditionsEvent.deserialize((CompoundTag) nbt.get("ActiveEvent"));
-
-
+        if(data.isActive) data.activeEvent = VaultAdditionsEvent.deserialize(nbt.getCompound("ActiveEvent"));
         return data;
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
-
+    public @NotNull CompoundTag save(@NotNull CompoundTag nbt) {
         ListTag scheduledEventTag = new ListTag();
         for (String time : scheduledEvents) {
             scheduledEventTag.add(StringTag.valueOf(time));
