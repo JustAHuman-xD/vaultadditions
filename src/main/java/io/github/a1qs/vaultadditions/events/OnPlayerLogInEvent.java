@@ -53,12 +53,16 @@ public class OnPlayerLogInEvent {
     @SubscribeEvent
     public static void transmogUnlocks(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getPlayer();
+        if (!(player.getLevel() instanceof ServerLevel level)) {
+            return;
+        }
+
         List<DynamicModel<?>> models = Configs.TRANSMOG_UNLOCKS.getUnlocks(player);
         if (models == null) {
             return;
         }
 
-        DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get((ServerLevel) player.level);
+        DiscoveredModelsData discoveredModelsData = DiscoveredModelsData.get(level);
         Set<ResourceLocation> discoveredModels = discoveredModelsData.getDiscoveredModels(player.getUUID());
         for (DynamicModel<?> model : models) {
             ResourceLocation id = model.getId();

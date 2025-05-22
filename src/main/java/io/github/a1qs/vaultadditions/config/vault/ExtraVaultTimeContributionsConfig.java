@@ -11,7 +11,6 @@ public class ExtraVaultTimeContributionsConfig extends Config {
     @Expose public int TICKS_PER_EFFECTIVE_CONTRIBUTION_PLAYER;
     @Expose public int TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER;
 
-
     @Override
     public String getName() {
         return "vaultadditions_extra_vault_time_contributions";
@@ -26,9 +25,6 @@ public class ExtraVaultTimeContributionsConfig extends Config {
         TICKS_PER_EFFECTIVE_CONTRIBUTION_PLAYER = 200;
         TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER = 200;
     }
-
-
-
 
     public int getServerCappedTicks(int contributions) {
         int ticks = (contributions / CONTRIBUTIONS_UNTIL_TIME_INCREASE_SERVER) * TICKS_PER_EFFECTIVE_CONTRIBUTION_SERVER;
@@ -47,6 +43,4 @@ public class ExtraVaultTimeContributionsConfig extends Config {
     public int getPlayerCappedSeconds(int contributions) {
         return getPlayerCappedTicks(contributions) / 20;
     }
-
-
 }

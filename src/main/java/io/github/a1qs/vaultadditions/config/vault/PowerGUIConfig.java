@@ -10,9 +10,6 @@ public class PowerGUIConfig extends Config {
     @Expose
     private HashMap<String, SkillStyle> styles;
 
-    public PowerGUIConfig() {
-    }
-
     public String getName() {
         return "vaultadditions_power_gui_styles";
     }

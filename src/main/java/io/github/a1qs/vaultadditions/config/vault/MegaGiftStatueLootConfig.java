@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 
 public class MegaGiftStatueLootConfig extends AbstractStatueLootConfig {
     protected void reset() {
+        this.DROPS.clear();
         this.DROPS.add(new ProductEntry(Items.AMETHYST_BLOCK), 1);
         this.DROPS.add(new ProductEntry(Items.NETHER_GOLD_ORE), 1);
         this.DROPS.add(new ProductEntry(Items.NETHER_QUARTZ_ORE), 1);

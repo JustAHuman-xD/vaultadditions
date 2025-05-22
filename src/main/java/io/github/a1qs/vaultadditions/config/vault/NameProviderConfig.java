@@ -5,14 +5,13 @@ import iskallia.vault.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class NameProviderConfig extends Config {
     @Expose
     public boolean IS_USED;
 
     @Expose
-    public List<String> NAME_LIST = new ArrayList<>();;
+    public List<String> NAME_LIST = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -22,14 +21,13 @@ public class NameProviderConfig extends Config {
     @Override
     protected void reset() {
         IS_USED = false;
-
         NAME_LIST.add("KaptainWutax");
         NAME_LIST.add("HellFirePVP");
         NAME_LIST.add("HoY_82");
         NAME_LIST.add("a1qs");
-        NAME_LIST.add("Dev");
-        NAME_LIST.add("Dev1");
-        NAME_LIST.add("Dev2");
+        NAME_LIST.add("JustAHuman_xD");
+        NAME_LIST.add("Jrowez");
+        NAME_LIST.add("attackeight");
     }
 
     public List<String> getNameList() {
@@ -41,6 +39,6 @@ public class NameProviderConfig extends Config {
     }
 
     public String getRandomName() {
-        return getNameList().get(new Random().nextInt(getNameList().size()));
+        return NAME_LIST.get(rand.nextInt(NAME_LIST.size()));
     }
 }

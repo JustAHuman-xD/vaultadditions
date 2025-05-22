@@ -9,19 +9,20 @@ import iskallia.vault.skill.base.SkillContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class PlayerAdditionalVaultStatData extends SavedData {
-    //todo: this isnt necessary, counter argument: lazy
     private static final String DATA_NAME = "vaultadditions_PlayerStatData";
     private final Map<UUID, PlayerAdditionalVaultStats> playerMap = new HashMap<>();
 
@@ -52,9 +53,10 @@ public class PlayerAdditionalVaultStatData extends SavedData {
     }
 
     public PlayerAdditionalVaultStatData resetPowers(ServerPlayer player) {
-        this.getVaultStats(player).resetPower(player.getLevel().getServer()).sync(player.getLevel().getServer());
-        PlayerAdditionalVaultStatData statsData = this.get(player.getLevel());
-        PlayerPowersData powerData = PlayerPowersData.get(player.getLevel());
+        MinecraftServer server = player.getLevel().getServer();
+        this.getVaultStats(player).resetPower(server).sync(server);
+        PlayerAdditionalVaultStatData statsData = get(server);
+        PlayerPowersData powerData = PlayerPowersData.get(server);
         PowerTree powerTree = powerData.getPowers(player);
         PlayerAdditionalVaultStats stats = statsData.getVaultStats(player);
 
@@ -65,7 +67,6 @@ public class PlayerAdditionalVaultStatData extends SavedData {
                     grouped.select(skill.getId());
                     skill = grouped;
                 }
-
                 if (skill instanceof LearnableSkill learnable && learnable.canRegret(context)) {
                     learnable.regret(context);
                     powerTree.sync(context);
@@ -74,7 +75,7 @@ public class PlayerAdditionalVaultStatData extends SavedData {
         }
 
         stats.setPowerPoints(0);
-        stats.sync(player.getLevel().getServer());
+        stats.sync(server);
         this.setDirty();
         return this;
     }
@@ -104,13 +105,12 @@ public class PlayerAdditionalVaultStatData extends SavedData {
     }
 
     public void load(CompoundTag nbt) {
-        ListTag playerList = nbt.getList("PlayerEntries", 8);
-        ListTag statEntries = nbt.getList("StatEntries", 10);
+        ListTag playerList = nbt.getList("PlayerEntries", Tag.TAG_STRING);
+        ListTag statEntries = nbt.getList("StatEntries", Tag.TAG_COMPOUND);
         if (playerList.size() != statEntries.size()) {
             throw new IllegalStateException("Map doesn't have the same amount of keys as values");
         } else {
-
-            for(int i = 0; i < playerList.size(); ++i) {
+            for (int i = 0; i < playerList.size(); ++i) {
                 UUID playerUUID = UUID.fromString(playerList.getString(i));
                 this.getVaultStats(playerUUID).deserializeNBT(statEntries.getCompound(i));
             }
@@ -118,7 +118,7 @@ public class PlayerAdditionalVaultStatData extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public @NotNull CompoundTag save(CompoundTag nbt) {
         ListTag playerList = new ListTag();
         ListTag statsList = new ListTag();
         this.playerMap.forEach((uuid, stats) -> {

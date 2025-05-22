@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 
 public class GiftStatueLootConfig extends AbstractStatueLootConfig {
     protected void reset() {
+        this.DROPS.clear();
         this.DROPS.add(new ProductEntry(Items.DEEPSLATE), 1);
         this.DROPS.add(new ProductEntry(Items.TUFF), 1);
         this.DROPS.add(new ProductEntry(Items.CRIMSON_NYLIUM), 1);

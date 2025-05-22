@@ -40,7 +40,7 @@ public class PowerSkillCommands {
 
     private int resetPowers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        PlayerPowersData data = PlayerPowersData.get(ServerLifecycleHooks.getCurrentServer());
+        PlayerPowersData data = PlayerPowersData.getServer();
         data.resetPowers(player);
         context.getSource().sendSuccess(new TextComponent("Reset " + player.getName().getString() + " Power Skills"), true);
 

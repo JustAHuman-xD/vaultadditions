@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 
 public class ArenaGiftStatueLootConfig extends AbstractStatueLootConfig {
     protected void reset() {
+        this.DROPS.clear();
         this.DROPS.add(new ProductEntry(Items.DIAMOND_ORE), 1);
         this.DROPS.add(new ProductEntry(Items.ANCIENT_DEBRIS), 1);
         this.DROPS.add(new ProductEntry(Items.RAW_IRON_BLOCK), 1);

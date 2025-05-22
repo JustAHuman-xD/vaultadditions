@@ -3,22 +3,20 @@ package io.github.a1qs.vaultadditions.vault.menu;
 
 import io.github.a1qs.vaultadditions.init.ModNetwork;
 import io.github.a1qs.vaultadditions.network.KnownPowerMessage;
+import iskallia.vault.skill.base.Skill;
 import iskallia.vault.skill.base.SkillContext;
 import iskallia.vault.skill.tree.SkillTree;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 
 public class PowerTree extends SkillTree {
-    public PowerTree() {
+    @Override
+    public Skill mergeFrom(Skill other, SkillContext context) {
+        return super.mergeFrom(other, context);
     }
 
     public void sync(SkillContext context) {
-        this.syncTree(context);
-    }
-
-    public void syncTree(SkillContext context) {
-        context.getSource().as(ServerPlayer.class).ifPresent((player) -> {
-            ModNetwork.CHANNEL.sendTo(new KnownPowerMessage(this), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
-        });
+        context.getSource().as(ServerPlayer.class).ifPresent(player ->
+                ModNetwork.CHANNEL.sendTo(new KnownPowerMessage(this), player.connection.connection, NetworkDirection.PLAY_TO_CLIENT));
     }
 }

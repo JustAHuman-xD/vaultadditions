@@ -17,7 +17,7 @@ public class MixinSkillGates {
             ordinal = 0
     )
     private List<String> addPowerSkills(List<String> allSkillIds) {
-        Configs.POWERS.getAll().skills.forEach(skill -> allSkillIds.add(skill.getId()));
+        Configs.POWERS.getTree().skills.forEach(skill -> allSkillIds.add(skill.getId()));
         return allSkillIds;
     }
 }

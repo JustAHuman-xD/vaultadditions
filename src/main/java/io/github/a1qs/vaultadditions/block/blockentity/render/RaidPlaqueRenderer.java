@@ -31,12 +31,10 @@ public class RaidPlaqueRenderer implements BlockEntityRenderer<RaidPlaqueTileEnt
     public RaidPlaqueRenderer(BlockEntityRendererProvider.Context context) {
         this.font = context.getFont();
         this.model = new StatuePlayerModel(context);
-        VaultAdditions.LOGGER.info("RaidPlaqueRenderer initialized");
     }
 
     @Override
     public void render(RaidPlaqueTileEntity entity, float pPartialTick, PoseStack matrices, MultiBufferSource buffer, int pPackedLight, int pPackedOverlay) {
-        MiscUtil.limitedLog("Trying rendering RaidPlaqueRenderer");
         ResourceLocation skinLocation = entity.getSkin().getLocationSkin();
         RenderType renderType = this.model.renderType(skinLocation);
         VertexConsumer vertexBuilder = buffer.getBuffer(renderType);

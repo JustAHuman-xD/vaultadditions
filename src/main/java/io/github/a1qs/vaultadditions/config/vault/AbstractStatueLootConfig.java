@@ -86,7 +86,7 @@ public abstract class AbstractStatueLootConfig extends Config {
     public List<ItemStack> getOptions() {
         Map<Item, ItemStack> options = new HashMap<>();
         for (int i = 0; i < MAX_ATTEMPTS && options.size() < 5; i++) {
-            ProductEntry entry = this.DROPS.getRandom(Config.rand);
+            ProductEntry entry = this.DROPS.getRandom(rand);
             ItemStack item = entry.generateItemStack();
             if (!item.isEmpty()) {
                 options.putIfAbsent(item.getItem(), item);
@@ -96,7 +96,7 @@ public abstract class AbstractStatueLootConfig extends Config {
     }
 
     public ItemStack randomLoot() {
-        return this.DROPS.getRandom(Config.rand).generateItemStack();
+        return this.DROPS.getRandom(rand).generateItemStack();
     }
 
     private String id() {

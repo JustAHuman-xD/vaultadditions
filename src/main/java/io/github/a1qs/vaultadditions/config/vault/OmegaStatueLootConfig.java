@@ -13,6 +13,7 @@ public class OmegaStatueLootConfig extends AbstractStatueLootConfig {
     private HashMap<Integer, Integer> INTERVAL_DECREASE_PER_CHIP = new HashMap<>();
 
     protected void reset() {
+        this.DROPS.clear();
         this.DROPS.add(new ProductEntry(Items.STONE), 1);
         this.DROPS.add(new ProductEntry(Items.GRANITE), 1);
         this.DROPS.add(new ProductEntry(Items.DIORITE), 3);

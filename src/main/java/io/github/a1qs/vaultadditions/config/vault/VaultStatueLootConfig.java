@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 
 public class VaultStatueLootConfig extends AbstractStatueLootConfig {
     protected void reset() {
+        this.DROPS.clear();
         this.DROPS.add(new ProductEntry(Items.STONE), 1);
         this.DROPS.add(new ProductEntry(Items.GRANITE), 1);
         this.DROPS.add(new ProductEntry(Items.DIORITE), 1);
