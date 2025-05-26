@@ -68,7 +68,7 @@ public class MixinLuckyHitTalent {
             }
         }
 
-        if (CritHelper.getCrit(attacker) || AttackScaleHelper.getLastAttackScale(attacker) >= 1.0F) {
+        if (CritHelper.getCrit(attacker) || AttackScaleHelper.getLastAttackScale(attacker) < 1.0F) {
             VaultAdditions.LOGGER.info("Crit {}, Attack Scale {}", CritHelper.getCrit(attacker), AttackScaleHelper.getLastAttackScale(attacker));
             return;
         }
