@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-@Mixin(ShellQuillAbility.class)
+@Mixin(value = ShellQuillAbility.class, remap = false)
 public class MixinShellQuillAbility {
     @Redirect(method = "thornsReflectDamage", at = @At(value = "INVOKE", target = "Ljava/util/Optional;ifPresent(Ljava/util/function/Consumer;)V"))
     private static void triggerNormalThornsFirst(Optional<ShellQuillAbility> instance, Consumer<ShellQuillAbility> action, @Local(argsOnly = true) LivingAttackEvent event) {
