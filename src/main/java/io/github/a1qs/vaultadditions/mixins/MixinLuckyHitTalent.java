@@ -49,7 +49,7 @@ import java.util.Random;
 @Mixin(LuckyHitTalent.class)
 @Debug(export = true)
 public class MixinLuckyHitTalent {
-    @Inject(method = "doLuckyHit", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "doLuckyHit", at = @At("HEAD"), cancellable = true, remap = false)
     private static void doLuckyHit(LivingHurtEvent event, CallbackInfo ci) {
         VaultAdditions.LOGGER.info("Living Hit Event Triggered: {}", event.getSource().getMsgId());
         if (!ActiveFlagsCheck.isAnyFlagActiveLuckyHit()) {
