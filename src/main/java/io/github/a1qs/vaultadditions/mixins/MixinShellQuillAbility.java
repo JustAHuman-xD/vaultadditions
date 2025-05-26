@@ -3,13 +3,10 @@ package io.github.a1qs.vaultadditions.mixins;
 import com.llamalad7.mixinextras.sugar.Local;
 import iskallia.vault.event.GearAttributeEvents;
 import iskallia.vault.skill.ability.effect.ShellQuillAbility;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 import java.util.function.Consumer;
