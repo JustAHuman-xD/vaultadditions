@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.power_crystals;
 
 import io.github.a1qs.vaultadditions.config.ServerConfigs;
 import io.github.a1qs.vaultadditions.init.ModNetwork;
