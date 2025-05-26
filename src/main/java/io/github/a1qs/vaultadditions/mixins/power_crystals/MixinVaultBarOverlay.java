@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.power_crystals;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.a1qs.vaultadditions.util.MiscUtil;

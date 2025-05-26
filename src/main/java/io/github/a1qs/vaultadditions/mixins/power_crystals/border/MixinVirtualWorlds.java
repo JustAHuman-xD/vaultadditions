@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.power_crystals.border;
 
 import iskallia.vault.world.data.VirtualWorlds;
 import net.minecraft.world.level.border.BorderChangeListener;

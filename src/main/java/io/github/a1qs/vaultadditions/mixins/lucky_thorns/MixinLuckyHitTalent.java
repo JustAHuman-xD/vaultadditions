@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.lucky_thorns;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import iskallia.vault.skill.talent.type.luckyhit.LuckyHitTalent;

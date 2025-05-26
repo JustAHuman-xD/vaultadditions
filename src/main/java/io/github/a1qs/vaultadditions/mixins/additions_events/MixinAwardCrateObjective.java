@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins;
+package io.github.a1qs.vaultadditions.mixins.additions_events;
 
 import io.github.a1qs.vaultadditions.data.EventData;
 import io.github.a1qs.vaultadditions.events.VaultAdditionsEvent;
