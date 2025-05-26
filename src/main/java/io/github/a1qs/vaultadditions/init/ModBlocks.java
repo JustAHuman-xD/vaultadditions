@@ -194,8 +194,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> VELVET_BED_BLACK = registerBlock("colored_velvet_bed_black", () -> bed(DyeColor.BLACK), false);
 
     public static final RegistryObject<Block> FOOLS_GOLD = registerBlock("fools_gold",
-            () -> new RotateableFoolsGold(BlockBehaviour.Properties.copy(Blocks.STONE_BRICKS).noOcclusion()), true);
-
+            () -> new RotateableFoolsGold(BlockBehaviour.Properties.of(Material.STONE).sound(SoundType.STONE).strength(2.0F, 3600000.0F).noOcclusion()), true);
     public static final RegistryObject<Block> ENCHANTED_FIRE = registerBlock("enchanted_fire",
             () -> new EnchantedFireBlock(BlockBehaviour.Properties.of(Material.FIRE, MaterialColor.COLOR_PURPLE).noCollission().instabreak()
                     .lightLevel(state -> 7).sound(SoundType.WOOL).noDrops()), true);
