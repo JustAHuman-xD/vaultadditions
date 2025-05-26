@@ -11,18 +11,16 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = VaultBarOverlay.class)
+@Mixin(value = VaultBarOverlay.class, remap = false)
 public class MixinVaultBarOverlay {
 
-    @Debug(export = true)
-    @Inject(method = "renderPointText", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V", shift = At.Shift.BEFORE))
+    @Inject(method = "renderPointText", at = @At(value = "INVOKE", target = "Liskallia/vault/client/render/IVaultOptions;showPointMessages()Z"))
     private static void renderPowerPoints(Minecraft minecraft, LocalPlayer player, PoseStack matrixStack, int right, MultiBufferSource.BufferSource buffer, CallbackInfo ci) {
         minecraft.getProfiler().popPush("batchPowerPointText");
         IVaultOptions options = (IVaultOptions) Minecraft.getInstance().options;
@@ -30,11 +28,10 @@ public class MixinVaultBarOverlay {
             return;
         }
 
-        int gap = 5;
-        int x = right - MiscUtil.unspentPowerPointComponentWidth - gap;
-        minecraft.font.drawInBatch(MiscUtil.unspentPowerPointComponent, (float)x, 18.0F, 16777215, true, matrixStack.last().pose(), buffer, false, 0, 15728880);
-        matrixStack.translate(0.0, 12.0, 0.0);
         MiscUtil.POWER_POINT_SUPPLIER.ifChanged(MixinVaultBarOverlay::vaultadditions$onUnspentPowerPointsChanged);
+        float x = right - MiscUtil.unspentPowerPointComponentWidth - 5;
+        minecraft.font.drawInBatch(MiscUtil.unspentPowerPointComponent, x, 18.0F, 16777215, true, matrixStack.last().pose(), buffer, false, 0, 15728880);
+        matrixStack.translate(0.0, 12.0, 0.0);
     }
 
     @Unique
