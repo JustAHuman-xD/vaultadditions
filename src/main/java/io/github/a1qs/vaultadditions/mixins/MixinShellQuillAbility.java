@@ -1,0 +1,24 @@
+package io.github.a1qs.vaultadditions.mixins;
+
+import com.llamalad7.mixinextras.sugar.Local;
+import iskallia.vault.event.GearAttributeEvents;
+import iskallia.vault.skill.ability.effect.ShellQuillAbility;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+@Mixin(ShellQuillAbility.class)
+public class MixinShellQuillAbility {
+    @Redirect(method = "thornsReflectDamage", at = @At(value = "INVOKE", target = "Ljava/util/Optional;ifPresent(Ljava/util/function/Consumer;)V"))
+    private static void triggerNormalThornsFirst(Optional<ShellQuillAbility> instance, Consumer<ShellQuillAbility> action, @Local(argsOnly = true) LivingAttackEvent event) {
+        GearAttributeEvents.thornsReflectDamage(event);
+        instance.ifPresent(action);
+    }
+}

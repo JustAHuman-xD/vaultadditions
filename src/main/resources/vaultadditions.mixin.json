@@ -14,6 +14,7 @@
     "MixinLuckyHitTalent",
     "MixinMultiJumpTrinket",
     "MixinPlayerTabNameEvent",
+    "MixinShellQuillAbility",
     "MixinSkillGates",
     "MixinSkillTabContainerElement",
     "MixinVaultChestBlock",
