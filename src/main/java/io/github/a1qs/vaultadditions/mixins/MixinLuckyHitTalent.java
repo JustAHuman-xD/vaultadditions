@@ -45,7 +45,7 @@ public class MixinLuckyHitTalent {
      * @author No
      * @reason Then is temporary so it doesnt matter
      */
-    @Overwrite @SubscribeEvent(priority = EventPriority.LOWEST)
+    @Overwrite(remap = false) @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void doLuckyHit(LivingHurtEvent event) {
         if (ActiveFlagsCheck.isAnyFlagActiveLuckyHit() || !(event.getSource().getEntity() instanceof ServerPlayer attacker)) {
             VaultAdditions.LOGGER.info("Flag {}, Wrong Attacker {}", ActiveFlagsCheck.isAnyFlagActiveLuckyHit(), !(event.getSource().getEntity() instanceof ServerPlayer));
