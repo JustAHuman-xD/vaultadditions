@@ -2,7 +2,6 @@ package io.github.a1qs.vaultadditions.mixins.deblock_cache;
 
 import io.github.a1qs.vaultadditions.util.DeblockCacheHolder;
 import iskallia.vault.block.DehammerizerBlock;
-import iskallia.vault.block.DemagnetizerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;

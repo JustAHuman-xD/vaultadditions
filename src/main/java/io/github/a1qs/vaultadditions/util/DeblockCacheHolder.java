@@ -15,7 +15,7 @@ public interface DeblockCacheHolder {
     Map<ResourceKey<Level>, Set<BlockPos>> vaultadditions$getCache();
 
     default void handleStateCycle(Level level, BlockPos pos) {
-        Set<BlockPos> positions = vaultadditions$getCache().computeIfAbsent(level.dimension(), k -> Set.of());
+        Set<BlockPos> positions = vaultadditions$getCache().computeIfAbsent(level.dimension(), k -> ConcurrentHashMap.newKeySet());
         if (!positions.remove(pos)) {
             positions.add(pos);
         }
