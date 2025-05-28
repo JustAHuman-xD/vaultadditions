@@ -20,143 +20,56 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-
-version = '1.16.0'
-group = 'io.github.a1qs.vaultadditions'
-archivesBaseName = 'vaultadditions'
+version = project.mod_version
+group = project.group_name
+archivesBaseName = project.archives_base_name
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings channel: 'parchment', version: '1.18.1-2022.03.06-1.18.2'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'forge.logging.markers', 'REGISTRIES'
-            arg "-mixin.config=vaultadditions.mixin.json"
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'vaultadditions'
-
-            mods {
-                vaultadditions {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        client2 {
-            parent runs.client
-            args '--username', 'Dev2'
-        }
-
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=vaultadditions.mixin.json"
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', 'vaultadditions'
-
-            mods {
-                vaultadditions {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        gameTestServer {
-            workingDirectory project.file('run')
-            arg "-mixin.config=vaultadditions.mixin.json"
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', 'vaultadditions'
-            mods {
-                vaultadditions {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            arg "-mixin.config=vaultadditions.mixin.json"
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'vaultadditions', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            mods {
-                vaultadditions {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
+    mappings channel: "${mappings_channel}", version: "${mappings_version}-${minecraft_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    flatDir {
-        dir 'libs'
-    }
-
-    maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
-    }
-
-    maven {
-        url "https://www.cursemaven.com"
-    }
+    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+    maven { url "https://www.cursemaven.com" }
     mavenCentral()
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.9'
-    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:6477559")
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${vaulthunters_version}")
 
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.18:3.0.57')
-    implementation fg.deobf("curse.maven:curios-309927:4418032")
-    implementation fg.deobf("curse.maven:quark-243121:3840125")
-    implementation fg.deobf("curse.maven:autoreglib-250363:3642382")
-    implementation fg.deobf("curse.maven:geckolib-388172:4181370")
-    implementation fg.deobf("curse.maven:jei-238222:4593548")
-    implementation fg.deobf("curse.maven:sophisticated-backpacks-vault-hunters-edition-696425:4287544")
-    implementation fg.deobf("curse.maven:sophisticated-core-618298:4665730")
-    implementation fg.deobf("curse.maven:sophisticated-backpacks-422301:4637292")
-    implementation fg.deobf("curse.maven:multi-world-borders-unofficial-961971:5376292")
-    implementation fg.deobf("curse.maven:create-328085:5797603")
-    compileOnly fg.deobf("curse.maven:wolds-vaults-standalone-1132404:6013909")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.18:${geckolib_version}")
+    implementation fg.deobf("curse.maven:curios-309927:${curios_version}")
+    implementation fg.deobf("curse.maven:jei-238222:${jei_version}")
+    implementation fg.deobf("curse.maven:wolds-vaults-standalone-1132404:${woldsvaultstandalone_version}")
+    implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:${iceandfire_version}")
 
-    runtimeOnly fg.deobf("curse.maven:observable-509575:3745494")
-    runtimeOnly fg.deobf("curse.maven:ferritecore-429235:4074294")
-    runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4147231")
-    runtimeOnly fg.deobf("curse.maven:kotlin-for-forge-351264:4513187")
-    runtimeOnly fg.deobf("curse.maven:alexs-mobs-426558:3853078")
-    runtimeOnly fg.deobf("curse.maven:citadel-331936:3783096")
-
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
-        jarJar.ranged(it, "[0.4.1,)")
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixinextras_version}"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:${mixinextras_version}")) {
+        jarJar.ranged(it, "[${mixinextras_version},)")
     }
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+}
+
+mixin {
+    add sourceSets.main, "${mod_id}.mixin-refmap.json"
+    config "${mod_id}.mixin.json"
 }
 
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "vaultadditions",
-                "Specification-Vendor"    : "vaultadditionssareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Title"     : "${mod_id}",
+                "Specification-Vendor"    : "${mod_id}sareus",
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "vaultadditionssareus",
+                "Implementation-Vendor"   : "${mod_id}sareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
@@ -187,9 +100,4 @@ tasks.named('jarJar', Jar).configure {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-}
-
-mixin {
-    add sourceSets.main, 'vaultadditions.mixin-refmap.json'
-    config 'vaultadditions.mixin.json'
 }
