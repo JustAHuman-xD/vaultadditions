@@ -6,7 +6,7 @@ import net.minecraft.core.IdMapper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(StructureTemplate.IdPalette.class)
+@Mixin(value = StructureTemplate.IdPalette.class, remap = false)
 public interface AccessorIdPalette {
     @Accessor IdMapper<PartialBlockState> getIds();
 }
