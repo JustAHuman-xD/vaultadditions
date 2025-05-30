@@ -16,6 +16,7 @@ import iskallia.vault.core.Version;
 import iskallia.vault.core.data.key.TemplateKey;
 import iskallia.vault.core.util.ThemeBlockRetriever;
 import iskallia.vault.core.vault.VaultRegistry;
+import iskallia.vault.core.world.data.tile.PartialBlock;
 import iskallia.vault.core.world.data.tile.PartialBlockState;
 import iskallia.vault.core.world.template.StructureTemplate;
 import iskallia.vault.core.world.template.Template;
@@ -39,6 +40,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 import java.util.Locale;
@@ -79,11 +81,23 @@ public class DebugCommands {
                     continue;
                 }
 
-                String file = templateKey.getName() + "_" + entry.getKey().getName() + ".json";
+                StructureTemplate.IdPalette palette = ((AccessorStructureTemplate) template).getPalette();
+                if (palette == null) {
+                    context.getSource().sendFailure(new TextComponent("Template " + templateKey.getName() + " has no palette!"));
+                    continue;
+                }
+
+                String fileName = templateKey.getName() + "_" + entry.getKey().getName() + ".json";
+                int nullBlocks = 0;
                 JsonObject templateJson = new JsonObject();
                 JsonArray ids = new JsonArray();
-                for (PartialBlockState state : ((AccessorIdPalette) ((AccessorStructureTemplate) template).getPalette()).getIds()) {
-                    ResourceLocation id = ResourceLocation.tryParse(state.getBlock().toString());
+                for (PartialBlockState state : ((AccessorIdPalette) palette).getIds()) {
+                    PartialBlock block = state.getBlock();
+                    if (block == null) {
+                        nullBlocks++;
+                        continue;
+                    }
+                    ResourceLocation id = ResourceLocation.tryParse(block.toString());
                     if (id != null) {
                         ids.add(id.toString());
                         if (!ThemeBlockRetriever.allowVaultBlock(id)) {
@@ -91,20 +105,61 @@ public class DebugCommands {
                         }
                     }
                 }
+                if (nullBlocks > 0) {
+                    context.getSource().sendFailure(new TextComponent("Template " + templateKey.getName() + " has " + nullBlocks + " null blocks!"));
+                }
                 templateJson.add("ids", ids);
-                try(FileWriter writer = new FileWriter("exported/vaultadditions/" + file)) {
+
+                File file = new File("exported/vaultadditions/" + fileName);
+                if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+                    context.getSource().sendFailure(new TextComponent("Failed to create directory for " + file.getName()));
+                    continue;
+                } else if (!file.exists()) {
+                    try {
+                        if (!file.createNewFile()) {
+                            context.getSource().sendFailure(new TextComponent("Failed to create file: " + file.getName()));
+                            continue;
+                        }
+                    } catch (Exception e) {
+                        context.getSource().sendFailure(new TextComponent("Failed to create file: " + file.getName()));
+                        e.printStackTrace();
+                        continue;
+                    }
+                }
+
+                try(FileWriter writer = new FileWriter(file)) {
                     GSON.toJson(templateJson, writer);
+                    context.getSource().sendSuccess(new TextComponent("Successfully wrote " + file.getName() + "!"), true);
                 } catch (Exception e) {
-                    context.getSource().sendFailure(new TextComponent("Failed to write template: " + file));
+                    context.getSource().sendFailure(new TextComponent("Failed to write template: " + file.getName()));
                     e.printStackTrace();
                 }
             }
         }
-        try(FileWriter writer = new FileWriter("exported/vaultadditions/parent_crucible.json")) {
+
+        File crucibleFile = new File("exported/vaultadditions/parent_crucible.json");
+        if (!crucibleFile.getParentFile().exists() && !crucibleFile.getParentFile().mkdirs()) {
+            context.getSource().sendFailure(new TextComponent("Failed to create directory for parent_crucible.json"));
+            return 0;
+        } else if (!crucibleFile.exists()) {
+            try {
+                if (!crucibleFile.createNewFile()) {
+                    context.getSource().sendFailure(new TextComponent("Failed to create file: parent_crucible.json"));
+                    return 0;
+                }
+            } catch (Exception e) {
+                context.getSource().sendFailure(new TextComponent("Failed to create file: parent_crucible.json"));
+                e.printStackTrace();
+                return 0;
+            }
+        }
+
+        try(FileWriter writer = new FileWriter(crucibleFile)) {
             crucibleJson.add("ids", explicitIds);
             GSON.toJson(crucibleJson, writer);
+            context.getSource().sendSuccess(new TextComponent("Successfully wrote exported/vaultadditions/parent_crucible.json!"), true);
         } catch (Exception e) {
-            context.getSource().sendFailure(new TextComponent("Failed to write crucible.json"));
+            context.getSource().sendFailure(new TextComponent("Failed to write parent_crucible.json"));
             e.printStackTrace();
         }
         return Command.SINGLE_SUCCESS;
