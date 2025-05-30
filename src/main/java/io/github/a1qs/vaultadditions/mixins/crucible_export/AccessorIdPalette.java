@@ -1,4 +1,4 @@
-package io.github.a1qs.vaultadditions.mixins.accessors;
+package io.github.a1qs.vaultadditions.mixins.crucible_export;
 
 import iskallia.vault.core.world.data.tile.PartialBlockState;
 import iskallia.vault.core.world.template.StructureTemplate;
