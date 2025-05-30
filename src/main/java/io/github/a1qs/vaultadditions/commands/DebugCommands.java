@@ -1,11 +1,24 @@
 package io.github.a1qs.vaultadditions.commands;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.a1qs.vaultadditions.mixins.accessors.AccessorIdPalette;
+import io.github.a1qs.vaultadditions.mixins.accessors.AccessorStructureTemplate;
 import io.github.a1qs.vaultadditions.vault.gear.effect.AttributeTransmogEffect;
+import iskallia.vault.core.Version;
+import iskallia.vault.core.data.key.TemplateKey;
+import iskallia.vault.core.util.ThemeBlockRetriever;
+import iskallia.vault.core.vault.VaultRegistry;
+import iskallia.vault.core.world.data.tile.PartialBlockState;
+import iskallia.vault.core.world.template.StructureTemplate;
+import iskallia.vault.core.world.template.Template;
 import iskallia.vault.gear.attribute.VaultGearModifier;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.mana.Mana;
@@ -20,15 +33,20 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.border.WorldBorder;
 
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DebugCommands {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+
     public DebugCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("vaultadditions")
                 .requires(sender -> sender.hasPermission(this.getRequiredPermissionLevel()))
@@ -46,8 +64,50 @@ public class DebugCommands {
                         )
                         .then(Commands.literal("serializeHeldModifiers")
                                 .executes(this::serializeHeldModifiers))
+                        .then(Commands.literal("createCrucibleListsFromStructures")
+                                .executes(this::createCrucibleListsFromStructures))
                 )
         );
+    }
+
+    private int createCrucibleListsFromStructures(CommandContext<CommandSourceStack> context) {
+        JsonObject crucibleJson = new JsonObject();
+        JsonArray explicitIds = new JsonArray();
+        for (TemplateKey templateKey : VaultRegistry.TEMPLATE.getKeys()) {
+            for (Map.Entry<Version, Template> entry : templateKey.getMap().entrySet()) {
+                if (!(entry.getValue() instanceof StructureTemplate template)) {
+                    continue;
+                }
+
+                String file = templateKey.getName() + "_" + entry.getKey().getName() + ".json";
+                JsonObject templateJson = new JsonObject();
+                JsonArray ids = new JsonArray();
+                for (PartialBlockState state : ((AccessorIdPalette) ((AccessorStructureTemplate) template).getPalette()).getIds()) {
+                    ResourceLocation id = ResourceLocation.tryParse(state.getBlock().toString());
+                    if (id != null) {
+                        ids.add(id.toString());
+                        if (!ThemeBlockRetriever.allowVaultBlock(id)) {
+                            explicitIds.add(id.toString());
+                        }
+                    }
+                }
+                templateJson.add("ids", ids);
+                try(FileWriter writer = new FileWriter("exported/vaultadditions/" + file)) {
+                    GSON.toJson(templateJson, writer);
+                } catch (Exception e) {
+                    context.getSource().sendFailure(new TextComponent("Failed to write template: " + file));
+                    e.printStackTrace();
+                }
+            }
+        }
+        try(FileWriter writer = new FileWriter("exported/vaultadditions/parent_crucible.json")) {
+            crucibleJson.add("ids", explicitIds);
+            GSON.toJson(crucibleJson, writer);
+        } catch (Exception e) {
+            context.getSource().sendFailure(new TextComponent("Failed to write crucible.json"));
+            e.printStackTrace();
+        }
+        return Command.SINGLE_SUCCESS;
     }
 
     private int giveMeMyMana(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

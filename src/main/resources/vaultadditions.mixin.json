@@ -13,6 +13,8 @@
     "MixinVaultChestBlock",
     "MixinVaultMessageUnload",
     "accessors.AccessorAttributeSnapshot",
+    "accessors.AccessorIdPalette",
+    "accessors.AccessorStructureTemplate",
     "accessors.InvokeAttributeSnapshotAttributeValue",
     "additional_gear_cores.MixinAnvilRecipes",
     "additional_gear_cores.MixinRepairGearAnvilRecipe",
