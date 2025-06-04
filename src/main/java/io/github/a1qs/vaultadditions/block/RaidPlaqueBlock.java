@@ -9,8 +9,10 @@ import iskallia.vault.init.ModConfigs;
 import iskallia.vault.util.BlockHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,7 +66,12 @@ public class RaidPlaqueBlock extends SoulPlaqueBlock {
             world.addFreshEntity(itemEntity);
         }
 
-        super.playerWillDestroy(world, pos, state, player);
+        this.spawnDestroyParticles(world, player, pos, state);
+        if (state.is(BlockTags.GUARDED_BY_PIGLINS)) {
+            PiglinAi.angerNearbyPiglins(player, false);
+        }
+
+        world.gameEvent(player, GameEvent.BLOCK_DESTROY, pos);
     }
 
     @Override
