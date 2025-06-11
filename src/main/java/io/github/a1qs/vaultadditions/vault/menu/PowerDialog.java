@@ -32,7 +32,7 @@ public class PowerDialog extends SkillDialog<PowerTree, PowerElementContainerScr
     }
 
     protected SkillContext getSkillContext() {
-        return new SkillContext(VaultBarOverlay.vaultLevel, MiscUtil.unspentPowerPoints, 0, SkillSource.of(Minecraft.getInstance().player));
+        return new SkillContext(VaultBarOverlay.vaultLevel, MiscUtil.unspentPowerPoints, SkillSource.of(Minecraft.getInstance().player));
     }
 
     protected void sendUpgradeMessage() {

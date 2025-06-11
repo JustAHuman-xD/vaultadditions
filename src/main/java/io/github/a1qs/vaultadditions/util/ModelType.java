@@ -23,7 +23,7 @@ public enum ModelType {
     SHIELD(ModDynamicModels.Shields.REGISTRY, ShieldModel::new, GeckoShieldModel::new),
     FOCUS(ModDynamicModels.Focus.REGISTRY, PlainItemModel::new, GeckoPlainModel::new),
     WAND(ModDynamicModels.Wands.REGISTRY, PlainItemModel::new, GeckoPlainModel::new),
-    MAGNETS(ModDynamicModels.Magnets.REGISTRY_MAGNETS, PlainItemModel::new, GeckoPlainModel::new),
+    MAGNETS(ModDynamicModels.Magnets.REGISTRY, PlainItemModel::new, GeckoPlainModel::new),
     WENDARR_IDOL("idol", ModDynamicModels.Idols.REGISTRY_WENDARR, PlainItemModel::new, GeckoPlainModel::new),
     IDONA_IDOL("idol", ModDynamicModels.Idols.REGISTRY_IDONA, PlainItemModel::new, GeckoPlainModel::new),
     VELARA_IDOL("idol", ModDynamicModels.Idols.REGISTRY_VELARA, PlainItemModel::new, GeckoPlainModel::new),

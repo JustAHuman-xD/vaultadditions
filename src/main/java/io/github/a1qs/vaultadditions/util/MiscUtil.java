@@ -27,7 +27,7 @@ public class MiscUtil {
     public static SkillContext ofPowers(ServerPlayer player) {
         PlayerVaultStats stats = PlayerVaultStatsData.get(player.getLevel()).getVaultStats(player);
         PlayerAdditionalVaultStats additionalStats = PlayerAdditionalVaultStatData.get(player.getLevel()).getVaultStats(player);
-        return new SkillContext(stats.getVaultLevel(), additionalStats.getUnspentPowerPoints(), 0, SkillSource.of(player));
+        return new SkillContext(stats.getVaultLevel(), additionalStats.getUnspentPowerPoints(), SkillSource.of(player));
     }
 
     public static boolean limitedLog(String log, Object... args) {
