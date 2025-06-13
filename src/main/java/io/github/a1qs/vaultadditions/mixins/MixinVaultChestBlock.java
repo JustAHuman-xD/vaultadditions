@@ -26,7 +26,7 @@ public class MixinVaultChestBlock extends ChestBlock {
         super(p_51490_, p_51491_);
     }
 
-    @Redirect(method = "onDestroyedByPlayer", at = @At(value = "INVOKE", target = "Liskallia/vault/block/VaultChestBlock;hasStepBreaking(Liskallia/vault/block/entity/VaultChestTileEntity;)Z"), remap = true)
+    @Redirect(method = "onDestroyedByPlayer", at = @At(value = "INVOKE", target = "Liskallia/vault/block/VaultChestBlock;hasStepBreaking(Liskallia/vault/block/entity/VaultChestTileEntity;)Z"))
     private boolean onDestroyedBreaching(VaultChestBlock instance, VaultChestTileEntity tileEntity, @Local(argsOnly = true) Player player) {
         return !VaultGearData.read(player.getMainHandItem()).hasAttribute(ModGearAttributes.BREACHING) && instance.hasStepBreaking(tileEntity);
     }
