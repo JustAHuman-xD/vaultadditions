@@ -4,10 +4,12 @@ import com.llamalad7.mixinextras.sugar.Local;
 import io.github.a1qs.vaultadditions.init.vault.ModGearAttributes;
 import iskallia.vault.block.VaultChestBlock;
 import iskallia.vault.block.entity.VaultChestTileEntity;
+import iskallia.vault.gear.data.AttributeGearData;
 import iskallia.vault.gear.data.GearDataCache;
 import iskallia.vault.gear.data.VaultGearData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,12 +30,14 @@ public class MixinVaultChestBlock extends ChestBlock {
 
     @Redirect(method = "onDestroyedByPlayer", at = @At(value = "INVOKE", target = "Liskallia/vault/block/VaultChestBlock;hasStepBreaking(Liskallia/vault/block/entity/VaultChestTileEntity;)Z"))
     private boolean onDestroyedBreaching(VaultChestBlock instance, VaultChestTileEntity tileEntity, @Local(argsOnly = true) Player player) {
-        return !VaultGearData.read(player.getMainHandItem()).hasAttribute(ModGearAttributes.BREACHING) && instance.hasStepBreaking(tileEntity);
+        ItemStack mainHandItem = player.getMainHandItem();
+        return (!AttributeGearData.hasData(mainHandItem) || !VaultGearData.read(mainHandItem).hasAttribute(ModGearAttributes.BREACHING)) && instance.hasStepBreaking(tileEntity);
     }
 
     @Redirect(method = "playerDestroy", at = @At(value = "INVOKE", target = "Liskallia/vault/block/VaultChestBlock;hasStepBreaking(Liskallia/vault/block/entity/VaultChestTileEntity;)Z"), remap = true)
     private boolean playerDestroyBreaching(VaultChestBlock instance, VaultChestTileEntity tileEntity, @Local(argsOnly = true) Player player) {
-        return !VaultGearData.read(player.getMainHandItem()).hasAttribute(ModGearAttributes.BREACHING) && instance.hasStepBreaking(tileEntity);
+        ItemStack mainHandItem = player.getMainHandItem();
+        return (!AttributeGearData.hasData(mainHandItem) || !VaultGearData.read(mainHandItem).hasAttribute(ModGearAttributes.BREACHING)) && instance.hasStepBreaking(tileEntity);
     }
 
     @Override
