@@ -4,10 +4,10 @@ import iskallia.vault.snapshot.AttributeSnapshot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(AttributeSnapshot.AttributeValue.class)
+@Mixin(value = AttributeSnapshot.AttributeValue.class, remap = false)
 public interface InvokeAttributeSnapshotAttributeValue {
     @Invoker("<init>")
-    static AttributeSnapshot.AttributeValue invokeConstructor() {
+    static <T, V> AttributeSnapshot.AttributeValue<T, V> invokeConstructor() {
         throw new AssertionError();
     }
 
