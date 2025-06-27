@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ClientPowerData {
-    private static PowerTree POWER_TREE = new PowerTree();
+    private static final PowerTree POWER_TREE = new PowerTree();
 
 
     @Nonnull

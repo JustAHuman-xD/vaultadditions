@@ -60,7 +60,7 @@ public class PowerLevelMessage {
                         learnable.learn(context);
                         PlayerAdditionalVaultStats stats = statsData.getVaultStats(player);
                         int learnPoints = stats.getUnspentPowerPoints() - context.getLearnPoints();
-                        stats.spendPowerPoints(player.getServer(), learnPoints);
+                        statsData.spendPowerPoints(player, learnPoints);
                         powerTree.sync(context);
                     }
                 }

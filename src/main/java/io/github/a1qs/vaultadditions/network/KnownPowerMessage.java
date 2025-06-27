@@ -10,7 +10,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class KnownPowerMessage {
-    private PowerTree tree;
+    private final PowerTree tree;
 
     public KnownPowerMessage(PowerTree tree) {
         this.tree = tree;
@@ -35,9 +35,7 @@ public class KnownPowerMessage {
 
     public static void handle(KnownPowerMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork(() -> {
-            ClientPowerData.updateTalents(message);
-        });
+        context.enqueueWork(() -> ClientPowerData.updateTalents(message));
         context.setPacketHandled(true);
     }
 }

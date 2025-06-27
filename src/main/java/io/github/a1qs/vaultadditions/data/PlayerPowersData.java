@@ -47,7 +47,6 @@ public class PlayerPowersData extends SavedData {
     public void resetPowers(ServerPlayer player) {
         this.getPowers(player).iterate(LearnableSkill.class, skill -> skill.onRemove(SkillContext.of(player)));
         this.playerMap.remove(player.getUUID());
-        this.setDirty();
         this.getPowers(player).sync(SkillContext.of(player));
     }
 
@@ -61,11 +60,11 @@ public class PlayerPowersData extends SavedData {
         if (event.phase == TickEvent.Phase.START && event.side.isServer() && event.player instanceof ServerPlayer player) {
             PlayerPowersData data = get(player.getLevel());
             if (data.scheduledMerge.remove(player.getUUID())) {
-                SkillContext context = SkillContext.of(player);
+                SkillContext context = MiscUtil.ofPowers(player);
                 data.playerMap.put(player.getUUID(), (PowerTree) (data.playerMap.get(player.getUUID())).mergeFrom(Configs.POWERS.getTree().copy(), context));
-                SkillContext ctx = MiscUtil.ofPowers(player);
                 PlayerAdditionalVaultStats stats = PlayerAdditionalVaultStatData.get(player.getLevel()).getVaultStats(player);
-                stats.setPowerPoints(ctx.getLearnPoints());
+                stats.setPowerPoints(context.getLearnPoints());
+                PlayerAdditionalVaultStatData.get(player.getLevel()).setDirty();
                 AttributeSnapshotHelper.getInstance().refreshSnapshotDelayed(player);
             }
             data.getPowers(player).onTick(SkillContext.of(player));

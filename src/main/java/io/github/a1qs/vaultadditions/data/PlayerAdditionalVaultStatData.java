@@ -86,6 +86,11 @@ public class PlayerAdditionalVaultStatData extends SavedData {
         return this;
     }
 
+    @Override
+    public boolean isDirty() {
+        return true;
+    }
+
     public static PlayerAdditionalVaultStatData getServer() {
         return get(ServerLifecycleHooks.getCurrentServer());
     }
