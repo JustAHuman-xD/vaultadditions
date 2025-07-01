@@ -22,14 +22,6 @@ public class ExpertisePointIncreasePower extends LearnableSkill {
         });
     }
 
-    @Override
-    public void onRemove(SkillContext context) {
-        context.getSource().as(ServerPlayer.class).ifPresent(serverPlayer -> {
-            PlayerVaultStatsData data = PlayerVaultStatsData.get(serverPlayer.getLevel());
-            data.addExpertisePoints(serverPlayer, -pointIncrease);
-        });
-    }
-
     public void writeBits(BitBuffer buffer) {
         super.writeBits(buffer);
         buffer.writeInt(this.pointIncrease);
