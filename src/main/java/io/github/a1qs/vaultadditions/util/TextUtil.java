@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.util;
 
 import iskallia.vault.client.util.ClientScheduler;
-import iskallia.vault.item.tool.ColorBlender;
+import iskallia.vault.item.render.ColorBlender;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
