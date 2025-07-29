@@ -23,6 +23,7 @@
     "armor_effects.sound.MixinDashAbility",
     "armor_effects.sound.MixinManaShieldAbility",
     "armor_effects.sound.MixinSmiteArchonAbility",
+    "chain_thorns.MixinShellQuillAbility",
     "loot_statue.MixinLootStatueBlock",
     "loot_statue.MixinLootStatueTileEntity",
     "loot_statue.MixinLootStatueUpperBlock",
