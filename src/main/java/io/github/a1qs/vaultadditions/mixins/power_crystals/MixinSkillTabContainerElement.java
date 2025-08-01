@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import static io.github.a1qs.vaultadditions.vault.menu.PowerElementContainerScreen.TAB_INDEX;
 
 @Mixin(value = SkillTabContainerElement.class, remap = false)
 public class MixinSkillTabContainerElement {
@@ -35,7 +36,7 @@ public class MixinSkillTabContainerElement {
 
     @Inject(method = "lambda$new$0(II)V", at = @At("TAIL"))
     private static void handleAdditionalIndex(int selectedIndex, int index, CallbackInfo ci) {
-        if (selectedIndex != index && index == 5) {
+        if (selectedIndex != index && index == TAB_INDEX) {
             ModNetwork.CHANNEL.sendToServer(ServerboundOpenPowersMessage.INSTANCE);
         }
     }
