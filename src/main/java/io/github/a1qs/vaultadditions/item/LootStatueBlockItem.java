@@ -70,8 +70,11 @@ public class LootStatueBlockItem extends BlockItem {
 
         CompoundTag nbt = new CompoundTag();
         nbt.putString("PlayerNickname", nickname);
-        ItemStack loot = Configs.STATUE_LOOT_OMEGA.randomLoot();
-        nbt.put("LootItem", loot.serializeNBT());
+
+        if (Configs.STATUE_LOOT_OMEGA != null) {
+            ItemStack loot = Configs.STATUE_LOOT_OMEGA.randomLoot();
+            nbt.put("LootItem", loot.serializeNBT());
+        }
 
         CompoundTag stackNBT = new CompoundTag();
         stackNBT.put("BlockEntityTag", nbt);
