@@ -25,11 +25,11 @@ public class TooltipEvent {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void addArmorSetBuffs(ItemTooltipEvent event) {
         ItemStack itemStack = event.getItemStack();
-        List<Component> toolTip = event.getToolTip();
-        if (!(itemStack.getItem() instanceof VaultGearItem)) {
+        if (!(itemStack.getItem() instanceof VaultGearItem) || Configs.TRANSMOG_EFFECTS_CONFIG == null) {
             return;
         }
 
+        List<Component> toolTip = event.getToolTip();
         DynamicModel<?> model = ModelUtil.getDynamicModel(itemStack, false);
         addEffectTooltip(toolTip, "Model Bonus:", Configs.TRANSMOG_EFFECTS_CONFIG.getEffects(model));
 
