@@ -10,17 +10,24 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Mixin(SkillAltarData.class)
 public class SkillAltarDataMixin {
     @Redirect(method = "save",at = @At(value = "INVOKE", target = "Liskallia/vault/util/nbt/NBTHelper;writeMap(Lnet/minecraft/nbt/CompoundTag;Ljava/lang/String;Ljava/util/Map;Ljava/util/function/Function;Ljava/util/function/Function;)V"))
-    public <K extends Integer, V extends SkillAltarData.SkillTemplate> void saveNPE(CompoundTag tag, String key, Map<K, V> map, Function<K, String> getStringKey, Function<V, Tag> getNbtValue) {
-        var nullSafeMap = new HashMap<K, V>();
+    public <K extends UUID, C extends Integer, W extends SkillAltarData.SkillTemplate, V extends Map<C, W>> void saveNPE(CompoundTag tag, String key, Map<K, V> map, Function<K, String> getStringKey, Function<V, Tag> getNbtValue) {
+        HashMap<K, V> nullSafeMap = new HashMap<>();
         if (map != null) {
-            for (var entry : map.entrySet()) {
+            for (Map.Entry<K, V> entry : map.entrySet()) {
                 if (entry.getKey() != null && entry.getValue() != null) {
-                    nullSafeMap.put(entry.getKey(), entry.getValue());
+                    HashMap<C, W> nullSafeInnerMap = new HashMap<>();
+                    for (Map.Entry<C, W> innerEntry : entry.getValue().entrySet()) {
+                        if (innerEntry.getKey() != null && innerEntry.getValue() != null) {
+                            nullSafeInnerMap.put(innerEntry.getKey(), innerEntry.getValue());
+                        }
+                    }
+                    nullSafeMap.put(entry.getKey(), (V) nullSafeInnerMap);
                 }
             }
         }
