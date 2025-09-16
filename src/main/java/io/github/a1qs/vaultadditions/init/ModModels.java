@@ -143,7 +143,8 @@ public class ModModels {
         SIDEARM("sidearm", "Sidearm", ModelType.WAND),
         RELIC_SHIELD("relicshield", "Relic Shield", ModelType.SHIELD),
         CHAIN_SWORD("chain_sword", "Chain-Sword", ModelType.SWORD),
-        DARKSABER2("darksaber2", "The Darksaber", ModelType.BATTLESTAFF);
+        DARKSABER2("darksaber2", "The Darksaber", ModelType.BATTLESTAFF),
+        EXECUTIONER("executioner", "Kubikiribōchō", ModelType.SWORD);
 
         private final DynamicModel<?> model;
         private final ModelType type;
