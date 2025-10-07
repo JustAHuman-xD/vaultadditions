@@ -144,6 +144,8 @@ public class ModModels {
         RELIC_SHIELD("relicshield", "Relic Shield", ModelType.SHIELD),
         CHAIN_SWORD("chain_sword", "Chain-Sword", ModelType.SWORD),
         DARKSABER2("darksaber2", "The Darksaber", ModelType.BATTLESTAFF),
+        ELDRITCH_STAFF("eldritch_staff", "Eldritch Staff", ModelType.BATTLESTAFF),
+        ELDRITCH_SHIELD("eldritch_shield", "Eldritch Shield", ModelType.WAND),
         EXECUTIONER("executioner", "Kubikiribōchō", ModelType.SWORD);
 
         private final DynamicModel<?> model;
