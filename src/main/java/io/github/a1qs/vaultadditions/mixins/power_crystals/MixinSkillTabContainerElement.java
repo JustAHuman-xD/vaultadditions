@@ -23,7 +23,7 @@ public class MixinSkillTabContainerElement {
     )
     private TextureAtlasRegion[] modifyIcons(TextureAtlasRegion[] icons) {
         TextureAtlasRegion[] newIcons;
-        if(ServerConfigs.SHOW_POWER_MENU.get() || VaultBarOverlay.vaultLevel == 100) {
+        if(ServerConfigs.SHOW_POWER_MENU.get() || VaultBarOverlay.vaultLevel >= 100) {
             newIcons = new TextureAtlasRegion[icons.length + 1];
             System.arraycopy(icons, 0, newIcons, 0, icons.length);
             newIcons[icons.length] = ScreenTextures.TAB_ICON_ARCHETYPES;

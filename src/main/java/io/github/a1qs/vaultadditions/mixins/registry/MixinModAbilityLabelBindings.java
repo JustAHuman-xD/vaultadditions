@@ -31,7 +31,7 @@ public class MixinModAbilityLabelBindings {
                 Map.of(
                         "damage",
                         ability -> AbilityLabelFormatters.percentTwoDecimalPlaces(ability.getPercentAttackDealt()),
-                        "radius",
+                        "adjustedRadius",
                         ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
                         "knockback",
                         ability -> AbilityLabelFormatters.decimal(ability.getKnockbackStrengthMultiplier())
@@ -40,16 +40,16 @@ public class MixinModAbilityLabelBindings {
         ModAbilityLabelBindings.register(
                 ShieldWallAbility.class,
                 Map.of(
-                        "duration",
+                        "adjustedDuration",
                         ability -> AbilityLabelFormatters.ticks(ability.getDurationTicks())
                 )
         );
         ModAbilityLabelBindings.register(
                 ThornedFrenzyAbility.class,
                 Map.of(
-                        "duration",
+                        "adjustedDuration",
                         ability -> AbilityLabelFormatters.ticks(ability.getDurationTicks()),
-                        "radius",
+                        "adjustedRadius",
                         ability -> AbilityLabelFormatters.decimal(ability.getUnmodifiedRadius()),
                         "damageInterval",
                         ability -> AbilityLabelFormatters.ticks(ability.getDamageTickDelay()),
