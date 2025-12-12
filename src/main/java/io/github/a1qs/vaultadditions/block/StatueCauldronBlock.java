@@ -41,10 +41,19 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StatueCauldronBlock extends Block implements EntityBlock  {
     public static final IntegerProperty LEVEL = BlockStateProperties.LEVEL_CAULDRON;
+    private static final int DEFAULT_STATUE_REQUIREMENT = 100;
+    private static final Map<String, Integer> HARDCODED_PLAYER_REQUIREMENTS;
 
+    static {
+        HARDCODED_PLAYER_REQUIREMENTS = new HashMap<>();
+        HARDCODED_PLAYER_REQUIREMENTS.put("TigerShrimp88", 50);
+        HARDCODED_PLAYER_REQUIREMENTS.put("Jrowez", 50);
+    }
     public StatueCauldronBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(LEVEL, 1));
@@ -60,9 +69,6 @@ public class StatueCauldronBlock extends Block implements EntityBlock  {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
         if(itemstack.isEmpty()) return InteractionResult.PASS;
         if(itemstack.getItem() != ModItems.INFINITE_WATER_BUCKET && itemstack.getItem() != Items.WATER_BUCKET) return InteractionResult.PASS;
-
-
-
         int i = pState.getValue(LEVEL);
         Item item = itemstack.getItem();
         if (item instanceof BucketItem && ((BucketItem)item).getFluid() == Fluids.WATER) {
@@ -73,13 +79,11 @@ public class StatueCauldronBlock extends Block implements EntityBlock  {
                         provider.drain(1000, IFluidHandler.FluidAction.EXECUTE);
                     });
                 }
-
                 pPlayer.awardStat(Stats.FILL_CAULDRON);
                 pLevel.setBlock(pPos, pState.setValue(LEVEL, 3), 3);
                 pLevel.updateNeighbourForOutputSignal(pPos, this);
                 pLevel.playSound(null, pPos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
-
             return InteractionResult.sidedSuccess(pLevel.isClientSide());
         }
         return InteractionResult.PASS;
@@ -114,19 +118,17 @@ public class StatueCauldronBlock extends Block implements EntityBlock  {
             BlockEntity te = pLevel.getBlockEntity(pPos);
             if (te instanceof StatueCauldronBlockEntity be) {
                 if (pStack.getOrCreateTag().contains("BlockEntityTag")) {
-                    CompoundTag cauldronNbt = pStack.getTagElement("BlockEntityTag");
-                    be.setOwner(cauldronNbt.getUUID("Owner"));
-                    be.setRequiredAmount(cauldronNbt.getInt("RequiredAmount"));
-                    be.setStatueCount(cauldronNbt.getInt("StatueCount"));
-                    be.setNames(cauldronNbt.getList("NameList", 10));
                 } else {
                     be.setOwner(player.getUUID());
-                    be.setRequiredAmount(ModConfigs.STATUE_RECYCLING.getPlayerRequirement(player.getDisplayName().getString()));
+                    String playerName = player.getDisplayName().getString();
+                    int requirement = HARDCODED_PLAYER_REQUIREMENTS.getOrDefault(
+                            playerName,
+                            DEFAULT_STATUE_REQUIREMENT
+                    );
+                    be.setRequiredAmount(requirement);
                 }
-
                 be.sendUpdates();
             }
-
         }
         super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
     }
@@ -143,12 +145,10 @@ public class StatueCauldronBlock extends Block implements EntityBlock  {
                 stackTag.put("BlockEntityTag", statueTag);
                 itemStack.setTag(stackTag);
             }
-
             ItemEntity item = new ItemEntity(pLevel, pPos.getX() + 0.5, pPos.getY() + 0.5, pPos.getZ() + 0.5, itemStack);
             item.setDefaultPickUpDelay();
             pLevel.addFreshEntity(item);
         }
-
         super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     }
 

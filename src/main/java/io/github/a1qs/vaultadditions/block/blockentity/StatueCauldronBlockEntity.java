@@ -5,7 +5,7 @@ import io.github.a1qs.vaultadditions.init.ModBlockEntities;
 import io.github.a1qs.vaultadditions.item.LootStatueBlockItem;
 import io.github.a1qs.vaultadditions.util.UsernameProvider;
 import iskallia.vault.init.ModBlocks;
-import iskallia.vault.init.ModConfigs;
+// REMOVED: import iskallia.vault.init.ModConfigs; // No longer needed
 import iskallia.vault.init.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,10 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class StatueCauldronBlockEntity extends BlockEntity {
@@ -38,6 +35,17 @@ public class StatueCauldronBlockEntity extends BlockEntity {
     private int statueCount;
     private int requiredAmount;
     private List<String> names = new ArrayList<>();
+
+    private static final Map<String, Integer> ITEM_RECYCLING_VALUES;
+
+    static {
+        ITEM_RECYCLING_VALUES = new HashMap<>();
+        ITEM_RECYCLING_VALUES.put("vaultadditions:loot_statue_vault", 2);
+        ITEM_RECYCLING_VALUES.put("vaultadditions:loot_statue_gift", 4);
+        ITEM_RECYCLING_VALUES.put("vaultadditions:loot_statue_gift_mega", 6);
+        ITEM_RECYCLING_VALUES.put("vaultadditions:loot_statue_arena", 8);
+    }
+
     private static final Predicate<ItemEntity> itemPredicate = (itemEntity) -> {
         return itemEntity.getItem().getItem() instanceof LootStatueBlockItem;
     };
@@ -52,13 +60,11 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     public void setNames(ListTag nameList) {
         this.names.clear();
-        int i = 0;
-
-        for (net.minecraft.nbt.Tag tag : nameList) {
-            this.names.add(((CompoundTag) tag).getString("name" + i++));
+        for (int i = 0; i < nameList.size(); i++) {
+            CompoundTag tag = (CompoundTag) nameList.get(i);
+            this.names.add(tag.getString("name" + i));
         }
         sendUpdates();
-
     }
 
     public void setOwner(UUID owner) {
@@ -97,16 +103,23 @@ public class StatueCauldronBlockEntity extends BlockEntity {
         if(!level.isClientSide()) {
             if(blockEntity instanceof StatueCauldronBlockEntity be) {
                 if(blockState.getValue(StatueCauldronBlock.LEVEL) == 3) {
+
                     List<ItemEntity> statues = level.getEntitiesOfClass(ItemEntity.class, (new AABB(blockPos)).inflate(1.0, 1.0, 1.0), itemPredicate);
+
+
                     for(ItemEntity itemEntity : statues) {
                         if (be.getStatueCount() >= be.getRequiredAmount()) break;
-                        ItemStack stack = itemEntity.getItem();
 
-                        int d = ModConfigs.STATUE_RECYCLING.getItemValue(stack.getItem().getRegistryName().toString());
-                        be.setStatueCount(d + be.getStatueCount());
-                        if(LootStatueBlockItem.getStatueName(stack) != null) be.addName(LootStatueBlockItem.getStatueName(stack));
-                        itemEntity.remove(Entity.RemovalReason.DISCARDED);
-                        bubbleCauldron((ServerLevel) level, blockPos);
+                        ItemStack stack = itemEntity.getItem();
+                        String registryName = stack.getItem().getRegistryName().toString();
+                        int d = ITEM_RECYCLING_VALUES.getOrDefault(registryName, 0);
+
+                        if(d > 0) {
+                            be.setStatueCount(d + be.getStatueCount());
+                            if(LootStatueBlockItem.getStatueName(stack) != null) be.addName(LootStatueBlockItem.getStatueName(stack));
+                            itemEntity.remove(Entity.RemovalReason.DISCARDED);
+                            bubbleCauldron((ServerLevel) level, blockPos);
+                        }
                     }
 
                     if (be.getStatueCount() >= be.getRequiredAmount()) {
@@ -133,8 +146,8 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     private static void bubbleCauldron(ServerLevel world, BlockPos pos) {
         int particleCount = 100;
-        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), ModSounds.CAULDRON_BUBBLES_SFX, SoundSource.MASTER, 1.0F, (float)Math.random());
-        world.sendParticles(ParticleTypes.WITCH, (double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, particleCount, 0.0, 0.0, 0.0, Math.PI);
+        world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ModSounds.CAULDRON_BUBBLES_SFX, SoundSource.MASTER, 1.0F, (float)Math.random());
+        world.sendParticles(ParticleTypes.WITCH, (double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, particleCount, 0.5, 0.5, 0.5, 0.0);
     }
 
 
@@ -222,7 +235,7 @@ public class StatueCauldronBlockEntity extends BlockEntity {
 
     public void sendUpdates() {
         if (this.level != null) {
-            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
             this.setChanged();
         }
     }

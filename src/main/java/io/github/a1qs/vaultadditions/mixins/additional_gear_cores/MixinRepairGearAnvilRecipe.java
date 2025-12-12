@@ -1,7 +1,7 @@
 package io.github.a1qs.vaultadditions.mixins.additional_gear_cores;
 
-import iskallia.vault.item.crystal.recipe.AnvilContext;
-import iskallia.vault.item.crystal.recipe.RepairGearAnvilRecipe;
+import iskallia.vault.recipe.anvil.AnvilContext;
+import iskallia.vault.recipe.anvil.RepairGearAnvilRecipe;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
