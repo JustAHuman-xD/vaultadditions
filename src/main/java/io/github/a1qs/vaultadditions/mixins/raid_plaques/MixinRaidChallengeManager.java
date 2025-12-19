@@ -13,17 +13,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
-//
-//@Mixin(RaidChallengeManager.class)
-//public abstract class MixinRaidChallengeManager extends ChallengeManager {
-//    @Inject(method = "onTick", at = @At(value = "INVOKE", target = "Liskallia/vault/block/entity/challenge/raid/RaidSpawner;onCompleteWave()V"), remap = false)
-//    public void callWaveCompletedEvent(ServerLevel world, CallbackInfo ci) {
-//        PlayerList playerList = ServerLifecycleHooks.getCurrentServer().getPlayerList();
-//        for (UUID uuid : this.players) {
-//            ServerPlayer player = playerList.getPlayer(uuid);
-//            if (player != null) {
-//                VaultCommonEvents.RAID_WAVE_COMPLETED.invoke(world, player);
-//            }
-//        }
-//    }
-//}
+
+@Mixin(RaidChallengeManager.class)
+public abstract class MixinRaidChallengeManager extends ChallengeManager {
+    @Inject(method = "onTick", at = @At(value = "INVOKE", target = "Liskallia/vault/core/vault/challenge/raid/RaidSpawner;onCompleteWave()V"), remap = false)
+    public void callWaveCompletedEvent(ServerLevel world, CallbackInfo ci) {
+        PlayerList playerList = ServerLifecycleHooks.getCurrentServer().getPlayerList();
+        for (UUID uuid : this.players) {
+            ServerPlayer player = playerList.getPlayer(uuid);
+            if (player != null) {
+                VaultCommonEvents.RAID_WAVE_COMPLETED.invoke(world, player);
+            }
+        }
+    }
+}
